@@ -53,6 +53,7 @@
       leftPaneStyle () {
         const w = window.lconfig.leftPaneWidth || '420px'
         // const c = window.lconfig.leftPaneBackground || '#fff'
+        // background: linear-gradient(135deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);`
         return `width:${w};background-color:rgba(0,0,0,0.5)`
       },
       top () {

@@ -168,7 +168,7 @@ export default {
         this.vtitle = this.model.vtitle
       }
       // toggle the tree node
-      let duration = 300
+      let duration = 0
       const easing = 'linear'
       this.reset = false // TODO: remove
 
@@ -241,7 +241,7 @@ export default {
     },
     toggleN: function () {
       // toggle the tree node
-      let duration = 300
+      let duration = 0
       const easing = 'linear'
       this.reset = false // TODO: remove
       const ul = this.$el.getElementsByClassName('child-items')[0]
@@ -410,8 +410,8 @@ $contentBorderColor: #ccc
   background-color: yellow
   height: 0
   overflow: hidden
-  -webkit-transition: height 4s ease
-  transition: height 4s ease
+  -webkit-transition: height 0s ease
+  transition: height 0s ease
 .leo-box
   display: none
 .accordion
