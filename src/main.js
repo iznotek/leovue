@@ -25,7 +25,6 @@ import VueYouTubeEmbed from 'vue-youtube-embed'
 
 import VueResize from 'vue-resize'
 import Zircle from 'zircle'
-import 'zircle/dist/zircle.css'
 
 import VTable from './components/Table'
 import VCTable from './content-components/VCTable'
