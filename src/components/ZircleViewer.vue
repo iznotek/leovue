@@ -19,6 +19,7 @@
   import View from './ZircleView'
   import ContentPane from './ContentPane'
   import SplitPane from './SplitPane'
+  import 'zircle/dist/zircle.css'
   
   let target = {
     el: true,

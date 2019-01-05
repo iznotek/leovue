@@ -34,6 +34,10 @@ export default {
       let style = {}
       if (window.lconfig.coverPage) {
         style = { display: 'none' }
+      } else {
+        const p = '0'
+        const u = 'static/images/bubble.png'
+        style = `padding:${p}; background-color: #2e2e2e; background-image: url(${u});`
       }
       return style
     }
