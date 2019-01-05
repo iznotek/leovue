@@ -32,12 +32,16 @@ export default {
     },
     dashboardStyle () {
       let style = {}
+      const p = '-33px'
+      const u = 'static/images/bubble.png'
+      style = `padding: ${p}; background-color: #2e2eff; background-image: url(${u});`
+      return style
       if (window.lconfig.coverPage) {
         style = { display: 'none' }
       } else {
         const p = '0'
         const u = 'static/images/bubble.png'
-        style = `padding:${p}; background-color: #2e2e2e; background-image: url(${u});`
+        style = `padding:${p}; background-color: #2e2eff; background-image: url(${u});`
       }
       return style
     }

@@ -365,8 +365,8 @@ $contentBorderColor: #ccc
 .bold
   font-weight: bold
 .iactive
-  background: #01FF70 //#81ff00
-  // max-width: 772px
+  background: rgba(0,0,0,0.8)  //#01FF70 //#81ff00
+  max-width: 300px
 .iactive.topItem
     background: #fff
 .activeb
@@ -374,6 +374,8 @@ $contentBorderColor: #ccc
   font-weight: bold
 .inline .content
   max-width: 760px
+  background: rgba(255,255,255,0.8)
+  color: #333
   white-space: normal
   padding: 30px
   padding-top: 20px

@@ -47,13 +47,13 @@
     computed: {
       ulStyle () {
         const p = window.lconfig.leftPanePadding || '0'
-        const c = window.lconfig.leftPaneBackground || '#fff'
-        return `padding-left:${p}; background-color:${c}`
+        // const c = window.lconfig.leftPaneBackground || '#fff'
+        return `padding-left:${p};`
       },
       leftPaneStyle () {
         const w = window.lconfig.leftPaneWidth || '420px'
-        const c = window.lconfig.leftPaneBackground || '#fff'
-        return `width:${w};background-color:${c}`
+        // const c = window.lconfig.leftPaneBackground || '#fff'
+        return `width:${w};background-color:rgba(0,0,0,0.5)`
       },
       top () {
         // if (this.$store.state.leodata.length > 1) { return false }
@@ -76,6 +76,7 @@
 .treeviewer
   margin: 0
   height: 100%
+  color: #dddddd
   #left-pane
     ul
       list-style-type: none

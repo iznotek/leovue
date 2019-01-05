@@ -77,6 +77,7 @@
       const leftLimit = 0
       const rightLimit = 90
 
+      let vm = this
       paneSep.sdrag(function (el, pageX, startX, pageY, startY, fix) {
         fix.skipX = true
         if (pageX < window.innerWidth * leftLimit / 100) {
@@ -94,10 +95,13 @@
         if (cur > window.innerWidth) {
           cur = window.innerWidth
         }
-        let right = (100 - cur - 2)
+        let right = (100 - cur - 1)
         leftPane.style.width = cur + '%'
         rightPane.style.width = right + '%'
+        vm.$store.state.leftPaneWidth = leftPane.style.width
       }, null, 'horizontal')
+
+      leftPane.style.width = vm.$store.state.leftPaneWidth
     },
     updated () {
     }
@@ -111,19 +115,19 @@
     height: 100%;
   }
   .left-pane {
-    background: #fff;
-    transition: width .3s
+    background: transparent;
+    transition: width .0s
   }
   .panes-separator {
     width: 14px;
-    background: #fcfcfc;
+    background: transparent;
     position: relative;
     cursor: col-resize;
     background-image: url('../assets/vertical.png');
     background-repeat: no-repeat;
     background-position: 50% 46%;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    //border-left: 1px solid #ddd;
+    //border-right: 1px solid #ddd;
   }
   .panes-container,
   .panes-separator,

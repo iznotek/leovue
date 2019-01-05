@@ -15,9 +15,9 @@ let baseMode = window.lconfig.baseMode
 if (!baseMode) { baseMode = 'o' }
 
 let startPage = '/1'
-// if (window.lconfig.coverPage) {
-//   startPage = '/2'
-// }
+if (window.lconfig.coverPage) {
+  startPage = '/2'
+}
 
 // TODO: add not found link
 export default new Router({

@@ -76,9 +76,9 @@
       },
       leftPaneStyle () {
         const w = window.lconfig.leftPaneWidth || '420px'
-        // const c = 'rgba(0, 0, 0, 0.5)'
+        const c = 'rgba(0, 0, 0, 0.5)'
         // const u = 'static/images/chou.jpg'
-        return `width:${w};` // background-color: ${c};
+        return `width:${w}; background-color: ${c};`
       },
       top () {
         // if (this.$store.state.leodata.length > 1) { return false }

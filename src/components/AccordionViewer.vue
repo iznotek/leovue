@@ -1,26 +1,32 @@
 <template>
   <div class="accordionviewer">
-    <div class="panes-container">
-      <div class="center-pane" id="center-pane">
-        <ul :style="ulStyle">
-          <div v-for="itemdata, index in data">
-          <item
-            class="item"
-            :top="getTop(index)"
-            :model="itemdata"
-            :textItems="text"
-            :targetEl="false"
-            :open="false">
-          </item>
-          </div>
-        </ul>
-      </div>
-    </div>
+    <splitpane>
+
+        <div slot="left">
+          <ul :style="ulStyle">
+            <div v-for="itemdata, index in data">
+            <item
+              class="item"
+              :top="getTop(index)"
+              :model="itemdata"
+              :textItems="text"
+              :targetEl="false"
+              :open="false">
+            </item>
+            </div>
+          </ul>
+        </div>
+
+      <contentpane slot="right"></contentpane>
+    </splitpane>
+    
   </div>
 </template>
 
 <script>
   import Item from './Item'
+  import ContentPane from './ContentPane'
+  import SplitPane from './SplitPane'
 
   let target = {el: null}
   export default {
@@ -28,7 +34,9 @@
     props: {
     },
     components: {
-      item: Item
+      item: Item,
+      contentpane: ContentPane,
+      splitpane: SplitPane
     },
     data: function () {
       return {
@@ -78,7 +86,8 @@
 <style>
   .accordionviewer{
     height: 100%;
-    margin-top: 40px;
+    //margin-top: 40px;
+    color: #dddddd
   }
   .accordionviewer UL {
     list-style-type: none;

@@ -82,6 +82,7 @@
       if (window.lconfig.filename) {
         filename = window.lconfig.filename
       }
+
       if (!this.$store.initializedData) {
         this.$store.dispatch('loadLeo', {filename, route: this.$route})
       }
@@ -109,6 +110,7 @@ HTML, BODY
   margin: 0
   padding: 0
   height: 100%
+  background-color: rgba(255,0,0,1.0)
 
 .right-pane .text, .inline .text
   // margin-top: 20px

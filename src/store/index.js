@@ -1190,6 +1190,7 @@ export default new Vuex.Store({
     openItemIds: [],
     history: [0],
     historyIndex: 0,
+    leftPaneWidth: 1200,
     iframeHTML: '',
     contentItemsUpdateCount: 0,
     idx: null,
@@ -1326,7 +1327,7 @@ export default new Vuex.Store({
         state.history.push(id)
         state.historyIndex = state.historyIndex + 1
       }
-      state.initialized = false
+      // state.initialized = false
     },
     OPEN_ITEMS (state, o) {
       const ids = state.openItemIds

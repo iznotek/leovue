@@ -278,6 +278,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+  .pane {
+    color: #333;
+  }
   .handle-button {
     height:20px;
     width: 20px;
@@ -288,7 +291,6 @@ export default {
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
-    color: #ccf;
     margin-left: 9px;
   }
   #lhandle {
@@ -306,7 +308,7 @@ export default {
   }
   .right-cpane {
     flex: auto;
-    background: #fff;
+    //background: rgba(255, 255, 255, 0.8);
     padding: 0px;
     // padding-top: 33px;
     //max-width: 720px;
@@ -320,18 +322,18 @@ export default {
   }
   #vpane {
     width: 100%;
-    background: #fff;
+    //background: #fff;
     //height: 400px;
     height: calc(100vh - 33px);
   }
   #bpane {
     width: 100%;
-    background: #fff;
+    //background: #fff;
     height: calc(100vh - 33px);
     overflow: scroll;
   }
   #tlayout {
-    background: #fff;
+    //background: #fff;
     min-height: 100%;
     margin: 0;
     margin-left: 5%;
@@ -342,7 +344,8 @@ export default {
   }
   .pane {
     // height: 100%;
-    background: #fff;
+    //background: #fff;
+    background: rgba(255, 255, 255, 0.8);
     width: 100%;
     position: relative;
   }

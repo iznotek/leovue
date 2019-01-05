@@ -2,7 +2,7 @@
   <div style="height:33px">
     <div class="holder">
       <div class="header" v-if="config.showHeader">
-        <span v-if="config.showAppTitle" class="app-title">LeoVue</span>
+        <span v-if="config.showAppTitle" class="app-title">@aspace.tech</span>
         <span v-if="config.showAppTitle && config.docTitle">: </span>
         <span class="doc-title">{{ config.docTitle }}</span>
         <div @click="toggle" class="icon icon-button">
@@ -231,14 +231,16 @@
   z-index: 111
   top: 33px
   overflow: hidden
-  background: #ccc
+  color: #ccc
+  background-color: rgba(0, 0, 0, 0.8)
+  //#ccc
   width: 0
   right: 0
   height: 100%
   //border-left: 1px solid #999
-  border-top: 1px solid #ccc
+  //border-top: 1px solid #ccc
   //-webkit-box-shadow: 10px 0 5px -2px #888;
-  //box-shadow: 10px 0 5px -2px #888;
+  box-shadow: 10px 0 5px -2px #888;
   //box-shadow: -4px 0 8px -4px rgba(31, 31, 31, 0.8)
   transition: width .5s
 .menu-separator
@@ -246,14 +248,14 @@
   margin-top: 10px
 .header
   text-align: left
-  background: #eee
+  background-color: rgba(0,0,0,0.3) 
   font-weight: normal
   padding: 2px
   padding-top: 6px
   padding-left: 6px
   color: #333
-  border-bottom: 1px solid #ddd
-  box-shadow: 0 1px 1px 0 rgba(116, 129, 141, 0.1)
+  //border-bottom: 1px solid #333
+  //box-shadow: 0 1px 1px 0 rgba(116, 129, 141, 0.1)
   height: 33px
 .search
   float: right
@@ -266,7 +268,7 @@
   padding: 0
   padding-top: 2px
   padding-right: 7px
-  color: #666
+  color: #ccc
 .icon-button
   cursor: pointer
   margin: 0
@@ -282,18 +284,19 @@
   height: 16px
 .app-title
   font-weight: normal
-  color: #333
+  color: #dddddd
   margin-left: 10px
-  border: 1px solid #ccc
-  border-radius: 5px
+  //border: 1px solid #ccc
+  //border-radius: 5px
   margin-top: -3px
   width: 72px
   display: inline-block
   text-align: center
 .doc-title
   // font-weight: bold
-  margin-left: 6px
-  color: #333
+  margin-left: 600px
+  color: #dddddd
+  text-align: center
 .menu-footer
   color: #fff
   position: absolute
@@ -306,6 +309,7 @@
   //position: absolute
   //right: 80px
   //top: 0
+  color: #ccc
   margin-top: -6px
   margin-right: 15px
   float: right
