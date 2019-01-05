@@ -2,27 +2,30 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import TreeViewer from '@/components/TreeViewer'
-import D3Viewer from '@/components/D3Viewer'
+// import D3Viewer from '@/components/D3Viewer'
 // import DbViewer from '@/components/DbViewer'
 import Settings from '@/components/Settings'
 import AccordionViewer from '@/components/AccordionViewer'
-import NestedViewer from '@/components/NestedViewer'
+// import NestedViewer from '@/components/NestedViewer'
+import ZircleViewer from '@/components/ZircleViewer'
 
 Vue.use(Router)
 
 let baseMode = window.lconfig.baseMode
-if (!baseMode) { baseMode = 't' }
+if (!baseMode) { baseMode = 'o' }
 
 let startPage = '/1'
-if (window.lconfig.coverPage) {
-  startPage = '/2'
-}
+// if (window.lconfig.coverPage) {
+//   startPage = '/2'
+// }
 
 // TODO: add not found link
 export default new Router({
   routes: [
     {
+      // Outline
       path: '/t/:id',
+      name: 'Outline',
       component: Dashboard,
       children: [{
         name: 'Node',
@@ -31,7 +34,9 @@ export default new Router({
       }]
     },
     {
+      // Accordeon
       path: '/a/:id',
+      name: 'Inline',
       component: Dashboard,
       children: [{
         name: 'ANode',
@@ -39,42 +44,50 @@ export default new Router({
         component: AccordionViewer
       }]
     },
-    {
-      path: '/n/:id',
-      component: Dashboard,
-      children: [{
-        name: 'NNode',
-        path: '',
-        component: NestedViewer
-      }]
-    },
-    {
-      path: '/d/:id',
-      component: Dashboard,
-      children: [{
-        name: 'DNode',
-        path: '',
-        component: D3Viewer
-      }]
-    },
-    {
-      path: '/z/:id',
-      component: Dashboard,
-      children: [{
-        name: 'ZNode',
-        path: '',
-        component: D3Viewer
-      }]
-    },
-    {
-      path: '/r/:id',
-      component: Dashboard,
-      children: [{
-        name: 'RNode',
-        path: '',
-        component: D3Viewer
-      }]
-    },
+    // {
+    //   // Nested
+    //   path: '/n/:id',
+    //   name: 'Nested',
+    //   component: Dashboard,
+    //   children: [{
+    //     name: 'NNode',
+    //     path: '',
+    //     component: NestedViewer
+    //   }]
+    // },
+    // {
+    //   // Graphic Tree
+    //   path: '/d/:id',
+    //   name: 'Graphic',
+    //   component: Dashboard,
+    //   children: [{
+    //     name: 'DNode',
+    //     path: '',
+    //     component: D3Viewer
+    //   }]
+    // },
+    // {
+    //   // Dendrogram
+    //   path: '/z/:id',
+    //   name: 'Dendogram',
+    //   component: Dashboard,
+    //   children: [{
+    //     name: 'ZNode',
+    //     path: '',
+    //     component: D3Viewer
+    //   }]
+    // },
+    // },
+    // {
+    //   path: '/r/:id',
+    //   name: 'Dendogram',
+    //   component: Dashboard,
+    //   children: [{
+    //     name: 'RNode',
+    //     path: '',
+    //     component: D3Viewer
+    //   }]
+    // },
     /*
     {
       path: '/w/:id',
@@ -86,6 +99,18 @@ export default new Router({
       }]
     },
     */
+
+    {
+      path: '/o/:id',
+      name: 'Circle',
+      component: Dashboard,
+      children: [{
+        name: 'ONode',
+        path: '',
+        component: ZircleViewer
+      }]
+    },
+
     {
       path: '/settings',
       component: Settings

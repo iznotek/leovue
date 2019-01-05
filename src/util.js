@@ -67,7 +67,7 @@ function parseQueryString (config, url) {
     }
   }
   const hash = window.location.hash
-  let baseMode = 't'
+  let baseMode = 'o'
   if (window.lconfig.baseMode) { baseMode = window.lconfig.baseMode }
   if (!hash || hash.length < 3) {
     //window.location.hash = baseMode + '/1'

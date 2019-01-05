@@ -22,6 +22,11 @@ import Vue2Leaflet from 'vue2-leaflet'
 import InfoCard from 'vue-info-card'
 import VTooltip from 'v-tooltip'
 import VueYouTubeEmbed from 'vue-youtube-embed'
+
+import VueResize from 'vue-resize'
+import Zircle from 'zircle'
+import 'zircle/dist/zircle.css'
+
 import VTable from './components/Table'
 import VCTable from './content-components/VCTable'
 import Mermaid from './content-components/Mermaid'
@@ -35,6 +40,7 @@ import ImageLeft from './components/layout/ImageLeft'
 import Kanban from './components/Kanban'
 import MermaidBoard from './components/MermaidBoard'
 import D3Board from './components/D3Board'
+
 import { TableComponent, TableColumn } from 'vue-table-component'
 
 import {charts} from './content-components/Charts'
@@ -46,6 +52,8 @@ Vue.use(VTooltip)
 Vue.use(VueYouTubeEmbed)
 Vue.use(ForkMeOnGithub)
 Vue.use(BootstrapVue)
+Vue.use(Zircle)
+Vue.use(VueResize)
 Vue.component('star-rating', StarRating)
 Vue.component('img-left', ImageLeft)
 Vue.component('sectionlink', SectionLink)
