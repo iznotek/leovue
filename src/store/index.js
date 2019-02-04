@@ -38,7 +38,7 @@ function loadIndexItems (arr, titles, textItems) {
     arr.push(
       {
         id: item.id,
-        name: item.name,
+        name: item.name.replace(/^@(.*?)\s/, '').replace(/^set(.*?)\s/, ''),
         text: textItems[item.t]
       }
     )
@@ -301,8 +301,9 @@ function showFormattedData (context, id, url, xslType, dataType, params, t) {
           dataArray = _.filter(dataArray, o => _.get(o, filter.key, '') === filter.value)
         }
         const template = nodeList.template || ''
-        addChildNodes(context.state, id, dataArray, template, params.urlIsQueryString,
-          params.urlTitle, nodeList.template, nodeList.titleKey)
+        addChildNodes(context.state, id, dataArray,
+          template, nodeList.hrefIsQueryString,
+          nodeList.hrefKey, nodeList.template, nodeList.titleKey)
       }
     })
     .catch(function (error) {
@@ -316,10 +317,10 @@ function showFormattedData (context, id, url, xslType, dataType, params, t) {
  * @param parentId: id of the item to which child nodes will be appended.
  * @param data: the array to be converted into child nodes
  * @param template: template to use, e.g. rgarticle (see index.html for example)
- * @param urlIsQueryString: use just the portion of the url after last '/' (will be passed to template.host)
+ * @param urlIsQueryString: the url passed is not the full url (will be passed to template.host)
  * @returns {boolean}
  */
-function addChildNodes (context, parentId, data, template, urlIsQueryString, urlTitle, childTemplate, titleKey) {
+function addChildNodes (context, parentId, data, template, urlIsQueryString, hrefKey, childTemplate, titleKey) {
   if (!_.isArray(data)) { return }
   const item = JSON.search(context.leodata, '//*[id="' + parentId + '"]')[0]
   const children = []
@@ -336,13 +337,14 @@ function addChildNodes (context, parentId, data, template, urlIsQueryString, url
     if (n.title) {
       vtitle = n.title.text
     }
-    // urlTitle means the title of the list item will be a url instead of a dataSet.
-    if (urlTitle) {
-      let url = n.title.href
+    // urlTitle means the title of the list item will become a JSON url instead of a dataSet.
+    if (hrefKey) {
+      let url = _.get(n, hrefKey)
       if (urlIsQueryString) {
         url = '/' + url
         url = url.substring(url.lastIndexOf('/') + 1)
       }
+      // e.g. @json-rgarticle [Article Title](Article URL)
       name = `@json${template} [${titleText}](${url})`
     } else {
       name = `@dataSet set${id} ${titleText}`// label
@@ -1004,7 +1006,10 @@ function loadSubtrees (context, trees, data, topId, subpath) {
   })
   return p
 }
-// add language directives to subtrees of existing language directives
+/**
+  Recursively preprocess tree
+  e.g add language directives to subtrees of existing language directives
+*/
 function setChildDirectives (context, data) {
   const textItems = data.textItems
   data.data.forEach(d => {
@@ -1013,12 +1018,23 @@ function setChildDirectives (context, data) {
 }
 function setChildDirective (context, d, textItems, parentDirective) {
   const text = textItems[d.t]
+  // check for @group, add if found
+  const title = d.name
+  const rex = /@group-(.*?) /
+  const match = rex.exec(title)
+  if (match && match[1]) {
+    d.group = match[1]
+  }
+  // language directive
   const re = /^(@language \w+)/
   let languageDirective = re.exec(text)
   if (languageDirective) {
     languageDirective = languageDirective[1]
   }
   if (parentDirective && !languageDirective) {
+    if (/^{/.test(textItems[d.t])) {
+      return // skip if the text item is JSON data
+    }
     textItems[d.t] = parentDirective + '\n' + textItems[d.t]
     languageDirective = parentDirective
   }
@@ -1535,7 +1551,51 @@ export default new Vuex.Store({
           if (!url) { return }
           return showFormattedData(context, id, url, 'rss', 'xml')
         }
+        if (/^@from/.test(item.name)) {
+          let params = jsyaml.load(itemText) || {}
+          const rex = /@from-(.*?) /
+          const match = rex.exec(item.name)
+          let group = null
+          if (match && match[1]) {
+            group = match[1]
+          } else {
+            return
+          }
+          item.name = item.name.replace(rex, '')
+          const groupItem = JSON.search(
+            context.state.leodata,
+            '//*[group="' + group + '"]')[0]
+          const children = groupItem.children
+          let items = []
+          children.forEach(child => {
+            const t = context.state.leotext[child.t]
+            let textData = {}
+            try {
+              textData = JSON.parse(t)
+            } catch (e) {
+            }
+            items.push(textData)
+          })
+          const nodeList = params.nodeList
+          items = JSON.search(items, '//' + nodeList.listKey)
+          // make items unique by listKey
+          const itemHash = {}
+          items.forEach(item => {
+            const k = item[nodeList.titleKey]
+            itemHash[k] = item
+          })
+
+          items = []
+          Object.keys(itemHash).sort().forEach(key => {
+            items.push(itemHash[key])
+          })
+          addChildNodes(context.state, id, items,
+            nodeList.template, nodeList.hrefIsQueryString,
+            nodeList.hrefKey, nodeList.template, nodeList.titleKey)
+        }
         if (/^@(xml|json)/.test(item.name)) {
+          // if there is a hyphen in the directive the second token
+          // is the dataType (more info will be in lconfig keyed by dataType)
           const re = /^@(xml|json)(-.*?)?\s/
           const match = re.exec(item.name)
           let dataType = match[1]

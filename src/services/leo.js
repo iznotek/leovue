@@ -309,7 +309,8 @@ function setIds (startId, d) {
     // return name
   }
   vtitle = vtitle
-    .replace(/^@[a-zA-Z-]+\s/, '')
+    .replace(/^@[a-zA-Z-]+\sset.*?\s/, '')
+    .replace(/@[a-zA-Z-\d]+\s/g, '') // hide directives in title
     .replace(/<</g, '\u00AB')
     .replace(/>>/g, '\u00BB')
 

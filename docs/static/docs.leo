@@ -11,14 +11,14 @@
 <vnodes>
 <v t="josephorr.20181002174010.1"><vh>@cover</vh></v>
 <v t="josephorr.20170228222411.2"><vh>LeoVue</vh></v>
-<v t="josephorr.20170326174500.1" a="E"><vh>More About Leo</vh>
+<v t="josephorr.20170326174500.1"><vh>More About Leo</vh>
 <v t="josephorr.20170327233137.1"><vh>[Feature Introduction](https://kaleguy.github.io/leo-tutorials/feature-introduction.md)</vh></v>
 <v t="josephorr.20170327233223.1"><vh>[Chunking](https://kaleguy.github.io/leo-tutorials/chunking.md)</vh></v>
 <v t="josephorr.20170327233236.1"><vh>Additional Features</vh></v>
 <v t="josephorr.20181202130523.1"><vh>[Screenshots](https://leoeditor.com/screen-shots.html)</vh></v>
 <v t="josephorr.20170327233257.1"><vh>Installing Leo</vh></v>
 </v>
-<v t="josephorr.20170327233126.1"><vh>More About LeoVue</vh>
+<v t="josephorr.20170327233126.1" a="E"><vh>More About LeoVue</vh>
 <v t="josephorr.20181006112633.1"><vh>[LeoVue Quick Look](static/QuickLook.md)</vh></v>
 <v t="josephorr.20180304203537.1"><vh>[LeoVue README](README.md)</vh></v>
 <v t="josephorr.20171116064625.1"><vh>Current Feature List</vh></v>
@@ -31,7 +31,7 @@
 </v>
 <v t="josephorr.20170421082838.1"><vh>Configuring</vh></v>
 <v t="josephorr.20181105183604.1"><vh>Navigating</vh></v>
-<v t="josephorr.20181120155646.1"><vh>@page Directives</vh>
+<v t="josephorr.20181120155646.1" a="E"><vh>@page Directives</vh>
 <v t="josephorr.20181120155705.1"><vh>Leo Directives</vh></v>
 <v t="josephorr.20181120155718.1"><vh>LeoVue Directives</vh></v>
 <v t="josephorr.20181120155733.1"><vh>URL Links in LeoVue</vh></v>
@@ -50,7 +50,7 @@
 <v t="josephorr.20170511082833.1"><vh>Subtrees</vh>
 <v t="josephorr.20170511083006.1"><vh>[Top](static/example.leo)</vh></v>
 </v>
-<v t="josephorr.20170326072340.1"><vh>File Nodes</vh>
+<v t="josephorr.20170326072340.1" a="E"><vh>File Nodes</vh>
 <v t="josephorr.20170408092907.1"><vh>@clean ../src/services/leo.js</vh></v>
 <v t="josephorr.20170328225527.1"><vh>@clean ../src/components/TreeViewer.vue</vh>
 <v t="josephorr.20170328225654.1"><vh>&lt;&lt; template &gt;&gt;</vh></v>
@@ -58,7 +58,7 @@
 <v t="josephorr.20170328225741.1"><vh>&lt;&lt; style &gt;&gt;</vh></v>
 </v>
 </v>
-<v t="josephorr.20170401144849.1"><vh>URL Nodes</vh>
+<v t="josephorr.20170401144849.1" a="E"><vh>URL Nodes</vh>
 <v t="josephorr.20180402061306.1"><vh>Basic Web Content</vh>
 <v t="josephorr.20170401114539.1"><vh>[Interstellar on Wikipedia](https://en.wikipedia.org/wiki/Interstellar_(film))</vh></v>
 <v t="josephorr.20170327233137.1"></v>
@@ -73,9 +73,9 @@
 <v t="josephorr.20180402071950.1"><vh>@xml [New York Weather](xttp://w1.weather.gov/xml/current_obs/display.php?stid=KLGA)</vh></v>
 </v>
 <v t="josephorr.20180407102550.1"><vh>JSON</vh>
-<v t="josephorr.20180407102553.1"><vh>@json [NYC Weather](https://www.treebased.io/weather/new%20york)</vh></v>
-<v t="josephorr.20180414145445.1"><vh>@json [Math Book](https://openlibrary.org/api/books?format=json&amp;jscmd=data&amp;bibkeys=ISBN:0201558025)</vh></v>
-<v t="josephorr.20181028132300.1"><vh>Lists from JSON data</vh>
+<v t="josephorr.20190101125029.1"><vh>@json [NYC Weather](https://www.treebased.io/weather/new%20york)</vh></v>
+<v t="josephorr.20190101130116.1"><vh>@json [Math Book](https://openlibrary.org/api/books?format=json&amp;jscmd=data&amp;bibkeys=ISBN:0201558025)</vh></v>
+<v t="josephorr.20181028132300.1" a="E"><vh>Lists from JSON data</vh>
 <v t="josephorr.20181020175246.1"><vh>@json [Papers of Paul Krugman](static/repec-krugman.json)</vh></v>
 <v t="josephorr.20181016191554.1"><vh>@json [Research of Jordan Peterson](static/articles-Jordan_Peterson2.json)</vh></v>
 </v>
@@ -84,6 +84,7 @@
 <v t="josephorr.20180414204148.1"><vh>@book [Concrete Mathematics](0201558025)</vh></v>
 <v t="josephorr.20180414205753.1"><vh>@book [Evolution of Civilizations](0913966576)</vh></v>
 </v>
+<v t="josephorr.20190103202205.1"><vh>[Import with JSON Nodes - Export to Leo](static/Export.md)</vh></v>
 </v>
 </v>
 <v t="josephorr.20170605184042.1"><vh>Vue.js Components</vh>
@@ -131,8 +132,8 @@
 <v t="josephorr.20171113062955.1"><vh>@board Polar Chart from dataTable</vh></v>
 </v>
 </v>
-<v t="josephorr.20171109061104.1"><vh>Data</vh>
-<v t="josephorr.20171107074219.1"><vh>Data Sets</vh>
+<v t="josephorr.20171109061104.1" a="E"><vh>Data</vh>
+<v t="josephorr.20171107074219.1" a="E"><vh>Data Sets</vh>
 <v t="josephorr.20171105192448.1"><vh>@dataSet set1 Some Sample Data</vh></v>
 <v t="josephorr.20171107081559.1"><vh>@dataSet set2 Some Sample Data</vh></v>
 </v>
@@ -183,7 +184,7 @@
 <v t="josephorr.20171130193909.1"></v>
 </v>
 </v>
-<v t="josephorr.20170401144849.1"></v>
+<v t="josephorr.20170401144849.1" a="E"></v>
 <v t="josephorr.20180123102417.1"><vh>Summary Nodes</vh>
 <v t="josephorr.20180123102440.1"><vh>Mermaid</vh>
 <v t="josephorr.20180123094605.1"><vh>@mermaidtd (Simple Example Top Down)</vh>
@@ -290,13 +291,14 @@
 </v>
 </v>
 <v t="josephorr.20180116093044.1"><vh>Kanban</vh>
-<v t="josephorr.20180116093050.1"><vh>@kanban LeoVue Project Kanban</vh>
-<v t="josephorr.20180122081638.1"><vh>Later</vh>
+<v t="josephorr.20180116093050.1" a="E"><vh>@kanban LeoVue Project Kanban</vh>
+<v t="josephorr.20180122081638.1" a="E"><vh>Later</vh>
 <v t="josephorr.20180122081646.1"><vh>Static Site upgrade</vh></v>
 <v t="josephorr.20180130120957.1"><vh>CSS cleanup</vh></v>
-</v>
-<v t="josephorr.20180116093114.1"><vh>To Do</vh>
+<v t="josephorr.20180116093218.1"><vh>Codeceptjs</vh></v>
 <v t="josephorr.20180420165601.1"><vh>Runkit Component</vh></v>
+</v>
+<v t="josephorr.20180116093114.1" a="E"><vh>To Do</vh>
 <v t="josephorr.20180402070616.1"><vh>Issues</vh></v>
 <v t="josephorr.20180305204208.1"><vh>Fix animation on initial node click</vh></v>
 <v t="josephorr.20180304114723.1"><vh>Cloud Diagrams</vh></v>
@@ -315,14 +317,14 @@
 <v t="josephorr.20180122081528.1"><vh>content pane</vh></v>
 </v>
 </v>
-<v t="josephorr.20180116093121.1"><vh>Doing</vh>
-<v t="josephorr.20180420165631.1"><vh>@page</vh></v>
+<v t="josephorr.20180116093121.1" a="E"><vh>Doing</vh>
+<v t="josephorr.20190105100914.1"><vh>@tab</vh></v>
+<v t="josephorr.20190105100838.1"><vh>word cloud component</vh></v>
+<v t="josephorr.20190105100846.1"><vh>graphs from group</vh></v>
 <v t="josephorr.20180420165635.1"><vh>?page=</vh></v>
 <v t="josephorr.20180420165609.1"><vh>@sort</vh></v>
-<v t="josephorr.20180420165801.1"><vh>logo and title</vh></v>
-<v t="josephorr.20180116093218.1"><vh>Codeceptjs</vh></v>
 </v>
-<v t="josephorr.20180116093125.1"><vh>Done</vh>
+<v t="josephorr.20180116093125.1" a="E"><vh>Done</vh>
 <v t="josephorr.20180303162711.1"><vh>Bookmarks in subtree nodes</vh></v>
 <v t="josephorr.20180303171634.1"><vh>Auto outline wikipedia pages</vh></v>
 <v t="josephorr.20180116093131.1"><vh>Mermaid from subtree</vh>
@@ -342,6 +344,8 @@
 </v>
 <v t="josephorr.20180116093153.1"><vh>Kanban v1</vh></v>
 <v t="josephorr.20180201111523.1"><vh>Cascading Directives</vh></v>
+<v t="josephorr.20180420165631.1"><vh>@page</vh></v>
+<v t="josephorr.20180420165801.1"><vh>logo and title</vh></v>
 </v>
 </v>
 </v>
@@ -1012,7 +1016,8 @@ function setIds (startId, d) {
     // return name
   }
   vtitle = vtitle
-    .replace(/^@[a-zA-Z-]+\s/, '')
+    .replace(/^@[a-zA-Z-]+\sset.*?\s/, '')
+    .replace(/@[a-zA-Z-\d]+\s/g, '') // hide directives in title
     .replace(/&lt;&lt;/g, '\u00AB')
     .replace(/&gt;&gt;/g, '\u00BB')
 
@@ -1277,12 +1282,29 @@ Some of the examples are adapted from the excellent [Chartjs Intro articles by T
   ]
 }
 </t>
-<t tx="josephorr.20171107074208.1">@language md
-
-A line chart with some random data contained in the **set1** @dataTable node.
+<t tx="josephorr.20171107074208.1">@language html
 
 &lt;line-chart dataSet="set1" :gridLines="true" :board="true"/&gt;</t>
-<t tx="josephorr.20171107074219.1"></t>
+<t tx="josephorr.20171107074219.1">## Data Sets
+
+A dataset is a node containing JSON data.
+
+You can use a dataset in another component by referring to it by name.
+
+You can also display a dataset as HTML by specifying a lodash template. See this
+sourcefile for examples.
+
+If you have a node containing child datasets, you can summarize the datasets in a table 
+like this:
+
+```
+&lt;summary-table
+ :cols="[{show: 'title', label: 'Title'},{show: 'pubdate', label: 'Date'}, {show: 'journal.text', label: 'Journal'}, {show: 'citations', label: 'Citations'}]" &gt;  
+&lt;/summary-table&gt;
+```
+
+For a more complete example of JSON data in LeoVue see:
+[Research of Jordan B Peterson](https://kaleguy.github.io/leo-examples/peterson)</t>
 <t tx="josephorr.20171107081559.1">@language json
 {
    "labels": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -1301,7 +1323,7 @@ A line chart with some random data contained in the **set1** @dataTable node.
         }
      ]
 }</t>
-<t tx="josephorr.20171107082534.1">@language md
+<t tx="josephorr.20171107082534.1">@language html
 
 A bar chart with some random data contained in the [[set1]] @dataTable node.
 
@@ -1404,9 +1426,9 @@ A basic table component is included for displaying table data. The table compone
 
 # LeoVue Current Feature List
 
-LeoVue is currently at version 1.17.1
+LeoVue is currently at version 1.21.0
 
-LeoVue 1.17.x is currently is only tested in Chrome and may not display correctly in other browsers.
+LeoVue 1.21.x is currently is only tested in Chrome and may not display correctly in other browsers.
 
 Current features include:
 * Display Leo content including markdown, html and code highlighting
@@ -1428,6 +1450,7 @@ Current features include:
 * Nodes with templated data, e.g. @xml and @json nodes.
 * Optional Google Analytics
 * Arrow key navigation of menu
+* Load JSON - Export to Leo
 
 Planned features not yet supported:
 * Form.io support
@@ -1445,7 +1468,8 @@ If you view this node in Leo, you'll see that in this example all of the data an
           { firstName: 'John', lastName: 'Lennon', instrument: 'Guitar', birthday: '04/10/1940', songs: 72 },
           { firstName: 'Paul', lastName: 'McCartney', instrument: 'Bass', birthday: '18/06/1942', songs: 70 },
           { firstName: 'George', lastName: 'Harrison', instrument: 'Guitar', birthday: '25/02/1943', songs: 22 },
-          { firstName: 'Ringo', lastName: 'Starr', instrument: 'Drums', birthday: '07/07/1940', songs: 2 },
+          { firstName: 'Foo', lastName: 'Bar', instrument: 'Kazoo', birthday: '07/07/1940', songs: 1 },
+          { firstName: 'Mr', lastName: 'X', instrument: 'Wood Blocks', birthday: '07/07/1940', songs: 100 },
      ]"
      sort-by="songs"
      sort-order="asc"
@@ -2313,11 +2337,6 @@ By default, LeoVue comes with just a 'weather' template for JSON data from OpenW
 templates to this file to format other JSON data sources.
 
 You can also add templates directly to index.html. See the index.html in the LeoVue repo for examples.</t>
-<t tx="josephorr.20180407102553.1">template: weather
-location: NYC Central Park
-source: OpenWeather Map</t>
-<t tx="josephorr.20180414145445.1">template: openbooks
-comments: This is a math book. It was on the Openlibrary site.</t>
 <t tx="josephorr.20180414204138.1">@language md
 
 ## The @book Directive
@@ -2570,7 +2589,7 @@ The child nodes below contain some examples of Bootstrap Vue components in use.
    &lt;/div&gt;
    &lt;p&gt;
      &lt;a style="display:none" href="https://github.com/kaleguy/leovue/" target="_blank"&gt;GitHub&lt;/a&gt;
-     &lt;a href="#dashboard"&gt;1.17.1 Docs / Demo&lt;/a&gt;
+     &lt;a href="#dashboard"&gt;1.21.0 Docs / Demo&lt;/a&gt;
    &lt;/p&gt;
    &lt;/div&gt;
 &lt;/div&gt;
@@ -2633,7 +2652,7 @@ nodeList:
 filter:
   key: type.text
   value: Article
-urlIsQueryString: true</t>
+</t>
 <t tx="josephorr.20181020175246.1">template: repec-articles
 nodeList: 
   listKey: articles
@@ -2782,12 +2801,16 @@ LeoVue adds a few directives not found in the Leo. These are all node level dire
 
 * **@page:** The content for the current item and all child items will appear on one scrolling page. The current page is an example of this directive. Note that the page scrolls as items on the page are selected in the tree menu, rather than a new content item being opened. 
 
-* **dataSet:** This is the only directive that doesn't indicate how content is shown but rather how it is consumed (by components in other nodes). For example:
+* **@dataSet:** This is the only directive that doesn't indicate how content is shown but rather how it is consumed (by components in other nodes). For example:
 
    ```
    @dataSet set1 Some Sample Data
    ```
-   In the above example, the data in the example node will have a key of 'set1' (which can be used by components elsewhere in the tree). The text after the key name will be used as the node label in the tree menu. </t>
+   In the above example, the data in the example node will have a key of 'set1' (which can be used by components elsewhere in the tree). The text after the key name will be used as the node label in the tree menu. 
+   
+* **@group-** Treat the immediate child nodes as one data set.   
+* **@from-** Extract a subset of data from the a group.   
+</t>
 <t tx="josephorr.20181120155733.1">Not exactly a directive, but operates similarly to the content directive above. If you enter a node title like this:
 
     [Interstellar on Wikipedia](https://en.wikipedia.org/wiki/Interstellar_(film))
@@ -2807,5 +2830,14 @@ For examples of content directives, see the [[ URL Nodes ]] section.
   &lt;/l-map&gt;
 &lt;/div&gt;</t>
 <t tx="josephorr.20181202130523.1"></t>
+<t tx="josephorr.20190101125029.1">template: weather
+location: NYC Central Park
+source: OpenWeather Map</t>
+<t tx="josephorr.20190101130116.1">template: openbooks
+comments: This is a math book. It was on the Openlibrary site.</t>
+<t tx="josephorr.20190103202205.1"></t>
+<t tx="josephorr.20190105100838.1"></t>
+<t tx="josephorr.20190105100846.1"></t>
+<t tx="josephorr.20190105100914.1"></t>
 </tnodes>
 </leo_file>
