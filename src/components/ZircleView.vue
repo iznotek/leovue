@@ -137,7 +137,7 @@ export default {
         if (theme && theme.background.spot) {
           return theme.background.spot
         } else {
-          return 'static/arkom/spot.png'
+          return require(`@/assets/spot.png`) // 'static/arkom/spot.png'
         }
       }
       return false
