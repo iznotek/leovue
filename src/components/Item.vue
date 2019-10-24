@@ -9,7 +9,7 @@
         <div @click="toggle" v-bind:class="{'icon-bracket': top}" class="icon-b" v-if="isFolder">
           <div class="arrow" v-bind:class="{arrowdown: isOpenA}">
             <!-- {{arrowIcon}} -->
-            <img src="static/images/bullet-collapse-white2.png" width="16">
+            <img :src="require(`@/assets/icons/bullet-arrow.svg`)" width="16">
           </div>
         </div>
         <!-- <editor :id="'editor-'+nid" v-if="isEditable" v-bind:editable="model.name" /> -->
