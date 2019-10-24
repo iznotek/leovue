@@ -8,6 +8,10 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+var UglifyJsPlugin = require('uglifyjs-3-webpack-plugin');
+var TerserPlugin = require('terser-webpack-plugin-legacy');
+// var PrerenderSpaPlugin = require('prerender-spa-plugin')
+// var OfflinePlugin = require('offline-plugin')
 
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -31,14 +35,28 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
+    // new UglifyJsPlugin({
+    //   test: /\.js($|\?)/i,
+    //   sourceMap: true,
+    //   exclude: [/vue-beautiful-chat/],
+    //   uglifyOptions: {
+    //     compress: {
+    //       warnings: false
+    //     },
+    //     mangle: {
+    //       keep_fnames: true,
+    //     },
+    //     output: {
+    //       beautify: false,
+    //     }
+    //   }
+    // }),
+    new TerserPlugin({
+      test: /\.js($|\?)/i,
+      sourceMap: true,
+      terserOptions: {
+        ecma: 6,
       },
-      mangle: {
-        keep_fnames: true,
-      },
-      sourceMap: true
     }),
     // extract css into its own file
     new ExtractTextPlugin({
@@ -93,7 +111,47 @@ var webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
+    ]),
+
+    // new PrerenderSpaPlugin(
+    //   // Path to compiled app
+    //   path.join(__dirname, '../dist'),
+    //   // List of endpoints you wish to prerender
+    //   // If you also wanted to prerender /about and /contact,
+    //   // then this would be [ '/', '/about', '/contact' ]
+    //   [ '/' ]
+    // ),
+    
+    // // it's always better if OfflinePlugin is the last plugin added
+    // new OfflinePlugin({
+    //   safeToUseOptionalCaches: true,
+    //   caches: {
+    //     main: [
+    //       'css/app.*.css',
+    //       'js/vendor.*.js',
+    //       'js/app.*.js',
+    //       '/'
+    //     ],
+    //     additional: [
+    //       ':externals:'
+    //     ],
+    //     optional: [
+    //       ':rest:'
+    //     ]
+    //   },
+    //   externals: [
+    //     // list assets that are not bundled by webpack here to cache them
+    //     '/'
+    //   ],
+    //   ServiceWorker: {
+    //     events: true,
+    //     navigateFallbackURL: '/',
+    //     publicPath: '/sw.js'
+    //   },
+    //   AppCache: {
+    //     FALLBACK: { '/': '/' }
+    //   }
+    // })
   ]
 })
 
@@ -121,3 +179,113 @@ if (config.build.bundleAnalyzerReport) {
 }
 
 module.exports = webpackConfig
+
+// Enable history mode for vue-router:
+// const router = new VueRouter({
+// mode: 'history',
+// routes: [...]
+// })
+
+// var path = require('path')
+// var webpack = require('webpack')
+// var PrerenderSpaPlugin = require('prerender-spa-plugin')
+// var HtmlWebpackPlugin = require('html-webpack-plugin')
+// var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// var VueLoaderPlugin = require('vue-loader')
+
+// module.exports = {
+//   entry: path.resolve(__dirname, 'src/main.js'),
+//   output: {
+//     path: path.resolve(__dirname, './dist'),
+//     publicPath: '/',
+//     filename: 'build.js'
+//   },
+//   module: {
+//     rules: [{
+//         test: /\.css$/,
+//         use: [
+//           'vue-style-loader',
+//           'css-loader'
+//         ],
+//       }, {
+//         test: /\.vue$/,
+//         loader: 'vue-loader',
+//         options: {
+//           loaders: {}
+//           // other vue-loader options go here
+//         }
+//       },
+//       {
+//         test: /\.js$/,
+//         loader: 'babel-loader',
+//         exclude: /node_modules/
+//       },
+//       {
+//         test: /\.(png|jpg|gif|svg)$/,
+//         loader: 'file-loader',
+//         options: {
+//           name: '[name].[ext]?[hash]'
+//         }
+//       }
+//     ]
+//   },
+//   resolve: {
+//     alias: {
+//       'vue$': 'vue/dist/vue.esm.js'
+//     },
+//     extensions: ['*', '.js', '.vue', '.json']
+//   },
+//   devServer: {
+//     historyApiFallback: true,
+//     noInfo: true,
+//     overlay: true
+//   },
+//   performance: {
+//     hints: false
+//   },
+//   devtool: '#eval-source-map'
+// }
+
+// if (process.env.NODE_ENV === 'production') {
+//   module.exports = {
+//     mode: "production",
+//     devtool: '#source-map',
+//     optimization: {
+//       minimizer: [
+//         new UglifyJsPlugin({
+//           sourceMap: true
+//         })
+//       ]
+//     },
+//     plugins: [
+//       new HtmlWebpackPlugin({
+//         template: 'index.html',
+//         filename: path.resolve(__dirname, 'dist/index.html')
+//       }),
+//       new PrerenderSpaPlugin({
+//         // Absolute path to compiled SPA
+//         staticDir: path.resolve(__dirname, './dist'),
+//         // List of routes to prerender
+//         routes: ['/', '/about', '/contact'],
+//         // Options
+//         postProcess(context) {
+//           let titles = {
+//             '/': 'My home page',
+//             '/about': 'My awesome about page',
+//             '/contact': 'Contact me'
+//           };
+//           context.html = context.html.replace(
+//             /<title>[^<]*<\/title>/i,
+//             `<title>${titles[context.route]}</title>`
+//           )
+//           return context
+//         }
+//       }),
+//       new VueLoaderPlugin()
+//     ]
+//   }
+// }
+
+// wget https://github.com/yongjhih/docker-parse-server/raw/master/docker-compose.yml
+// $ APP_ID=iznoapp MASTER_KEY=iznokey PARSE_DASHBOARD_ALLOW_INSECURE_HTTP=1 SERVER_URL=http://localhost:1337/parse docker-compose up -d
+// APP_ID=iznoapp MASTER_KEY=iznokey PARSE_DASHBOARD_ALLOW_INSECURE_HTTP=1 SERVER_URL=http://localhost:1337/parse USER1=izno USER1_PASSWORD=iznokey docker-compose up -d

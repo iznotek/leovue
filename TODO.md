@@ -36,3 +36,5 @@ ok 1. click to load child node
 1. export to Leo
 
 
+"zircle": "1.2.1"
+

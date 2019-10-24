@@ -7,4 +7,11 @@ test/e2e/reports
 selenium-debug.log
 .idea/
 *.map
-/static/components.leo
+
+extras/
+static/textures/
+static/src/
+static/models/
+static/js/
+assets/
+dist/

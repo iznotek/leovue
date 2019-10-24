@@ -19,7 +19,7 @@ if (!/"staticSite":/.test(indexHTML)) {
 let re = /window\.lconfig\s?=(.*?)<\/script>/
 const indexHTMLn = indexHTML.replace(/[\n\r]/g, '')
 let match = re.exec(indexHTMLn)
-const config = JSON.parse(match[1])
+const config = JSON.parse(JSON.stringify(match[1]))
 
 const xml = fs.readFileSync(config.filename + '.leo', 'utf8')
 

@@ -42,8 +42,11 @@ module.exports = {
         loader: 'eslint-loader',
         enforce: "pre",
         include: [resolve('src'), resolve('test')],
+        exclude: [resolve('src/components/modelviewer'),
+                  resolve('src/components/ambient')],
         options: {
-          formatter: require('eslint-friendly-formatter')
+          formatter: require('eslint-friendly-formatter'),
+          emitError: true
         }
       },
       {
@@ -53,7 +56,8 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /defiant/,
+        //exclude: /defiant/,
+        exclude: [/defiant/, /modelviewer/, /ambient/, /vue-beautiful-chat/],
         loader: 'babel-loader',
         include: [
           resolve('src'),
