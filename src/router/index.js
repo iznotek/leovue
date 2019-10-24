@@ -2,12 +2,18 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import TreeViewer from '@/components/TreeViewer'
-// import D3Viewer from '@/components/D3Viewer'
+import D3Viewer from '@/components/D3Viewer'
 // import DbViewer from '@/components/DbViewer'
 import Settings from '@/components/Settings'
 import AccordionViewer from '@/components/AccordionViewer'
 // import NestedViewer from '@/components/NestedViewer'
 import ZircleViewer from '@/components/ZircleViewer'
+
+// Fix DuplicatedNavigation due to promise
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push (location) {
+//  return originalPush.call(this, location).catch(err => err)
+// }
 
 Vue.use(Router)
 
@@ -25,7 +31,6 @@ export default new Router({
     {
       // Outline
       path: '/t/:id',
-      name: 'Outline',
       component: Dashboard,
       children: [{
         name: 'Node',
@@ -36,7 +41,6 @@ export default new Router({
     {
       // Accordeon
       path: '/a/:id',
-      name: 'Inline',
       component: Dashboard,
       children: [{
         name: 'ANode',
@@ -55,17 +59,16 @@ export default new Router({
     //     component: NestedViewer
     //   }]
     // },
-    // {
-    //   // Graphic Tree
-    //   path: '/d/:id',
-    //   name: 'Graphic',
-    //   component: Dashboard,
-    //   children: [{
-    //     name: 'DNode',
-    //     path: '',
-    //     component: D3Viewer
-    //   }]
-    // },
+    {
+      // Graphic Tree
+      path: '/d/:id',
+      component: Dashboard,
+      children: [{
+        name: 'DNode',
+        path: '',
+        component: D3Viewer
+      }]
+    },
     // {
     //   // Dendrogram
     //   path: '/z/:id',
@@ -102,7 +105,6 @@ export default new Router({
 
     {
       path: '/o/:id',
-      name: 'Circle',
       component: Dashboard,
       children: [{
         name: 'ONode',

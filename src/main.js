@@ -11,6 +11,13 @@ import 'vue-awesome/icons/arrow-left'
 import 'vue-awesome/icons/arrow-right'
 import 'vue-awesome/icons/check'
 import 'vue-awesome/icons/chevron-left'
+import 'vue-awesome/icons/chevron-right'
+import 'vue-awesome/icons/expand'
+import 'vue-awesome/icons/reply'
+import 'vue-awesome/icons/share'
+import 'vue-awesome/icons/project-diagram'
+import 'vue-awesome/icons/code-branch'
+import 'vue-awesome/icons/eye'
 import 'vue-awesome/icons/'
 import ForkMeOnGithub from 'fork-me-on-github-vue'
 import BootstrapVue from 'bootstrap-vue'
@@ -19,11 +26,18 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'timeline-vuejs/dist/timeline-vuejs.css'
 
 // content components
-import Vue2Leaflet from 'vue2-leaflet'
+import {LMap, LTileLayer, LMarker} from 'vue2-leaflet'
 import InfoCard from 'vue-info-card'
 import VTooltip from 'v-tooltip'
+import VueContentPlaceholders from 'vue-content-placeholders'
+import Pdf from 'vue-pdf'
+import AsyncComputed from 'vue-async-computed'
+import VueMouseParallax from 'vue-mouse-parallax'
+
+// import VueYoutube from 'vue-youtube'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 
+import Fullscreen from 'vue-fullscreen'
 import VueResize from 'vue-resize'
 import Zircle from 'zircle'
 
@@ -46,18 +60,73 @@ import D3Board from './components/D3Board'
 import { TableComponent, TableColumn } from 'vue-table-component'
 import SummaryTable from './components/SummaryTable'
 import VueWordCloud from 'vuewordcloud'
+import VueLazyImageLoading from 'vue-lazy-image-loading'
+// import VueCesium from 'vue-cesium'
+import vBlur from 'v-blur'
+import Chat from 'vue-beautiful-chat'
+// import VueFab from 'vue-float-action-button'
+import VueEvents from 'vue-events'
+import VueLazyComponent from '@xunlei/vue-lazy-component'
+import Grid from 'vue-js-grid'
 
-import {charts} from './content-components/Charts'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import Transitions from 'vue2-transitions'
+import VueMouseFollower from 'vue-mousefollower'
+import VueGoodLinks from 'vue-good-links'
+import 'vue-good-links/dist/vue-good-links.css'
+import VueAnime from 'vue-animejs'
+
+import { charts } from './content-components/Charts'
 charts(Vue)
 
 const Defiant = require('./lib/defiant') // eslint-disable-line
 
+// Enable progressive web app support (with offline-plugin)
+// if (process.env.NODE_ENV === 'production') {
+//   require('./pwa')
+// }
+
+Vue.use(VueAnime)
+Vue.use(VueGoodLinks)
+Vue.use(VueMouseFollower)
+Vue.use(Transitions)
+Vue.use(Loading)
+Vue.use(Grid)
+Vue.use(VueLazyComponent)
+Vue.use(VueMouseParallax)
+Vue.use(AsyncComputed)
+Vue.use(VueEvents)
+Vue.use(Chat)
+Vue.use(VueContentPlaceholders)
 Vue.use(VTooltip)
+// Vue.use(VueYoutube)
+Vue.use(Fullscreen)
 Vue.use(VueYouTubeEmbed)
 Vue.use(ForkMeOnGithub)
 Vue.use(BootstrapVue)
 Vue.use(Zircle)
 Vue.use(VueResize)
+Vue.use(VueLazyImageLoading)
+Vue.use(vBlur)
+// Vue.use(VueCesium, {
+// cesiumPath is path of Cesium.js', for example:
+// local Cesium Build package:
+// cesiumPath: /static/Cesium/Cesium.js
+// Personal online Cesium Build package：
+// cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/Cesium/Cesium.js'
+// Personal online SuperMap Cesium Build package：
+// cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/SuperMapCesium/Cesium.js'
+// Official Online Cesium Build package：
+// cesiumPath: 'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+// cesiumPath: 'https://zouyaoji.top/vue-cesium/statics/MyCesium/Cesium.js',
+// accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5Y2U0ZTk2Ni1jNzdkLTQ3OWYtYjVmYS0yMGM3YTk3NjgzMmUiLCJpZCI6Njk5Nywic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU0ODA1MTc0OH0.Csy6yyAnv6JSBppH0Ou3ahshqcHFEhP27iOz5gjQMEo'
+// })
+// Vue.use(VueFab, {
+//   iconType: 'MaterialDesign'
+//   // iconType: 'iconfont'
+// })
+Vue.component('pdf', Pdf)
 Vue.component('star-rating', StarRating)
 Vue.component('lv-timeline', LVTimeline)
 Vue.component('word-cloud', WordCloud)
@@ -72,9 +141,9 @@ Vue.component('mermaid', Mermaid)
 Vue.component('mermaidp', MermaidP)
 Vue.component('mj', MathJaxComponent)
 Vue.component('info-card', InfoCard)
-Vue.component('l-map', Vue2Leaflet.LMap)
-Vue.component('l-tilelayer', Vue2Leaflet.LTileLayer)
-Vue.component('l-marker', Vue2Leaflet.LMarker)
+Vue.component('l-map', LMap)
+Vue.component('l-tilelayer', LTileLayer)
+Vue.component('l-marker', LMarker)
 Vue.component('summary-table', SummaryTable)
 Vue.component('table-component', TableComponent)
 Vue.component('table-column', TableColumn)

@@ -45,8 +45,43 @@ function getLanguage (text) {
   return language
 }
 
-function removeFirstLine (text) {
-  return text.split(/[\n]/).splice(1).join('\n')
+// function removeFirstLine (text) {
+//   // return text.split(/[\n]/).splice(1).join('\n')
+//   const rets = []
+//   const lines = text.split(/[\n]/)
+//   const re = /^@\S+ (\w+)/
+//   lines.forEach(line => {
+//     if (re.test(line)) {
+//       rets.push(line)
+//     }
+//   })
+//   lines.splice(0,rets.length)
+//   return lines.join('\n')
+// }
+
+function removeDirectives (text) {
+  const rets = []
+  const lines = text.split(/[\n]/)
+  const re = /^@\S+ (\w+)/
+  lines.forEach(line => {
+    if (re.test(line)) {
+      rets.push(line)
+    }
+  })
+  lines.splice(0,rets.length)
+  return lines.join('\n')
+}
+
+function getDirectives (text) {
+  const rets = []
+  const lines = text.split(/[\n]/)
+  const re = /^@\S+ (\w+)/
+  lines.forEach(line => {
+    if (re.test(line)) {
+      rets.push(line)
+    }
+  })
+  return rets.join('\n')
 }
 
 function parseQueryString (config, url) {
@@ -81,6 +116,50 @@ function parseQueryString (config, url) {
  * @param nowrapper {boolean} Skip the content div wrapper el
  * @returns {string}
  */
+function rgbaFromTheme(name, alpha = 1.0, add = 0) {
+  var val = rgbaObjectFromTheme(name, alpha, add)
+  if (typeof val === 'object') {
+    return 'rgba(' + val.r + ',' + val.g + ',' + val.b + ',' + val.a + ')'
+  }
+  return name
+}
+
+/**
+ * return formatted text, e.g. markdown or html
+ * @param name {string} color css name
+ * @param alpha {float} Optional alpha
+ * @returns {string}
+ */
+function rgbaObjectFromTheme(name, alpha = 1.0, add = 0) {
+  var val = {r: 0, g: 0, b: 0, a: alpha }
+  switch (name)
+  {
+    case 'blue':     val.g = 82, val.b = 255; break
+    case 'yellow':   val.r = 255, val.g = 255; break
+    case 'green':    val.g = 150; break
+    case 'red':      val.r = 150; break
+    case 'orange':   val.r = 255, val.g = 150; break
+    case 'black':    val.r = 0; break 
+    case 'white':    val.r = 255, val.g = 255, val.r = 255; break 
+    case 'violet':    val.r = 150, val.g = 50, val.r = 255; break 
+    case 'marron':    val.r = 140, val.g = 70, val.r = 0; break
+    default:         return name
+  }
+  val.r += add
+  val.g += add
+  val.b += add
+  val.r = (val.r > 255) ? 255 : val.r
+  val.g = (val.g > 255) ? 255 : val.g
+  val.b = (val.b > 255) ? 255 : val.b
+  return val
+}
+
+/**
+ * return formatted text, e.g. markdown or html
+ * @param text {string}
+ * @param nowrapper {boolean} Skip the content div wrapper el
+ * @returns {string}
+ */
 function formatText (text, noWrapper, title) {
   if (!text) { return '' }
   let language = getLanguage(text)
@@ -97,7 +176,7 @@ function formatText (text, noWrapper, title) {
   }
   // remove directives from first line
   if (/^\s*?@/.test(text)) {
-    text = removeFirstLine(text)
+    text = removeDirectives(text)
   }
   if (title) {
     text = title + text
@@ -107,10 +186,16 @@ function formatText (text, noWrapper, title) {
   switch (language) {
     case 'yaml':
       const data = jsyaml.load(text.replace('@language yaml', ''))
+      const dump = jsyaml.dump(data)
       console.log('YAML DATA..........', data)
       const template = _.get(data, 'params.template', '')
-      text = lodashTemplate.render(data, template)
-      break
+      if (template) {
+        text = lodashTemplate.render(data, template)
+        break
+      } else {
+        text = hiliteCode(text, language)
+        text = '<div class="hcode">' + text + '</div>'
+      }
     case 'text':
       text = `<div class="text">${text}</div>`
       break
@@ -256,8 +341,11 @@ module.exports = {
   replaceRelUrls,
   getFileExtension,
   getLanguage,
-  removeFirstLine,
+  getDirectives,
+  removeDirectives,
   parseQueryString,
+  rgbaFromTheme,
+  rgbaObjectFromTheme,
   formatText,
   getObjectByKeyFromTree,
   sendGTag,

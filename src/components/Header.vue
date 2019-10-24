@@ -1,31 +1,43 @@
 <template>
-  <div style="height:33px">
+  <div style="height:0px;">
     <div class="holder">
       <div class="header" v-if="config.showHeader">
-        <span v-if="config.showAppTitle" class="app-title">@aspace.tech</span>
-        <span v-if="config.showAppTitle && config.docTitle">: </span>
-        <span class="doc-title">{{ config.docTitle }}</span>
-        <div @click="toggle" class="icon icon-button">
+        <span class="app-title">{{user}}{{ config.trademark }}</span>
+        <!-- <span v-if="config.showAppTitle && config.docTitle">:</span> -->
+        <span v-if="config.showAppTitle" class="doc-title">{{ docTitle }}</span>
+         <!-- <div @click="toggle" class="icon icon-button">
           <icon class="icon" name="bars"></icon>
-        </div>
-        <div class="button-shim"></div>
-        <div @click="goForward"
-             class="icon icon-button">
-          <icon class="icon"
-                :class="{disabled: noForward}"
-                name="arrow-right"></icon>
-        </div>
-        <div @click="goBack"
+        </div> -->
+       
+        <div v-if="connected" @click="fullscreen" class="icon icon-button">
+          <icon class="icon" name="expand"></icon>
+        </div> 
+        <div v-if="connected" class="button-shim"></div>
+        <div v-if="connected" @click="goBack"
              class="icon icon-button disabled">
           <icon class="icon"
                 :class="{disabled: noBack}"
-                name="arrow-left"></icon>
+                name="reply"></icon>
         </div>
-        <searchbar class="searchbar"></searchbar>
+        <div v-if="connected" @click="goForward"
+             class="icon icon-button">
+          <icon class="icon"
+                :class="{disabled: noForward}"
+                name="share"></icon>
+        </div>
+       
+        <!-- <searchbar class="searchbar"></searchbar> -->
         <div class="vshim"></div>
+
+        <!-- <dock/> -->
       </div>
     </div>
-    <div id="menu" class="menu">
+    <div id="imenu" class="menu">
+      <div style="height:33px" class='header'>
+      <div @click="toggle" class="icon icon-button">
+          <icon class="icon" name="bars"></icon>
+      </div>
+      </div>
       <div class="menu-header">View Type</div>
       <div  v-for="v in viewTypes"
             class="menu-item"
@@ -73,6 +85,7 @@
 
 <script>
   import SearchBar from './SearchBar'
+  import Dock from './dock/dock'
   import _ from 'lodash'
   import { JSONtoLeo } from '../services/leo-file'
   function formatJSONData (data, textItems) {
@@ -89,7 +102,8 @@
   export default {
     name: 'appheader',
     components: {
-      searchbar: SearchBar
+      searchbar: SearchBar,
+      dock: Dock
     },
     data () {
       return {
@@ -124,14 +138,17 @@
       setAccordion () {
         this.$store.commit('TOGGLEACCORDION')
       },
+      fullscreen () {
+        this.$fullscreen.toggle(document.getElementById('dashboard'))
+      },
       toggle () {
-        const menuEl = document.getElementById('menu')
+        const menuEl = document.getElementById('imenu')
         if (this.menu) {
           menuEl.style.width = 0
-          menuEl.style.borderLeft = 'none'
+          menuEl.style.borderRight = 'none'
         } else {
           menuEl.style.width = '180px'
-          menuEl.style.borderLeft = '1px solid #ccc'
+          // menuEl.style.borderRight = '1px solid #ccc'
         }
         this.menu = !this.menu
       },
@@ -164,6 +181,21 @@
       }
     },
     computed: {
+      docTitle () {
+        if (!this.connected) {
+          return '' // window.lconfig.docTitle
+        }
+        if (this.$store.state.currentItemPath.includes('@cover')) {
+          return window.lconfig.docTitle + ' / Home'
+        }
+        return window.lconfig.docTitle + this.$store.state.currentItemPath
+      },
+      user () {
+        return this.$store.state.user.name
+      },
+      connected () {
+        return this.$store.state.connected
+      },
       viewType () {
         return this.$store.state.viewType
       },
@@ -206,9 +238,10 @@
 .holder
   padding: 0
   margin: 0
-  // position: fixed
+  top: 0px
+  position: fixed
   width: 100%
-  z-index: 111
+  z-index: 1110
 .icon-box
   width: 20px
   margin-left: 20px
@@ -229,26 +262,27 @@
 .menu
   position: fixed
   z-index: 111
-  top: 33px
+  top: 0px
   overflow: hidden
   color: #ccc
-  background-color: rgba(0, 0, 0, 0.8)
+  background-color: rgba(0, 0, 0, 0.9)
   //#ccc
   width: 0
-  right: 0
+  left: 0
   height: 100%
   //border-left: 1px solid #999
   //border-top: 1px solid #ccc
   //-webkit-box-shadow: 10px 0 5px -2px #888;
-  box-shadow: 10px 0 5px -2px #888;
+  //box-shadow: 0px 10 5px -2px #888;
   //box-shadow: -4px 0 8px -4px rgba(31, 31, 31, 0.8)
   transition: width .5s
 .menu-separator
-  border-bottom: 1px solid #ddd
+  //border-bottom: 1px solid #ddd
   margin-top: 10px
 .header
   text-align: left
-  background-color: rgba(0,0,0,0.3) 
+  //background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+  background-color: rgba(0,0,0,0.5) 
   font-weight: normal
   padding: 2px
   padding-top: 6px
@@ -258,15 +292,16 @@
   //box-shadow: 0 1px 1px 0 rgba(116, 129, 141, 0.1)
   height: 33px
 .search
-  float: right
+  float: left
   margin-right: 10px
   font-size: 14px
   margin-top: -1px
   display: none
 .icon
-  float: right
+  float: left
   padding: 0
   padding-top: 2px
+  padding-left: 7px
   padding-right: 7px
   color: #ccc
 .icon-button
@@ -280,21 +315,22 @@
   color: #ccc
 .button-shim
   width: 8px
-  float: right
+  float: left
   height: 16px
 .app-title
+  float: right
   font-weight: normal
   color: #dddddd
   margin-left: 10px
+  margin-right: 10px
   //border: 1px solid #ccc
   //border-radius: 5px
   margin-top: -3px
-  width: 72px
   display: inline-block
   text-align: center
 .doc-title
   // font-weight: bold
-  margin-left: 600px
+  margin-left: 20px
   color: #dddddd
   text-align: center
 .menu-footer
@@ -309,9 +345,12 @@
   //position: absolute
   //right: 80px
   //top: 0
+  border-radius: 16px;
+  background: rgba(0,0,0,0.0)
   color: #ccc
   margin-top: -6px
   margin-right: 15px
+  margin-left: 15px
   float: right
-  height: 20px
+  height: 33px
 </style>

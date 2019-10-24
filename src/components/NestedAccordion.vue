@@ -1,5 +1,5 @@
 <template>
-  <li :id="prefix + model.id"
+  <li :id="prefix + getModel().id"
       :nid="nid"
       v-bind:class="{'unselected-sibling': hasOpenSibling}">
     <div class="item-box"
@@ -26,13 +26,13 @@
       <ul v-if="isFolder">
         <item
           class="item"
-          v-for="model in model.children"
-          :model="model"
+          v-for="amodel in getModel.children"
+          :model="amodel"
           :prefix="prefix"
-          :key="model.id"
-          :textItems="textItems"
-          :accordion="accordion"
-          :targetEl="targetEl">
+          :key="amodel.id"
+          :textItems="items"
+          :accordion="getAccordion"
+          :targetEl="target">
         </item>
       </ul>
       <div v-show="isOpenInline" class="hshim"></div>
@@ -67,6 +67,18 @@ export default {
     }
   },
   computed: {
+    getModel: function () {
+      return this.model
+    },
+    getAccordion: function () {
+      return this.accordion
+    },
+    items: function () {
+      return this.textItems
+    },
+    target: function () {
+      return this.targetEl
+    },
     isFolder: function () {
       if (/\.leo\)$/.test(this.model.name)) { return true } // subtree
       return this.model.children && this.model.children.length

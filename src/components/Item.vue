@@ -5,29 +5,50 @@
     <div class="item-box"
          :class="{bold: isFolder, iactive: active, topItem: top}"
          >
-      <div
-        @click="toggle">
-        <div v-bind:class="{'icon-bracket': top}" class="icon-b"
-             v-if="isFolder">
-          <div class="arrow"
-               v-bind:class="{arrowdown: isOpenA}">{{arrowIcon}}</div>
+      <div>
+        <div @click="toggle" v-bind:class="{'icon-bracket': top}" class="icon-b" v-if="isFolder">
+          <div class="arrow" v-bind:class="{arrowdown: isOpenA}">
+            <!-- {{arrowIcon}} -->
+            <img src="static/images/bullet-collapse-white2.png" width="16">
+          </div>
         </div>
+        <!-- <editor :id="'editor-'+nid" v-if="isEditable" v-bind:editable="model.name" /> -->
         <div class="leo-box"></div>
         <div v-if="!isFolder" class="leaf-button"></div>
-        <span class="otitle">{{model.vtitle}}</span>
+        <span @click="toggle" class="otitle">{{model.vtitle}}</span>
       </div>
     </div>
+    <!-- <div v-if="isEditable" class="inline">
+      <div class="content">
+        <codemirror class="code-directive" v-model="myDirectives" :options="cmOption"></codemirror>
+        <div class="icon-tab">
+          <div @click="toEditor('code')" class="icon icon-bracket">
+            code
+          </div>
+          <div @click="toEditor('html')" class="icon icon-bracket">
+            html
+          </div>
+          <div @click="toEditor('md')" class="icon icon-bracket">
+            md
+          </div>
+        </div>
+        <codemirror v-if="editorType === 'code'" v-model="myLeo" :options="cmOption"></codemirror>
+        <medium-editor v-if="editorType === 'md'" :text="myLeo"/>
+        <editor v-if="editorType === 'html'" v-bind:editable="myLeo" />
+      </div>
+    </div> -->
     <div v-show="isOpen" class="child-items">
-      <div v-html="myContent"
+      <div v-if="isOpenInline" v-html="myContent"
            class="inline">
       </div>
       <ul v-if="isFolder">
         <item
           class="item"
-          v-for="model in model.children"
-          :model="model"
+          v-for="amodel in model.children"
+          v-if="isVisible(amodel)"
+          :model="amodel"
           :prefix="prefix"
-          :key="model.id"
+          :key="amodel.id"
           :textItems="textItems"
           :accordion="accordion"
           :targetEl="targetEl">
@@ -39,12 +60,32 @@
 </template>
 
 <script>
-
+import Editor from './editor/Editor'
 import Velocity from 'velocity-animate'
 import _ from 'lodash'
 
+// import mavonEditor from 'mavon-editor'
+// import 'mavon-editor/dist/css/index.css'
+
+// import MediumEditor from 'vue2-medium-editor'
+// import 'medium-editor/dist/css/medium-editor.css'
+// import 'vue2-medium-editor/src/themes/default.css'
+
+import { codemirror } from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/mode/markdown/markdown.js'
+import 'codemirror/theme/monokai.css'
+
+// const util = require('../util.js')
+// import { getLanguage, removeFirstLine } from '../utils.js'
+
 export default {
   name: 'item',
+  components: {
+    Editor,
+    codemirror // ,
+    // MediumEditor
+  },
   props: {
     model: Object,
     targetEl: Boolean,
@@ -63,17 +104,41 @@ export default {
       hasRibbon: true,
       inline: false,
       closearrow: false,
-      myContent: ''
+      editorType: 'code',
+      myContent: '',
+      myLeo: '',
+      myLang: '',
+      myDirectives: '',
+      cmOption: {
+        tabSize: 4,
+        styleActiveLine: true,
+        lineNumbers: true,
+        lineWrapping: false,
+        line: true,
+        mode: 'text/x-markdown',
+        theme: 'monokai'
+      }
     }
   },
   computed: {
+    html: function () {
+      if (!this.editor) return ''
+      return this.editor.getHTML()
+    },
     arrowIcon: function () {
       return window.lconfig.itemArrow || '▶'
     },
     isFolder: function () {
       if (/\.leo\)$/.test(this.model.name)) { return true } // subtree
       if (/^@outline/.test(this.model.name)) { return true } // outline
-      return this.model.children && this.model.children.length
+      let nbVisibleItems = 0
+      for (let i = 0; i < this.model.children.length; i++) {
+        if (this.isVisible(this.model.children[i])) {
+          nbVisibleItems += 1
+        }
+      }
+      return nbVisibleItems > 0
+      // return this.model.children && this.model.children.length
     },
     isClosedSibling: function () {
       if (this.isOpen) { return ' open' }
@@ -117,6 +182,9 @@ export default {
     nid: function () {
       return this.prefix + '_' + this.model.id
     },
+    isEditable: function () {
+      return this.isOpen && this.active
+    },
     isOpen: function () {
       const ids = this.$store.state.openItemIds
       let open = true
@@ -151,6 +219,14 @@ export default {
     }
   },
   methods: {
+    isVisible: function (itemdata) {
+      if (/^@theme/.test(itemdata.name)) { return false } // theme node hided
+      if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
+      return true
+    },
+    toEditor: function (lang) {
+      this.editorType = lang
+    },
     toggle: function () {
       if (window.lconfig.githubRibbon) {
         const ribbon = document.getElementsByClassName('github-ribbon')
@@ -167,6 +243,9 @@ export default {
       if (this.model.vtitle) {
         this.vtitle = this.model.vtitle
       }
+      // if (this.isEdited) {
+      //   return
+      // }
       // toggle the tree node
       let duration = 0
       const easing = 'linear'
@@ -299,10 +378,14 @@ export default {
   watch: {
     '$store.state.contentItemsUpdateCount': {
       handler: function (val, oldVal) {
-        if (!this.isOpenInline) { return }
+        // if (!this.isOpenInline) { return }
         if (val > 0 && val !== oldVal) {
-          const text = this.$store.state.contentItems[this.model.id]
-          this.myContent = text
+          // const text = this.$store.state.contentItems[this.model.id]
+          // this.myContent = text
+          // const leo = this.textItems[this.model.t]
+          // this.myLang = util.getLanguage(leo)
+          // this.myDirectives = util.getDirectives(leo)
+          // this.myLeo = util.removeDirectives(leo)
         }
       },
       deep: true,
@@ -331,6 +414,11 @@ $contentBorderColor: #ccc
   padding-left: 20px
   margin-right: -10px
   // display: none
+.icon-tab
+  display: inline-block
+.icon
+  float: left
+  padding: 5px
 .icon-b
   display: inline-block
   padding-left: 3px
@@ -368,7 +456,7 @@ $contentBorderColor: #ccc
   background: rgba(0,0,0,0.8)  //#01FF70 //#81ff00
   max-width: 300px
 .iactive.topItem
-    background: #fff
+    background: rgba(0,0,0,0.8)
 .activeb
   background: #81ff00
   font-weight: bold
@@ -416,4 +504,371 @@ $contentBorderColor: #ccc
   display: none
 .accordion
   margin-top: 40px
+.code-directive .CodeMirror
+  height: 100px
+  margin-bottom: 20px
 </style>
+
+<!--
+<style lang="css">
+@import url('https://assets-cdn.github.com/assets/gist-embed-1baaff35daab552f019ad459494450f1.css');
+
+.medium-editor-container * {
+    outline: none;
+    box-sizing: border-box;
+}
+
+.medium-editor-container {
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    padding: 2rem 0;
+    font-size: 1.2rem;
+}
+
+.medium-editor-container p, 
+.medium-editor-container h1, 
+.medium-editor-container h2,
+.medium-editor-container h3,
+.medium-editor-container h4,
+.medium-editor-container h5,
+.medium-editor-container h6,
+.medium-editor-container ul,
+.medium-editor-container ol,
+.medium-editor-container blockquote {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.medium-editor-container ul,
+.medium-editor-container ol {
+    margin-left: auto !important;
+    padding-left: 30px;
+}
+
+.medium-editor-container .medium-editor-element:empty, .medium-editor-container .medium-editor-placeholder {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.medium-editor-container .editor {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.medium-editor-container .medium-editor-placeholder::after {
+    color: #BBB;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: block;
+}
+
+.medium-editor-container .editor.has-content {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.medium-editor-container .editor.has-content.medium-editor-placeholder::after {
+    display: none;
+}
+
+
+.medium-editor-container h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.1em;
+}
+
+.medium-editor-container h2 {
+    font-size: 2.2em;
+    margin-top: 0.2em;
+    margin-bottom: 0.1em;
+}
+
+.medium-editor-container h3 {
+    font-size: 1.9em;
+    margin-top: 0.2em;
+    margin-bottom: 0.1em;
+}
+
+.medium-editor-container h4 {
+    font-size: 1.6em;
+    margin-top: 0.2em;
+    margin-bottom: 0.1em;
+}
+
+.medium-editor-container h5 {
+    font-size: 1.3em;
+    margin-top: 0.2em;
+    margin-bottom: 0.1em;
+}
+
+.medium-editor-container h6 {
+    font-size: 1em;
+    margin-bottom: 0.1em;
+}
+
+.medium-editor-container p {
+    margin-bottom: 1em;
+}
+.medium-editor-container ul {
+    margin-left: 30px;
+    list-style: disc;
+}
+.medium-editor-container ul li {
+    margin-bottom: 0.5em
+}
+.medium-editor-container ol {
+    margin-left: 30px;
+}
+.medium-editor-container ol li {
+    margin-bottom: 0.5em
+}
+
+.medium-editor-container iframe{
+    width: 1px;
+    min-width: 100%;
+}
+
+.medium-editor-container blockquote {
+    border-left: 3px solid #3B3E3E;
+    padding-left: 30px;
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+    font-style: italic;
+}
+
+.medium-toolbar-arrow-under:after {
+    border-color: #222526 transparent transparent transparent;
+    top: 48px;
+}
+
+.medium-toolbar-arrow-over:before {
+    border-color: transparent transparent #222526 transparent;
+}
+
+.medium-editor-toolbar {
+    background-color: #222526;
+    border: 1px solid #222526;
+    border-radius: 4px;
+}
+
+.medium-editor-toolbar li button {
+    background-color: transparent;
+    border: none;
+    border-right: 1px solid #222526;
+    box-sizing: border-box;
+    color: #fff;
+    height: 48px;
+    min-width: 48px;
+    -webkit-transition: background-color .2s ease-in, color .2s ease-in;
+    transition: background-color .2s ease-in, color .2s ease-in;
+}
+
+.medium-editor-toolbar li button:hover {
+    background-color: transparent;
+    color: #00BD6A;
+}
+
+.medium-editor-toolbar li .medium-editor-button-first {
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.medium-editor-toolbar li .medium-editor-button-last {
+    border-bottom-right-radius: 4px;
+    border-right: none;
+    border-top-right-radius: 4px;
+}
+
+.medium-editor-toolbar li .medium-editor-button-active {
+    background-color: transparent;
+    color: #00BD6A;
+}
+
+.medium-editor-toolbar-form {
+    background: #222526;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+    background: #222526;
+    color: #fff;
+    height: 48px;
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
+    /* Firefox 18- */
+    color: #fff;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #fff;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
+    color: #fff;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.medium-editor-toolbar-form a {
+    color: #fff;
+}
+
+.medium-editor-toolbar-anchor-preview {
+    background: #222526;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.medium-editor-placeholder:after {
+    color: #222526;
+}
+
+.medium-editor-container * {
+    outline: none;
+}
+
+.medium-editor-container .insert-image-container {
+    display: flex;
+    position: fixed;
+    left: 100px;
+    top: 100px;
+    transform: translate(-54px, -7px);
+}
+
+.medium-editor-container .insert-image-container .btn-toggle {
+    border: 1px solid #DDD;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #555;
+    background-color: #FFF;
+}
+
+.medium-editor-container .image-handler {
+    display: flex;
+    position: fixed;
+    left: 50%;
+    top: 100px;
+    transform: translate(-50%, -20px);
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.medium-editor-container .image-handler .btn-toggle {
+    border: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #FFF;
+    background-color: transparent;
+}
+
+.medium-editor-container .image-handler .btn-toggle img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.medium-editor-container .image-handler .btn-toggle:hover {
+    cursor: pointer;
+    color: #00BD6A;
+}
+
+.medium-editor-container .insert-image-container .insert-image-menu {
+    display: flex;
+}
+.medium-editor-container .insert-image-container .insert-image-menu .btn-toggle {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.medium-editor-container .editor-image {
+    display: block;
+    max-width: 1000px;
+    margin: 2rem auto;
+}
+
+.medium-editor-container .editor-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.medium-editor-container .editor-image-description {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: -1rem;
+    font-size: 0.8rem;
+    color: #999;
+    position: relative;
+}
+
+.medium-editor-container .editor-image-description.is-empty::after { 
+    content: "Image Description";
+    color: #BBB;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.medium-editor-container .editor-image + .editor-image-description.is-empty {
+    display: none;
+}
+
+.medium-editor-container .editor-image.is-focus + .editor-image-description.is-empty {
+    display: block;
+}
+
+.medium-editor-container .editor-image img:hover {
+    cursor: pointer;
+}
+.medium-editor-container .editor-image.is-expand {
+    max-width: 1200px;
+}
+.medium-editor-container .editor-image.is-full {
+    max-width: 100%;
+}
+.medium-editor-container .editor-image input {
+    margin: 0 auto;
+    border: 0;
+    display: block;
+    font-size: 0.7rem;
+    padding: 0.5rem;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    color: #888;
+    margin-bottom: 2rem;
+}
+
+.medium-editor-container .editor-embed-container.is-inactive {
+    display: none;
+}
+
+.medium-editor-container .editor-embed-input.is-inactive {
+    display: none;
+}
+
+.medium-editor-container .editor-embed > a {
+    display: none;
+}
+</style> -->

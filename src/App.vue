@@ -4,8 +4,8 @@
        @drop="drop_handler($event);"
        @dragover="dragover_handler($event);"
        @dragend="dragend_handler($event);">
-    <cover></cover>
-    <router-view></router-view>
+    <cover v-if="hasCoverPage"/>
+    <router-view id="router-page"></router-view>
     <Ribbon v-if="hasGithubRibbon"
       v-bind="ribbonOptions"
     ></Ribbon>
@@ -20,6 +20,12 @@
       cover: Cover
     },
     computed: {
+      hasCoverPage: function () {
+        if (window.lconfig.coverPage) {
+          return true
+        }
+        return false
+      },
       hasGithubRibbon: function () {
         if (window.lconfig.githubRibbon) {
           return true
@@ -39,54 +45,65 @@
       dragend_handler (ev) {
         // Remove all of the drag data
         var dt = ev.dataTransfer
-        if (dt.items) {
-          // Use DataTransferItemList interface to remove the drag data
-          for (var i = 0; i < dt.items.length; i++) {
-            dt.items.remove(i)
+        if (dt !== undefined) {
+          if (dt.items) {
+            // Use DataTransferItemList interface to remove the drag data
+            for (var i = 0; i < dt.items.length; i++) {
+              dt.items.remove(i)
+            }
+          } else {
+            // Use DataTransfer interface to remove the drag data
+            ev.dataTransfer.clearData()
           }
-        } else {
-          // Use DataTransfer interface to remove the drag data
-          ev.dataTransfer.clearData()
         }
       },
       drop_handler (ev) {
         ev.preventDefault()
         // If dropped items aren't files, reject them
         const dt = ev.dataTransfer
-        let i
-        let f
-        if (dt.items) {
-          // Use DataTransferItemList interface to access the file(s)
-          for (i = 0; i < dt.items.length; i++) {
-            if (dt.items[i].kind === 'file') {
-              f = dt.items[i].getAsFile()
+        if (dt !== undefined) {
+          let i
+          let f
+          if (dt.items) {
+            // Use DataTransferItemList interface to access the file(s)
+            for (i = 0; i < dt.items.length; i++) {
+              if (dt.items[i].kind === 'file') {
+                f = dt.items[i].getAsFile()
+              }
+            }
+          } else {
+            // Use DataTransfer interface to access the file(s)
+            for (i = 0; i < dt.files.length; i++) {
+              f = dt.files[i]
             }
           }
-        } else {
-          // Use DataTransfer interface to access the file(s)
-          for (i = 0; i < dt.files.length; i++) {
-            f = dt.files[i]
+          const reader = new FileReader()
+          reader.onload = (xml) => {
+            const xmlString = xml.srcElement.result
+            this.$store.dispatch('loadLeoFromXML', {xml: xmlString, route: this.$route})
           }
+          reader.readAsText(f)
         }
-        const reader = new FileReader()
-        reader.onload = (xml) => {
-          const xmlString = xml.srcElement.result
-          this.$store.dispatch('loadLeoFromXML', {xml: xmlString, route: this.$route})
-        }
-        reader.readAsText(f)
       }
 
     },
     mounted () {
+      // const router = document.getElementById('router-page')
+      // if (router) {
+      //   router.style.display = 'none'
+      // }
+
       let filename = 'static/docs'
       if (window.lconfig.filename) {
         filename = window.lconfig.filename
       }
 
-      if (!this.$store.initializedData) {
+      if (!this.$store.state.initializedData) {
         this.$store.dispatch('loadLeo', {filename, route: this.$route})
       }
       this.$store.dispatch('setMessages')
+
+      // operative knowledge platform initiative
     }
   }
 </script>

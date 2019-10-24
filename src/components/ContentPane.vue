@@ -1,49 +1,197 @@
 <template>
-  <div class="pane" id="dx">
-    <div v-if="textContent">
-      <div id="lhandle"
-           class="handle">
-        <div class="handle-button"
-             v-show="hasPrev"
-             @click="goPrev">
-          <icon class="icon"
-                name="chevron-left"></icon>
-        </div>
-      </div>
+
+  <div class="behind">
+    <div v-if="!connected" class="login"> 
       <div id="tlayout">
         <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
           <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
             <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-              <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
-              <component :is="dynComponent" v-bind="$props"/>
+              <div  :style="{width: cpWidth, marginLeft: '100px', marginRight: 'auto'}">
+                <p style="height:10%" />
+                <login class="login"/>
               </div>
-            </div>
             </div>
           </div>
         </div>
-      <div id="rhandle"
-           class="handle">
-        <div class="handle-button"
-             v-show="hasNext"
-             @click="goNext">
-          <icon class="icon"
-                name="chevron-right"></icon>
+      </div> 
+    </div>
+   
+  
+    <div v-if="connected" class="pane" id="dx" > 
+      <div v-if="textContent(current)">
+        <div id="lhandle"
+            class="handle">
+          <div class="handle-button"
+              v-show="hasPrev(current)"
+              @click="goPrev">
+            <icon class="icon"
+                  name="chevron-left"></icon>
+          </div>
+        </div>
+        <div id="tlayout">
+          <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+            <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
+              <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                <vue-lazy-component>
+                <component :is="dynComponent(current)" v-bind="$props"/>
+                </vue-lazy-component>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        <div id="rhandle"
+            class="handle">
+          <div class="handle-button"
+              v-show="hasNext(current)"
+              @click="goNext">
+            <icon class="icon"
+                  name="chevron-right"></icon>
+          </div>
         </div>
       </div>
-    </div>
-    <div v-if="boardContent"
-         style="display:flex; background:#fff; width: 100%"
-         id="bpane">
-      <div style="width:100%">
-        <component :is="dynComponent" v-bind="$props"/>
+      <div v-if="boardContent(current)"
+          class="frame"
+          id="bpane">
+        <div style="width:100%">
+        <vue-lazy-component>
+          <component :is="dynComponent(current)" v-bind="$props"/>
+          </vue-lazy-component>
+        </div>
       </div>
+      <vue-lazy-component>
+      <div v-if="iframeContent(current)"
+          class="frame"
+          v-html="iframeHTML(current)"
+          id="vpane">
+      </div>
+      </vue-lazy-component>
+    </div> <!--
+
+  <div v-if="connected" style="width:100%;height:100%">
+    <vueper-slides ref="slider"  fixed-height="1200px">
+        <vueper-slide v-for="(item,index) in historyItems" :key="index" :style="style(item)">
+          <div slot="slideContent">
+          <div  class="pane" id="dx">
+            <instagram-loader v-if="loading"/>
+            <div v-if="textContent(item)">
+              <div id="lhandle"
+                  class="handle">
+                <div class="handle-button"
+                    v-show="hasPrev(item)"
+                    @click="goPrev">
+                  <icon class="icon"
+                        name="chevron-left"></icon>
+                </div>
+              </div>
+              <div id="tlayout">
+                <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+                  <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
+                    <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                      <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                      <vue-lazy-component>
+                      <component :is="dynComponent(item)" v-bind="$props"/>
+                      </vue-lazy-component>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              <div id="rhandle"
+                  class="handle">
+                <div class="handle-button"
+                    v-show="hasNext(item)"
+                    @click="goNext">
+                  <icon class="icon"
+                        name="chevron-right"></icon>
+                </div>
+              </div>
+            </div>
+            <div v-if="boardContent(item)"
+                class="frame"
+                id="bpane">
+              <div style="width:100%">
+              <vue-lazy-component>
+                <component :is="dynComponent(item)" v-bind="$props"/>
+                </vue-lazy-component>
+              </div>
+            </div>
+            <vue-lazy-component>
+            <div v-if="iframeContent(item)"
+                class="frame"
+                v-html="iframeHTML(item)"
+                id="vpane">
+            </div>
+            </vue-lazy-component>
+          </div>
+          </div>
+          </vueper-slide>
+        </vueper-slides>
+      </div>-->
+
+  <!-- <carousel-3d ref="carousel"
+    :width="width"
+    :height="1300"
+    :count="historyLength">
+  <slide v-for="(item, index) in historyItems"
+    :index="index"
+    :key="index">  
+    <div class="pane" id="dx">
+      <instagram-loader v-if="loading"/>
+      <div v-if="textContent(item)">
+        <div id="lhandle"
+            class="handle">
+          <div class="handle-button"
+              v-show="hasPrev(item)"
+              @click="goPrev">
+            <icon class="icon"
+                  name="chevron-left"></icon>
+          </div>
+        </div>
+        <div id="tlayout">
+          <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+            <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
+              <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                <vue-lazy-component>
+                <component :is="dynComponent(item)" v-bind="$props"/>
+                </vue-lazy-component>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        <div id="rhandle"
+            class="handle">
+          <div class="handle-button"
+              v-show="hasNext(item)"
+              @click="goNext">
+            <icon class="icon"
+                  name="chevron-right"></icon>
+          </div>
+        </div>
+      </div>
+      <div v-if="boardContent(item)"
+          class="frame"
+          id="bpane">
+        <div style="width:100%">
+        <vue-lazy-component>
+          <component :is="dynComponent(item)" v-bind="$props"/>
+          </vue-lazy-component>
+        </div>
+      </div>
+      <vue-lazy-component>
+      <div v-if="iframeContent(item)"
+          class="frame"
+          v-html="iframeHTML(item)"
+          id="vpane">
+      </div>
+      </vue-lazy-component>
     </div>
-    <div v-if="iframeContent"
-         style="display:flex; background:#fff; width: 100%"
-         v-html="iframeHTML"
-         id="vpane">
-    </div>
-  </div>
+  </slide>
+  </carousel-3d> -->
+  </div> 
 </template>
 
 <script>
@@ -51,6 +199,11 @@ const hljs = require('highlight.js')
 import {presentation} from '../lib/presentation'
 import _ from 'lodash'
 const util = require('../util.js')
+import { Carousel3d, Slide } from 'vue-carousel-3d'
+import { ContentLoader } from 'vue-content-loader'
+import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
+import Login from './Login'
 
 // functions for dealing with x-frame headers
 // TODO move these
@@ -124,11 +277,42 @@ function loadPresentation(item, textItems, iframe) {
 export default {
   name: 'contentpane',
   components: {
+    Carousel3d,
+    Slide,
+    ContentLoader,
+    login: Login,
+    VueperSlides, 
+    VueperSlide 
   },
   data () {
     return {
       xSections: [],
-      handleScroll: null
+      handleScroll: null,
+      current: {
+        item: null,
+        content: null,
+        pane: null,
+        iframe: null
+      },
+      new: {
+        item: null,
+        content: null,
+        pane: null,
+        iframe: null
+      },
+      history: [],
+      historyItems: [],
+      loading: true,
+      options: {
+        // effect: 'fade',
+        currentPage: 1,
+        thresholdDistance: 100,
+        thresholdTime: 300,
+        speed: 500,
+        timingFunction: 'ease',
+        loop: false,
+        autoplay: 0
+      }
     }
   },
   methods: {
@@ -138,11 +322,11 @@ export default {
       this.handleScroll()
     },
     goNext () {
-      const next = this.$store.state.currentItem.next
+      const next = this.current.item.next
       this.resetCurrentItem(next)
     },
     goPrev () {
-      const prev = this.$store.state.currentItem.prev
+      const prev = this.current.item.prev
       this.resetCurrentItem(prev)
     },
     resetCurrentItem (id) {
@@ -161,9 +345,91 @@ export default {
         this.$store.dispatch('setCurrentItem', {id})
       }
       console.log('ROW CLICK', title, item)
+    },
+    iframeContent (item) {
+      if (item && item.pane === 'site') {
+        return true
+      } else {
+        return false
+      }
+    },
+    boardContent (item) {
+      if (item && item.pane === 'board') {
+        return true
+      } else {
+        return false
+      }
+    },
+    textContent (item) {
+      if (item && item.pane === 'text') {
+        return true
+      } else {
+        return false
+      }
+    },
+    currentItemContent (item) {
+      if (!this.connected) {
+        return true
+      }
+      return item && item.content ? item.content : '' // this.$store.state.currentItemContent
+    },
+    iframeHTML (item) {
+      if (this.iframeContent(item)) {
+        return item.iframe
+      } else {
+        return ''
+      }
+    },
+    hasNext (item) {
+      return item && item.next ? item.next : false // this.$store.state.currentItem.next
+    },
+    hasPrev (item) {
+      return item && item.prev ? item.prev : false // this.$store.state.currentItem.prev
+    },
+    dynComponent (item) {
+      // const id = this.$store.state.currentItem.id
+      var template = item && item.content ? item.content : '<div></div>' // this.currentItemContent
+      return {
+        template, // use content as template for this component
+        props: this.$options.props // re-use current props definitions
+      }
+    },
+    style (item) {
+      return { background: 'transparent' }
+    },
+    goToHistory(index) {
+      if (this.$refs.carousel !== undefined) {
+        this.$refs.carousel.goSlide(index)
+      }
+      else if (this.$refs.slider !== undefined) {
+        this.$refs.slider.goToSlide(index)
+      }
+      else {
+        this.current = this.historyItems[index]
+      }
+    },
+    findInHistory(id) {
+      let index = this.historyItems.findIndex(item => item.item.id === id);
+      // console.log(index)
+      return index
+    },
+    addItem(item) {
+      this.current = item
+      this.historyItems.push(item)
+      let index = this.historyItems.length - 1
+      setTimeout(() => this.goToHistory(index), 500)
     }
   },
   computed: {
+    historyIndex () {
+      return this.$store.state.historyIndex
+    },
+    historyLength () {
+      return this.historyItems.length
+    },
+    width () {
+      return this.$store.state.rightPaneWidth
+    },
     cpWidth () {
       return window.lconfig.contentPaneWidth || '700px'
     },
@@ -173,50 +439,8 @@ export default {
     text () {
       return this.$store.state.leotext
     },
-    iframeContent () {
-      if (this.$store.state.contentPane === 'site') {
-        return true
-      } else {
-        return false
-      }
-    },
-    boardContent () {
-      if (this.$store.state.contentPane === 'board') {
-        return true
-      } else {
-        return false
-      }
-    },
-    textContent () {
-      if (this.$store.state.contentPane === 'text') {
-        return true
-      } else {
-        return false
-      }
-    },
-    currentItemContent () {
-      return this.$store.state.currentItemContent
-    },
-    iframeHTML () {
-      if (this.iframeContent) {
-        return this.$store.state.iframeHTML
-      } else {
-        return ''
-      }
-    },
-    hasNext () {
-      return this.$store.state.currentItem.next
-    },
-    hasPrev () {
-      return this.$store.state.currentItem.prev
-    },
-    dynComponent () {
-      // const id = this.$store.state.currentItem.id
-      const template = this.currentItemContent ? this.currentItemContent : '<div></div>'
-      return {
-        template, // use content as template for this component
-        props: this.$options.props // re-use current props definitions
-      }
+    connected () {
+      return this.$store.state.connected
     }
   },
   beforeUpdate () {
@@ -273,9 +497,75 @@ export default {
     }
   },
   watch: {
+    '$store.state.history': {
+      handler: function (val, oldVal) {
+        this.history = val
+      },
+      deep: true,
+      immediate: true
+    },
+    '$store.state.currentItem': {
+      handler: function (val, oldVal) {
+        this.loading = true
+        this.new.item = val ? Object.assign({}, val) : null
+        this.new.pane = 'text'
+        this.new.content = ''
+        this.new.iframe = ''
+      },
+      deep: true,
+      immediate: true
+    },
+    '$store.state.contentPane': {
+      handler: function (val, oldVal) {
+        this.new.pane = val ? val : null
+      },
+      deep: true,
+      immediate: true
+    },
+    '$store.state.currentItemContent': {
+      handler: function (val, oldVal) {
+        this.new.content = val ? val : null
+        if (this.new.content && this.new.pane !== 'site') {
+          this.loading = false
+          let index = this.findInHistory(this.new.item.id)
+          if (index === -1) {
+            setTimeout(() => this.addItem(Object.assign({}, this.new)), 1500)
+          } else {
+            setTimeout(() => this.goToHistory(index), 2000)
+          }
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+    '$store.state.iframeHTML': {
+      handler: function (val, oldVal) {
+        this.new.iframe = val ? val : null
+        if (this.new.content && this.new.pane == 'site') {
+          this.loading = false
+          let index = this.findInHistory(this.new.item.id)
+          if (index === -1) {
+            setTimeout(() => this.addItem(Object.assign({}, this.new)), 1500)
+          } else {
+            setTimeout(() => this.goToHistory(index), 2000)
+          }
+        }
+      },
+      deep: true,
+      immediate: true
+    }
   }
 }
 </script>
+
+<style lang='scss'>
+.carousel-3d-container {
+  .carousel-3d-slide {
+    background: rgba(255,255,255, 1.0);
+    border: 0px;
+  }
+}
+</style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
@@ -301,6 +591,14 @@ export default {
   #rhandle {
     float: right;
   }
+  .behind {
+    //background: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
+  },
+  .login {
+    //height: 1000px;
+    //position:'absolute';
+  },
   .handle {
     width:50px;
     // align-items: center;
@@ -344,11 +642,20 @@ export default {
     justify-content: center;
   }
   .pane {
+    font-family: fantasy;
+    z-index: 1500;
     // height: 100%;
     //background: #fff;
-    background: rgba(255, 255, 255, 0.8);
+    // background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
+    background: rgba(255, 255, 255, 0.03);
     width: 100%;
     position: relative;
+  }
+  .frame {
+    display:flex; 
+    // background:#fff;
+    // background: rgba(255, 255, 255, 0.8); 
+    width: 100%;
   }
   .voutline {
   }

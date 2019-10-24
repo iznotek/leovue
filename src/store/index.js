@@ -204,6 +204,22 @@ function getUrlFromTitle (title, dataType) {
 
   return {url, label}
 }
+function showPdf (context, title, id) {
+  let {url, label} = getUrlFromTitle(title) // eslint-disable-line
+  if (!url) { return }
+  const ext = util.getFileExtension(url)
+  // const base = url.substring(0, url.lastIndexOf('/'))
+  context.commit('CURRENT_ITEM_CONTENT', { text: '<div class="spin-box"><div class="single10"></div></div>' })
+  if (ext === 'pdf') {
+    let text = `<pdf src="` + url + `"></pdf>`
+    // let text = `<button @click="$refs.thePdf.print()">print</button> <pdf ref="thePdf" src="` + url + `"></pdf>`
+    context.commit('CURRENT_ITEM_CONTENT', { text })
+    const newItem = { id, t: text }
+    context.commit('CONTENT_ITEM', {item: newItem})
+    context.commit('CONTENT_ITEM_UPDATE')
+    context.commit('CONTENT_PANE', { type: 'board' })
+  }
+}
 function showPresentation (context, title, id) {
   const dummy = Math.random()
   const iframeHTML = `
@@ -715,10 +731,41 @@ function extractCover (ldata) {
   let cover = ''
   if (ldata.data[0].name.indexOf('@cover') > -1) {
     cover = ldata.textItems[ldata.data[0].t]
-    ldata.data.shift()
+    if (window.lconfig.coverPage === true) {
+      ldata.data.shift()
+    }
   }
 
   return cover.replace('@language html', '')
+}
+
+/**
+ * extract @theme nodes section
+ * @param ldata
+ * @returns {string}
+ */
+function extractThemes (ldata) {
+  let themes = {}
+  const textItems = ldata.textItems
+  ldata.data.forEach(d => {
+    _.merge(themes, extractTheme(d, textItems))
+  })
+  return themes
+}
+function extractTheme (d, textItems, parentid = 1) {
+  let themes = {}
+  if (/^@theme/.test(d.name)) {
+    let itemText = textItems[d.t]
+    let theme = jsyaml.load(itemText.replace('@language yaml', ''))
+    if (theme) {
+      // console.log('FOUND THEME: ', theme)
+      themes[parentid] = theme
+    }
+  }
+  d.children.forEach(child => {
+    _.merge(themes, extractTheme(child, textItems, d.id))
+  })
+  return themes
 }
 
 /**
@@ -734,12 +781,14 @@ function setData (context, ldata, filename, route) {
   context.commit('RESET') // content item has not been drawn
   context.commit('INIT_DATA') // loaded the leo data
   let cover = extractCover(ldata) // cover page, pull out any nodes with @cover directive
+  let themes = extractThemes(ldata)
   const text = ldata.textItems
   context.commit('LEO', {
     data: ldata.data,
     text,
     filename: filename,
-    cover: cover
+    cover: cover,
+    themes: themes
   })
   loadDataSets(context, ldata)
   loadDataTables(context, ldata)
@@ -790,7 +839,7 @@ function setData (context, ldata, filename, route) {
     subtrees = getRoots([], npath)
   }
   loadSubtrees(context, subtrees, ldata.data, id, subpath, npath).then(() => {
-    console.log('SUBPATH', subpath)
+    console.log('loadSubtrees: ', npath)
     context.commit('SUBPATH', {subpath})
     const openItems = JSON.search(ldata.data, '//*[id="' + id + '"]/ancestor::*')
     if (!openItems) { return }
@@ -1222,14 +1271,22 @@ function loadDataTable (context, item, textItems) {
 // ========= The Store ===============
 export default new Vuex.Store({
   state: {
+    user: {
+      name: '',
+      pw: ''
+    },
     leotext: {},
     leodata: {},
     filename: '',
     initialized: false,
     initializedData: false,
     contentPane: 'text',
-    viewType: 't',
+    viewType: 'o',
     cover: '',
+    themes: {},
+    connected: false,
+    currentItemPath: '',
+    currentItemPathMapIds: [],
     currentItem: {
       id: 0,
       next: 0,
@@ -1246,7 +1303,9 @@ export default new Vuex.Store({
     openItemIds: [],
     history: [0],
     historyIndex: 0,
+    leftPaneLeft: 0,
     leftPaneWidth: 1200,
+    rightPaneWidth: 0,
     iframeHTML: '',
     contentItemsUpdateCount: 0,
     idx: null,
@@ -1254,9 +1313,16 @@ export default new Vuex.Store({
     accordionPrev: false,
     searchFlag: false,
     selecting: false, // e.g. in search dialog using arrow keys
-    subpath: ''
+    subpath: '',
+    angle: 0,
+    tween: null,
+    theme: null,
+    zircle: {}
   },
   mutations: {
+    TWEEN_ANGLE (state, o) {
+      state.angle = o.a
+    },
     ADDDATASET (state, o) {
       state.dataSets[o.k] = o.v
     },
@@ -1286,9 +1352,13 @@ export default new Vuex.Store({
       state.idx = c.idx
       state.idxDocs = c.docs
       state.cover = o.cover
+      state.themes = o.themes
       state.filename = o.filename
       window.lconfig.leodata = o.data
       window.lconfig.leotext = o.text
+    },
+    CONNECTED (state, o) {
+      state.connected = o.state
     },
     RESETCOVER (state, o) { // set the cover page content
       state.cover = o.cover
@@ -1383,7 +1453,37 @@ export default new Vuex.Store({
         state.history.push(id)
         state.historyIndex = state.historyIndex + 1
       }
+
+      // construct path string for header
+      var paths = []
+      var ids = []
+      if (id > 0) {
+        const item = JSON.search(state.leodata, '//*[id="' + id + '"]')
+        if (item && item[0]) {
+          ids.push(id)
+          paths.push(item[0].vtitle)
+        }
+      }
+      var parentid = id
+      while (parentid > 0) {
+        const parent = JSON.search(state.leodata, '//*[id="' + parentid + '"]/parent::*')
+        if (parent && parent[0]) {
+          parentid = parent[0].id
+          ids.push(parentid)
+          paths.push(parent[0].vtitle)
+        } else break
+      }
+      paths = paths.reverse()
+      state.currentItemPath = paths.join(' / ')
+      state.currentItemPathMapIds = ids.reverse()
+
       // state.initialized = false
+    },
+    CURRENT_THEME (state, o) {
+      state.theme = o
+    },
+    ZIRCLE_VIEW (state, o) {
+      state.zircle[o.view] = o.id
     },
     OPEN_ITEMS (state, o) {
       const ids = state.openItemIds
@@ -1393,7 +1493,6 @@ export default new Vuex.Store({
     SUBPATH (state, o) {
       state.subpath = o.subpath
     }
-
   },
   actions: {
     setMessages (context) {
@@ -1565,6 +1664,22 @@ export default new Vuex.Store({
           console.log('No item[0] for item:', item)
           return
         }
+
+        // look for theme and
+        // if (item && item.children) {
+        //   for (let i = 0; i < item.children.length; i++) {
+        //     // console.log(i + ': ' + item.children[i].name)
+        //     if (/^@theme/.test(item.children[i].name)) {
+        //       let itemText = context.state.leotext[item.children[i].t]
+        //       let themeObj = jsyaml.load(itemText.replace('@language yaml', ''))
+        //       if (themeObj) {
+        //         context.commit('CURRENT_THEME', themeObj)
+        //       }
+        //       break
+        //     }
+        //   }
+        // }
+
         util.sendGTag(item) // send Google Analytics if GA initialized in index.html
         let itemText = context.state.leotext[item.t]
         if (/^@presentation /.test(item.name)) {
@@ -1585,6 +1700,11 @@ export default new Vuex.Store({
             const html = lodashTemplate.render(itemData, template)
             return showText(context, html, id, null, _.get(itemData, 'params', {}))
           }
+        }
+        if (/^@pdf/.test(item.name)) {
+          let {url, label} = getUrlFromTitle(item.name) // eslint-disable-line
+          if (!url) { return }
+          return showPdf(context, item.name, id)
         }
         if (/^@rss/.test(item.name)) {
           let {url, label} = getUrlFromTitle(item.name) // eslint-disable-line

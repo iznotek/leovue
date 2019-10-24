@@ -1,0 +1,55 @@
+<template>
+    <div>
+        <MenuBar v-bind="this.$attrs" @openMenu="push" @closeMenu="pull">
+            <slot></slot>
+        </MenuBar>
+    </div>
+</template>
+
+<script>
+import MenuBar from './MenuBar'
+export default {
+  name: 'reveal',
+  components: {
+    MenuBar: MenuBar
+  },
+  methods: {
+    openMenu () {
+      this.$emit('openMenu')
+    },
+    closeMenu () {
+      this.$emit('closeMenu')
+    },
+    push () {
+      this.openMenu()
+      let width = this.$attrs.width ? this.$attrs.width + 'px' : '300px'
+
+      document.body.style.overflowX = 'hidden'
+
+      if (this.$attrs.right) {
+        document.querySelector(
+          '#page-wrap'
+        ).style.transform = `translate3d(-${width}, 0px, 0px )`
+      } else {
+        document.querySelector(
+          '#page-wrap'
+        ).style.transform = `translate3d(${width}, 0px, 0px )`
+      }
+
+      document.querySelector('#page-wrap').style.position = 'relative'
+      document.querySelector('#page-wrap').style.transition =
+        'all 0.5s ease 0s'
+    },
+    pull () {
+      this.closeMenu()
+      document.querySelector('#page-wrap').style.transition =
+        'all 0.5s ease 0s'
+      document.querySelector('#page-wrap').style.transform = ''
+      document.querySelector('#page-wrap').style.position = ''
+      document.body.removeAttribute('style')
+    }
+  }
+}
+</script>
+
+

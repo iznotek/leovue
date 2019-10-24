@@ -13,7 +13,7 @@
         </item>
         </div>
       </ul>
-      <contentpane slot="right"></contentpane>
+      <contentpane slot="right"></contentpane> 
     </splitpane>
   </div>
 </template>

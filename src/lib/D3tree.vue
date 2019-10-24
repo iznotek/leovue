@@ -528,19 +528,21 @@ export default {
 
 <style>
 .treeclass .nodetree  circle {
-  fill: #999;
+  fill: #888;
   r: 4.5;
 }
 
 .treeclass .node--internal circle {
   cursor: pointer;
-  fill:  #555;
-  r: 5;
+  fill:  #aaa;
+  r: 6;
 }
 
 .treeclass .nodetree text {
   font: 14px sans-serif;
   cursor: pointer;
+  color: #eee;
+  fill: #eee; 
 }
 
 .treeclass .nodetree.selected text {
@@ -548,12 +550,13 @@ export default {
 }
 
 .treeclass .node--internal text {
-  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+  //text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
+  color: #eee;
 }
 
 .treeclass .linktree {
   fill: none;
-  stroke: #555;
+  stroke: #999;
   stroke-opacity: 0.4;
   stroke-width: 1.5px;
 }

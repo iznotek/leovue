@@ -1,13 +1,15 @@
 <template>
   <div @click="setup">
   <section class="cover show" id="cover-page" v-if="coverContent">
-    <component :is="dynComponent" />
+    <div :is="dynComponent">
+    </div>
   </section>
   </div>
 </template>
 
 <script>
   import _ from 'lodash'
+
   export default {
     name: 'cover',
     data () {
@@ -23,7 +25,8 @@
         }
       }
     },
-    components: {},
+    components: {
+    },
     computed: {
       coverContent () {
         return this.$store.state.cover
@@ -65,28 +68,32 @@
   }
 </script>
 
-//MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathExample"]);
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+  .login {
+    position: absolute;
+    top: calc(100vh - 800px);
+    left: 100px;
+  }
 
   section {
-    --theme-color: #0c0;
+    // --theme-color: #0c0;
   }
 
   section.cover {
     -ms-flex-align: center;
     align-items: center;
-    background-position: 50%;
+    background-position: 0%;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100vh;
+    height: 100%;
     display: none
   }
 
   section.cover.show {
     display: -ms-flexbox;
-    display: flex
+    display: block;
+    height: 100%;
   }
 
   section.cover.has-mask .mask {
@@ -99,10 +106,11 @@
   }
 
   section.cover .cover-main {
-    -ms-flex: 1;
-    flex: 1;
+    //-ms-flex: 1;
+    //flex: 1;
     text-align: center;
-    z-index: 1
+    z-index: 1;
+    height: 100%;
   }
 
   section.cover a {
