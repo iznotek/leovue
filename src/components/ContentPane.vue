@@ -201,8 +201,8 @@ import _ from 'lodash'
 const util = require('../util.js')
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { ContentLoader } from 'vue-content-loader'
-import { VueperSlides, VueperSlide } from 'vueperslides'
-import 'vueperslides/dist/vueperslides.css'
+// import { VueperSlides, VueperSlide } from 'vueperslides'
+// import 'vueperslides/dist/vueperslides.css'
 import Login from './Login'
 
 // functions for dealing with x-frame headers
@@ -280,9 +280,9 @@ export default {
     Carousel3d,
     Slide,
     ContentLoader,
-    login: Login,
-    VueperSlides, 
-    VueperSlide 
+    login: Login // ,
+    // VueperSlides, 
+    // VueperSlide 
   },
   data () {
     return {
