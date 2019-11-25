@@ -1,5 +1,5 @@
 # build environment
-FROM node:8 as builder
+FROM node:8
 RUN node --version
 RUN npm --version
 RUN apt-get update && apt-get install -y build-essential && apt-get -y install sudo
@@ -8,14 +8,19 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY . /usr/src/app
-RUN npm install
+RUN npm install --only=prod
+RUN npm install -g http-server
 RUN npm run build
 
-# production environment
-FROM nginx:1.13.9-alpine
-RUN rm -rf /etc/nginx/conf.d
-RUN mkdir -p /etc/nginx/conf.d
-COPY ./nginx.conf /etc/nginx/conf.d/
-COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+WORKDIR /usr/src/app/dist
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["http-server", "-c-1", "-p", "80;"]
+
+# production environment
+#FROM nginx:1.13.9-alpine
+#RUN rm -rf /etc/nginx/conf.d
+#RUN mkdir -p /etc/nginx/conf.d
+#COPY ./nginx.conf /etc/nginx/conf.d/
+#COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+#EXPOSE 80
+#CMD ["nginx", "-g", "daemon off;"]
