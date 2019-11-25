@@ -15,13 +15,13 @@
          id="panes-separator">
       <div v-if="connected" class="noselect" style="margin-top: calc(0vh);">
         <ballmenu class="split-ball"/>
-        <div class="split-left"
+        <div class="arrow-left"
             v-show="showLeftButton"
             @click="slide('left')">
           <!-- <icon name="bulletarrow" /> -->
           <img :src="require(`@/assets/icons/bullet-arrow.svg`)" :style="style" width="95"/>
         </div>
-        <div class="split-right"
+        <div class="arrow-right"
             v-show="showRightButton"
             @click="slide('right')">
           <!-- <icon name="bulletarrow" /> -->
@@ -282,17 +282,17 @@
     //overflow-y: auto;
     // padding-top: 33px;
   }
-  .split-left, .split-right {
+  .arrow-left, .arrow-right {
     color: #fff;
     cursor: pointer;
   }
-  .split-left {
+  .arrow-left {
     position: absolute;
     transform: rotate(180deg);
     margin-top: 0px; 
     margin-left: -57px;
   }
-  .split-right {
+  .arrow-right {
     position: absolute;
     margin-top: 0px; 
     margin-left: -25px;
