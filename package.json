@@ -71,6 +71,7 @@
     "vue-codemirror": "^4.0.6",
     "vue-content-loader": "^0.2.2",
     "vue-content-placeholders": "^0.2.1",
+    "vue-digital-clock": "^2.0.0",
     "vue-events": "^3.1.0",
     "vue-flux": "^5.1.9",
     "vue-fullscreen": "^2.1.5",

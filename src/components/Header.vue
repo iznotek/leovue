@@ -2,13 +2,15 @@
   <div style="height:0px;">
     <div class="holder">
       <div class="header" v-if="config.showHeader">
-        <span class="app-title">{{user}}{{ config.trademark }}</span>
+        <span class="app-title"> {{user}}{{ config.trademark }}</span>
+
         <!-- <span v-if="config.showAppTitle && config.docTitle">:</span> -->
         <span v-if="config.showAppTitle" class="doc-title">{{ docTitle }}</span>
          <!-- <div @click="toggle" class="icon icon-button">
           <icon class="icon" name="bars"></icon>
         </div> -->
        
+        <digital-clock :blink="false" />
         <div v-if="connected" @click="fullscreen" class="icon icon-button">
           <icon class="icon" name="expand"></icon>
         </div> 
@@ -88,6 +90,8 @@
   import Dock from './dock/dock'
   import _ from 'lodash'
   import { JSONtoLeo } from '../services/leo-file'
+  import DigitalClock from 'vue-digital-clock'
+
   function formatJSONData (data, textItems) {
     if (_.isArray(data)) {
       data.forEach(d => formatJSONData(d, textItems))
@@ -103,12 +107,15 @@
     name: 'appheader',
     components: {
       searchbar: SearchBar,
-      dock: Dock
+      dock: Dock,
+      DigitalClock
     },
     data () {
       return {
         menu: false
       }
+    },
+    mounted () {
     },
     methods: {
       settings () {
@@ -186,7 +193,7 @@
           return '' // window.lconfig.docTitle
         }
         if (this.$store.state.currentItemPath.includes('@cover')) {
-          return window.lconfig.docTitle + ' / Home'
+          return window.lconfig.docTitle // + ' / Home'
         }
         return window.lconfig.docTitle + this.$store.state.currentItemPath
       },
@@ -232,6 +239,12 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
+.clock 
+  float: left
+  color: #eceff1
+  margin-top: -1px
+  padding-left: 7px
+  padding-right: 15px
 .check
   // margin-top: 2px
   // margin-bottom: -3px
