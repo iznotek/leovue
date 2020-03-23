@@ -6,6 +6,8 @@
 
 <script>
 import Accordion from './accordion/vue-accordion'
+const util = require('../util.js')
+
 export default {
   name: 'spacemenu',
   components: {
@@ -38,7 +40,8 @@ export default {
         },
         p: {
           fontSize: this.texts.font + 'px',
-          marginTop: this.texts.margin + 'px'
+          marginTop: this.texts.margin + 'px',
+          color: this.titles.color
         }
       }
     }
@@ -55,11 +58,11 @@ export default {
         padding: 0
       },
       texts: {
-        font: 10,
+        font: 15,
         margin: 0
       },
       titles: {
-        font: 15,
+        font: 20,
         color: 'white'
       },
       items: [{
@@ -67,37 +70,38 @@ export default {
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ',
         url: '#',
         image: 'https://unsplash.it/650/350/?image=111'
-      }, {
-        title: 'Second',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ',
-        url: '#',
-        image: 'https://unsplash.it/650/350/?image=534'
-      }, {
-        title: 'Third',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ',
-        url: '#',
-        image: 'https://unsplash.it/650/350/?image=9'
-      }, {
-        title: 'Fourth',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ',
-        url: '#',
-        image: 'https://unsplash.it/650/350/?image=12'
-      }, {
-        title: 'Fifth',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ',
-        url: '#',
-        image: 'https://unsplash.it/650/350/?image=15'
-      }, {
-        title: 'Sixth',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ',
-        url: '#',
-        image: 'https://unsplash.it/650/350/?image=114'
-      }, {
-        title: 'Seventh',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore ',
-        url: '#',
-        image: 'https://unsplash.it/650/350/?image=318'
       }]
+    }
+  },
+  watch: {
+    '$store.state.themes': {
+      handler: function (val, oldVal) {
+        var spaces = []
+        if (val) {
+          Object.keys(val).forEach(id => {
+            let theme = val[id]
+            if (theme.background.space) {
+              let item = JSON.search(this.$store.state.leodata, '//*[id="' + id + '"]')
+              if (item) {
+                item = item[0]
+                if (item) {
+                  var space = {
+                    text: theme.background.space,
+                    title: item.vtitle,
+                    image: theme.background.spot,
+                    id: id,
+                    color: util.rgbaFromTheme(theme.background.theme || 'black', 0.8)
+                  }
+                  spaces.push(space)
+                }
+              }
+            }
+          })
+        }
+        this.items = spaces
+      },
+      deep: true,
+      immediate: true
     }
   }
 }
