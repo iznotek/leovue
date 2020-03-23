@@ -3,7 +3,7 @@
     ["env"]
   ],
   "plugins": [
-    "transform-runtime"
+    ["transform-runtime", { "polyfill": false }]
   ],
   "comments": false,
   "env": {

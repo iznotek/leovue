@@ -7,11 +7,14 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node --max-old-space-size=2048 build/build.js",
+    "tar": "tar -cvf ./deploy.tar --exclude='*.map' ./captain-definition ./Dockerfile.production ./dist/*",
+    "deploy": "npm run tar && caprover deploy -t ./deploy.tar",
+    "publish": "npm run build && npm run deploy",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "deploy": "rm -Rf docs && cp -Rf dist docs && rm dist/static/js/vendor.js.map && cp README.md docs && cp -Rf examples docs/examples && cp -Rf screencasts docs/screencasts",
+    "docs": "rm -Rf docs && cp -Rf dist docs && rm dist/static/js/vendor.js.map && cp README.md docs && cp -Rf examples docs/examples && cp -Rf screencasts docs/screencasts",
     "build-static": "node build/build-static.es6"
   },
   "dependencies": {
