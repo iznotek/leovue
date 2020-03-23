@@ -126,6 +126,34 @@ function rgbaFromTheme(name, alpha = 1.0, add = 0) {
 
 /**
  * return formatted text, e.g. markdown or html
+ * @param text {string}
+ * @param nowrapper {boolean} Skip the content div wrapper el
+ * @returns {string}
+ */
+function rgbaFromObject(color, alpha = null, add = null) {
+  var val = color
+  if (typeof val === 'object') {
+    if (alpha) {
+      color.a = alpha
+    }
+    if (add) {
+      val.r += add
+      val.g += add
+      val.b += add
+      val.r = (val.r > 255) ? 255 : val.r
+      val.g = (val.g > 255) ? 255 : val.g
+      val.b = (val.b > 255) ? 255 : val.b
+      val.r = (val.r < 0) ? 0 : val.r
+      val.g = (val.g < 0) ? 0 : val.g
+      val.b = (val.b < 0) ? 0 : val.b
+    }
+    return 'rgba(' + val.r + ',' + val.g + ',' + val.b + ',' + val.a + ')'
+  }
+  return rgba(0,0,0,1.0)
+}
+
+/**
+ * return formatted text, e.g. markdown or html
  * @param name {string} color css name
  * @param alpha {float} Optional alpha
  * @returns {string}
@@ -140,9 +168,9 @@ function rgbaObjectFromTheme(name, alpha = 1.0, add = 0) {
     case 'red':      val.r = 150; break
     case 'orange':   val.r = 255, val.g = 150; break
     case 'black':    val.r = 0; break 
-    case 'white':    val.r = 255, val.g = 255, val.r = 255; break 
-    case 'violet':    val.r = 150, val.g = 50, val.r = 255; break 
-    case 'marron':    val.r = 140, val.g = 70, val.r = 0; break
+    case 'white':    val.r = 255, val.g = 255, val.b = 255; break 
+    case 'violet':    val.r = 150, val.g = 50, val.b = 255; break 
+    case 'marron':    val.r = 140, val.g = 70, val.b = 0; break
     default:         return name
   }
   val.r += add
@@ -151,6 +179,9 @@ function rgbaObjectFromTheme(name, alpha = 1.0, add = 0) {
   val.r = (val.r > 255) ? 255 : val.r
   val.g = (val.g > 255) ? 255 : val.g
   val.b = (val.b > 255) ? 255 : val.b
+  val.r = (val.r < 0) ? 0 : val.r
+  val.g = (val.g < 0) ? 0 : val.g
+  val.b = (val.b < 0) ? 0 : val.b
   return val
 }
 
@@ -345,6 +376,7 @@ module.exports = {
   removeDirectives,
   parseQueryString,
   rgbaFromTheme,
+  rgbaFromObject,
   rgbaObjectFromTheme,
   formatText,
   getObjectByKeyFromTree,
