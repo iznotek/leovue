@@ -323,11 +323,15 @@ function setIds (startId, d) {
 
   d.id = counter++
   if (_.isArray(d)) {
-    return d.forEach(i => setIds(startId, i))
+    _.remove(d, e => { return e.name.indexOf('@private') > -1 })
+    d.forEach(i => setIds(startId, i))
+    return
   }
   if (startId) {
     d.id = startId + '-' + d.id
   }
+  
+  _.remove(d.children, e => { return e.name.indexOf('@private') > -1 })
   d.children.forEach(c => setIds(startId, c))
 }
 function transformLeoXML2JSON (data, startId, parser, transformer, serializer) {
