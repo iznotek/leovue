@@ -30,7 +30,7 @@ import {LMap, LTileLayer, LMarker} from 'vue2-leaflet'
 import InfoCard from 'vue-info-card'
 import VTooltip from 'v-tooltip'
 import VueContentPlaceholders from 'vue-content-placeholders'
-import Pdf from 'vue-pdf'
+import Pdf from 'pdfvuer'
 import AsyncComputed from 'vue-async-computed'
 import VueMouseParallax from 'vue-mouse-parallax'
 
@@ -126,6 +126,7 @@ Vue.use(vBlur)
 //   iconType: 'MaterialDesign'
 //   // iconType: 'iconfont'
 // })
+Vue.component('pdfview', PDFViewer)
 Vue.component('pdf', Pdf)
 Vue.component('star-rating', StarRating)
 Vue.component('lv-timeline', LVTimeline)

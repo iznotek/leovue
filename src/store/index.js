@@ -211,7 +211,7 @@ function showPdf (context, title, id) {
   // const base = url.substring(0, url.lastIndexOf('/'))
   context.commit('CURRENT_ITEM_CONTENT', { text: '<div class="spin-box"><div class="single10"></div></div>' })
   if (ext === 'pdf') {
-    let text = `<pdf src="` + url + `"></pdf>`
+    let text = `<pdfview style="width: 100%" url="` + url + `"></pdfview>`
     // let text = `<button @click="$refs.thePdf.print()">print</button> <pdf ref="thePdf" src="` + url + `"></pdf>`
     context.commit('CURRENT_ITEM_CONTENT', { text })
     const newItem = { id, t: text }
