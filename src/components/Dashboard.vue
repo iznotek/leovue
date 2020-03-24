@@ -1,5 +1,6 @@
 <template>
-   <div class="dashboard" id="dashboard" v-bind:style="dashboardStyle"> 
+  <div  class="dashboard">
+   <div id="dashboard" v-bind:style="dashboardStyle"> 
     <!--<modelviewer/>-->
     <typemenu v-if="connected"/>
     <chat v-if="connected"/>
@@ -13,31 +14,26 @@
       <div slot="right" id="main" :class="{'header-space': config.showHeader}">
           <router-view :id="id"></router-view>
       </div>
-    </menubar>
+    </menubar> 
+   <!--  <div slot="right" id="main" :class="{'header-space': config.showHeader}">
+      <router-view :id="id"></router-view>
+    </div> -->
 
-    <div class="login">
+    <!-- <div class="login">
         <img v-if="!connected" class="loginimage" :src="require(`@/assets/logo.png`)" width="170" height="170"/> 
-        <!-- <img v-if="connected" class="loginimagehide" :src="require(`@/assets/logo.png`)" width="150" height="150"/> -->
-    </div>
+        <!-- <img v-if="connected" class="loginimagehide" :src="require(`@/assets/logo.png`)" width="150" height="150"/> 
+    </div> -->
     <div class="login" v-if="!connected">
          <!-- <img class="loginimage" :src="require(`@/assets/logo.png`)" width="150" height="150"/> -->
-
+<!-- 
          <div class="logintheme">
-    
             <pbutton
               :visible.sync="configlogin.visible"
               :animating.sync="configlogin.animating"
               :options="configlogin">
-       
-             <!-- <div class="loginbutton">
-               </div> -->
-                       <vgl-wave :text="title" :style="{fontFamily: 'fantasy', color: 'white', fontSize: '35', textAlign: 'center'}"></vgl-wave>
-           
-
+             <vgl-wave :text="title" :style="{fontFamily: 'fantasy', color: 'white', fontSize: '35', textAlign: 'center'}"></vgl-wave>
             </pbutton>
-
-      
-          </div>
+          </div>   -->
         
          <div class="logininput">
          <form id="form_cdb" onsubmit="return false">
@@ -53,6 +49,7 @@
           </div>
 
        
+      </div>
     </div>
   </div>
 </template>
@@ -74,8 +71,10 @@ import TypeMenu from './TypeMenu'
 import Background from './Background'
 import TreeView from './TreeView'
 import D3View from './D3View'
+
 // import ModelViewer from './modelviewer/Viewer'
 import ParticleEffectButton from 'vue-particle-effect-buttons'
+import {OrbitSpinner} from 'epic-spinners' // OrbitSpinner
 
 export default {
   name: 'dashboard',
@@ -88,13 +87,14 @@ export default {
     menubar: MenuBar,
     treeview: TreeView,
     d3view: D3View,
-    pbutton: ParticleEffectButton
+    pbutton: ParticleEffectButton,
+    spinner: OrbitSpinner
     // ,
     // modelviewer: ModelViewer
   },
   data () {
     return {
-      type: 'tree',
+      type: 'circle',
       password: '',
       configlogin: {
         // easing: 'easeOutQuart',
@@ -149,8 +149,13 @@ export default {
         if (action.name) {
           this.type = action.name
         }
-        // console.log(action.active)
-        this.$refs.menubar.toggle(action.active)
+      }
+    },
+    showLeft (state) {
+      if (state) {
+        this.type = !state.active ? 'circle' : 'tree'
+        this.$refs.menubar.toggle(state.active)
+        // this.type = 'tree'
       }
     }
   },
@@ -158,13 +163,17 @@ export default {
     let loader = this.$loading.show({
       // Optional parameters
       container: this.$refs.dashboard,
-      backgroundColor: '#FFF',
+      backgroundColor: '#001127',
       color: '#0AF',
       opacity: 1,
       canCancel: true,
       loader: 'dots',
       zIndex: 10000
       // onCancel: this.onCancel,
+    }, {
+      default: this.$createElement('spinner', {props: {size: 120, animationDuration: 1700, color: '#FFF'}})
+      // before: this.$createElement('before'),
+      // after: this.$createElement('after')
     })
     // simulate AJAX
 
@@ -224,10 +233,11 @@ export default {
   methods: {
     onKeyUp: function (e) {
       if (e.keyCode === 13) {
-        let vm = this
-        setTimeout(() => {
-          vm.configlogin.visible = false
-        }, 100)
+        this.login()
+        // let vm = this
+        // setTimeout(() => {
+        //   vm.configlogin.visible = false
+        // }, 100)
       } // else if (e.keyCode === 50) {
       // alert('@ was pressed');
       // }
@@ -238,7 +248,7 @@ export default {
         // 3,14159265
         this.$store.state.connected = true
         this.$store.state.user = {name: 'guest', pw: this.password}
-        this.animLogoLogin.play()
+        // this.animLogoLogin.play()
 
         let vm = this
         setTimeout(() => {
