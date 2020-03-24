@@ -554,7 +554,7 @@ export default {
     '$store.state.currentItemContent': {
       handler: function (val, oldVal) {
         this.new.content = val ? val : null
-        if (this.new.content && this.new.pane !== 'site') {
+        if (this.new.content) {
           this.loading = false
           let index = this.findInHistory(this.new.item.id)
           if (index === -1) {
@@ -570,7 +570,7 @@ export default {
     '$store.state.iframeHTML': {
       handler: function (val, oldVal) {
         this.new.iframe = val ? val : null
-        if (this.new.content && this.new.pane == 'site') {
+        if (this.new.iframe && this.new.pane == 'site') {
           this.loading = false
           let index = this.findInHistory(this.new.item.id)
           if (index === -1) {
