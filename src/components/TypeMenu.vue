@@ -53,7 +53,7 @@
             icon: 'project-diagram',
             // tooltip: 'Tree',
             color: 'rgba(20, 40, 100, 0.7)',
-            active: true,
+            active: false,
             group: 1
           },
           {
@@ -67,7 +67,7 @@
         ],
         color: 'rgba(20, 40, 100, 0.7)',
         position: 'bottom-left',
-        positionType: 'absolute',
+        positionType: 'fixed',
         tooltipEvent: 'hover',
         iconSizes: 'medium',
         mainIcon: 'eye',
@@ -92,7 +92,7 @@
       },
       handleToggle: function (state) {
         var action = {active: state}
-        this.$events.fire('show', action)
+        this.$events.fire('showLeft', action)
       }
     },
     watch: {

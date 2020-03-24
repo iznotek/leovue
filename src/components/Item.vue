@@ -1,66 +1,70 @@
 <template>
-  <li :id="prefix + model.id"
-      :nid="nid"
-      v-bind:class="{'unselected-sibling': hasOpenSibling}">
-    <div class="item-box"
-         :class="{bold: isFolder, iactive: active, topItem: top}"
-         >
-      <div>
-        <div @click="toggle" v-bind:class="{'icon-bracket': top}" class="icon-b" v-if="isFolder">
-          <div class="arrow" v-bind:class="{arrowdown: isOpenA}">
-            <!-- {{arrowIcon}} -->
-            <img :src="require(`@/assets/icons/bullet-arrow.svg`)" width="16">
+  <div class="back" :style="{backgroundImage: selectedImage}">
+  <div class="block" :style="{background: selectedColor}">
+    <li :id="prefix + model.id"
+        :nid="nid"
+        v-bind:class="{'unselected-sibling': hasOpenSibling}">
+      <div class="item-box"
+          :class="{bold: isFolder, topItem: top}"
+          >
+        <div>
+          <div @click="toggle" v-bind:class="{'icon-bracket': top}" class="icon-b" v-if="isFolder">
+            <div class="arrow" v-bind:class="{arrowdown: isOpenA}">
+              <!-- {{arrowIcon}} -->
+              <img :src="require(`@/assets/icons/bullet-arrow.svg`)" width="16">
+            </div>
           </div>
+          <!-- <editor :id="'editor-'+nid" v-if="isEditable" v-bind:editable="model.name" /> -->
+          <div class="leo-box"></div>
+          <div v-if="!isFolder" class="leaf-button"></div>
+          <span @click="toggle" class="otitle">{{model.vtitle}}</span>
         </div>
-        <!-- <editor :id="'editor-'+nid" v-if="isEditable" v-bind:editable="model.name" /> -->
-        <div class="leo-box"></div>
-        <div v-if="!isFolder" class="leaf-button"></div>
-        <span @click="toggle" class="otitle">{{model.vtitle}}</span>
       </div>
-    </div>
-    <!-- <div v-if="isEditable" class="inline">
-      <div class="content">
-        <codemirror class="code-directive" v-model="myDirectives" :options="cmOption"></codemirror>
-        <div class="icon-tab">
-          <div @click="toEditor('code')" class="icon icon-bracket">
-            code
+      <!-- <div v-if="isEditable" class="inline">
+        <div class="content">
+          <codemirror class="code-directive" v-model="myDirectives" :options="cmOption"></codemirror>
+          <div class="icon-tab">
+            <div @click="toEditor('code')" class="icon icon-bracket">
+              code
+            </div>
+            <div @click="toEditor('html')" class="icon icon-bracket">
+              html
+            </div>
+            <div @click="toEditor('md')" class="icon icon-bracket">
+              md
+            </div>
           </div>
-          <div @click="toEditor('html')" class="icon icon-bracket">
-            html
-          </div>
-          <div @click="toEditor('md')" class="icon icon-bracket">
-            md
-          </div>
+          <codemirror v-if="editorType === 'code'" v-model="myLeo" :options="cmOption"></codemirror>
+          <medium-editor v-if="editorType === 'md'" :text="myLeo"/>
+          <editor v-if="editorType === 'html'" v-bind:editable="myLeo" />
         </div>
-        <codemirror v-if="editorType === 'code'" v-model="myLeo" :options="cmOption"></codemirror>
-        <medium-editor v-if="editorType === 'md'" :text="myLeo"/>
-        <editor v-if="editorType === 'html'" v-bind:editable="myLeo" />
+      </div> -->
+      <div v-show="isOpen" class="child-items">
+        <div v-if="isOpenInline" v-html="myContent"
+            class="inline">
+        </div>
+        <ul v-if="isFolder">
+          <item
+            class="item"
+            v-for="amodel in model.children"
+            v-if="isVisible(amodel)"
+            :model="amodel"
+            :prefix="prefix"
+            :key="amodel.id"
+            :textItems="textItems"
+            :accordion="accordion"
+            :targetEl="targetEl">
+          </item>
+        </ul>
+        <div v-show="isOpenInline" class="hshim"></div>
       </div>
-    </div> -->
-    <div v-show="isOpen" class="child-items">
-      <div v-if="isOpenInline" v-html="myContent"
-           class="inline">
-      </div>
-      <ul v-if="isFolder">
-        <item
-          class="item"
-          v-for="amodel in model.children"
-          v-if="isVisible(amodel)"
-          :model="amodel"
-          :prefix="prefix"
-          :key="amodel.id"
-          :textItems="textItems"
-          :accordion="accordion"
-          :targetEl="targetEl">
-        </item>
-      </ul>
-      <div v-show="isOpenInline" class="hshim"></div>
-    </div>
-  </li>
+    </li>
+  </div>
+  </div>
 </template>
 
 <script>
-import Editor from './editor/Editor'
+// import Editor from './editor/Editor'
 import Velocity from 'velocity-animate'
 import _ from 'lodash'
 
@@ -71,10 +75,12 @@ import _ from 'lodash'
 // import 'medium-editor/dist/css/medium-editor.css'
 // import 'vue2-medium-editor/src/themes/default.css'
 
-import { codemirror } from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/mode/markdown/markdown.js'
-import 'codemirror/theme/monokai.css'
+// import { codemirror } from 'vue-codemirror'
+// import 'codemirror/lib/codemirror.css'
+// import 'codemirror/mode/markdown/markdown.js'
+// import 'codemirror/theme/monokai.css'
+
+const util = require('../util.js')
 
 // const util = require('../util.js')
 // import { getLanguage, removeFirstLine } from '../utils.js'
@@ -82,8 +88,8 @@ import 'codemirror/theme/monokai.css'
 export default {
   name: 'item',
   components: {
-    Editor,
-    codemirror // ,
+    // Editor,
+    // codemirror // ,
     // MediumEditor
   },
   props: {
@@ -127,6 +133,46 @@ export default {
     },
     arrowIcon: function () {
       return window.lconfig.itemArrow || '▶'
+    },
+    selectedImage: function () {
+      // var color = 'rgba(0,0,0,0.5)'
+      if (this.model) {
+        var theme = this.$store.state.themes[this.model.id]
+        if (theme && theme.background.spot) {
+          return 'url(' + theme.background.spot + ')'
+        }
+      }
+      return ''
+    },
+    selectedColor: function () {
+      // var color = 'rgba(0,0,0,0.5)'
+      let decal = 50
+      let alpha = 0.8
+      let alpha2 = 0.8
+      let angle = 165
+      let color = ''
+      let color2 = ''
+      if (this.model) {
+        var theme = this.$store.state.themes[this.model.id]
+        if (theme && theme.background.theme) {
+          color = util.rgbaFromTheme(theme.background.theme, alpha, this.active ? decal : -decal)
+          color2 = util.rgbaFromTheme('black', alpha2, this.active ? decal : -decal)
+          return 'linear-gradient(' + angle + 'deg, ' + color + ' 0%, ' + color2 + ' 100%)'
+        }
+        const parent = JSON.search(this.$store.state.leodata, '//*[id="' + this.model.id + '"]/parent::*')
+        if (parent && parent[0]) {
+          var pid = parent[0].id
+          theme = this.$store.state.themes[pid]
+          if (theme && theme.background.theme) {
+            color = util.rgbaFromTheme(theme.background.theme, alpha, this.active ? decal : -decal)
+            color2 = util.rgbaFromTheme('black', alpha2, this.active ? decal : -decal)
+            return 'linear-gradient(' + angle + 'deg, ' + color + ' 0%, ' + color2 + ' 100%)'
+          }
+        }
+      }
+      color = util.rgbaFromObject({r: 0, g: 0, b: 0, a: 1.0}, alpha, this.active ? decal : -decal)
+      color2 = util.rgbaFromObject({r: 0, g: 0, b: 0, a: 1.0}, alpha2, this.active ? decal : -decal)
+      return 'linear-gradient(' + angle + 'deg, ' + color + ' 0%, ' + color2 + ' 100%)'
     },
     isFolder: function () {
       if (/\.leo\)$/.test(this.model.name)) { return true } // subtree
@@ -251,9 +297,9 @@ export default {
       const easing = 'linear'
       this.reset = false // TODO: remove
 
-      if (this.model.parent) {
-        return this.toggleN()
-      }
+      // if (this.model.parent) {
+      //   return this.toggleN()
+      // }
       // toggle the open/close state of the item
       let openItemIds = this.$store.state.openItemIds.slice(0) // clone openid array
       if (!this.isOpen) {
@@ -271,7 +317,7 @@ export default {
             this.closeSiblings(easing, 'Up')
           }
         })
-      } else {
+      } else if (this.model.id === this.$store.state.currentItem.id) {
         Velocity(ul, 'slideUp', {duration, easing}).then(els => {
           this.$store.commit('OPEN_ITEMS', {openItemIds})
           this.closearrow = false
@@ -317,6 +363,7 @@ export default {
       }
       // if (!this.targetEl) { return }
       this.$store.dispatch('setCurrentItem', {id})
+      // this.$store.dispatch('setCurrentItem', {id})
     },
     toggleN: function () {
       // toggle the tree node
@@ -399,6 +446,119 @@ export default {
 }
 </script>
 
+
+<style lang="scss" scoped>
+$black: rgba(0,0,0,0.5);
+$selected: rgba(50,50,50,0.5);
+$dkblack: #333;
+$mdblack: rgba(150,150,150,0.5);
+$ltblack: #444;
+$grey: #888;
+$width: 350px;
+
+section {
+  transform: translateX(70px);
+}
+
+.back {
+  -webkit-box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
+  box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
+  border-radius: 20px;
+  width: $width;
+
+  // .back {
+  //   width: 200px;
+  //   .back .back {
+  //     width: 300px;
+  //     .back .back {
+  //       width: 235px;
+  //     }
+  //   }
+  // }
+
+  background-repeat: no-repeat;
+	background-position: center center;
+  background-size: cover;
+  background-blend-mode: overlay;
+  background-attachment: absolute;
+  filter: opacity(90%);
+}
+
+.block {
+  background-color: $black;
+  border: 1px solid;
+  border-color: $mdblack;
+  // border-bottom-color: $ltblack;
+
+  button {
+    background: $dkblack;
+    border: 1px solid $ltblack;
+    &:focus {
+      outline: 1px dashed $ltblack;
+    }
+  }
+}
+
+.block {
+  font-size: 14px;
+  position: relative;
+  display: block;
+  padding: 4px 40px 4px 10px;
+  margin: 5px 0;
+  width: $width;
+  transition: 0.5s all ease;
+  // font-family: 'Space Mono', monospace;
+  text-align: left;
+  border-radius: 20px;
+  button {
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  // .block {
+  //   width: 200px;
+  //   .block .block {
+  //     width: 300px;
+  //     .block .block {
+  //       width: 235px;
+  //     }
+  //   }
+  // }
+}
+
+.block button.info,
+.block .block button.info {
+  // font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  position: absolute;
+  right: 8px;
+  background: #42b983;
+  padding: 3px 8px;
+  font-size: 12px;
+  color: white;
+  margin-top: -1px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border: none;
+}
+
+@media only screen and (max-width: 600px) {
+  section {
+    transform: translateX(20px) !important;
+  }
+
+  .block,
+  .block .block .block .block {
+    font-size: 12px;
+    width: $width !important;
+  }
+
+  .block button.info,
+  .block .block button.info {
+    font-size: 9px;
+  }
+}
+</style>
+
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass">
 $contentBorderColor: #ccc
@@ -453,10 +613,10 @@ $contentBorderColor: #ccc
 .bold
   font-weight: bold
 .iactive
-  background: rgba(0,0,0,0.8)  //#01FF70 //#81ff00
+  background-color: rgba(30,30,30,0.8)  //#01FF70 //#81ff00
   max-width: 300px
 .iactive.topItem
-    background: rgba(0,0,0,0.8)
+    background-color: rgba(30,30,30,0.8)
 .activeb
   background: #81ff00
   font-weight: bold

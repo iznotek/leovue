@@ -70,15 +70,16 @@
 .treeview
   margin: 0
   padding-top: 33px;
-  margin-left: 85px
+  margin-left: 100px
   height: 100%
+  width: 100%
   color: #dddddd
   z-index: 2000
   
 .very-pane
   ul
     padding: 0
-    padding-left: 20px
+    padding-left: 70px
     line-height: 1.4em
     margin-bottom: 0px
     list-style-type: none
