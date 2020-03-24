@@ -509,6 +509,9 @@
 </v>
 </v>
 </v>
+<v t="ifs.20200324194154.1"><vh>[Ark'OM](https://arkom.iznow.tech)</vh>
+<v t="ifs.20200324194333.1"><vh>[Outline ?](https://outline.iznow.tech/share/c7a4c5bd-3372-4be6-b3f7-caa8df85b966)</vh></v>
+</v>
 </vnodes>
 <tnodes>
 <t tx="ifs.20190324100058.1"></t>
@@ -4926,6 +4929,8 @@ background:
 
 background: 
   spot: static/arkom/astro/bar01.jpg</t>
+<t tx="ifs.20200324194154.1"></t>
+<t tx="ifs.20200324194333.1"></t>
 <t tx="josephorr.20170228222411.2">@language html
 
 &lt;div style="width:600px;margin-left:auto;margin-right:auto; margin-top:20px"&gt;
