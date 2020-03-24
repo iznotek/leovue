@@ -9,7 +9,7 @@
 <v t="josephorr.20181002174010.1"><vh>@cover</vh>
 <v t="ifs.20190418155034.1"><vh>@theme</vh></v>
 </v>
-<v t="josephorr.20170228222411.2"><vh>@board is now</vh>
+<v t="josephorr.20170228222411.2"><vh>@board iz now</vh>
 <v t="ifs.20190421204116.1"><vh>@theme</vh></v>
 <v t="ifs.20190414205247.1"><vh>l'astro</vh>
 <v t="ifs.20190415223632.1"><vh>@theme</vh></v>
@@ -46,7 +46,7 @@
 <v t="ifs.20190324100129.1"><vh>oy</vh></v>
 </v>
 </v>
-<v t="ifs.20190324101206.1"><vh>...</vh>
+<v t="ifs.20190324101206.1"><vh>@private ...</vh>
 <v t="josephorr.20180123102417.1"><vh>Summary Nodes</vh>
 <v t="josephorr.20180123102440.1"><vh>Mermaid</vh>
 <v t="josephorr.20180123094605.1"><vh>@mermaidtd (Simple Example Top Down)</vh>
@@ -4802,6 +4802,7 @@ rating: 5</t>
 <t tx="ifs.20190415223632.1">@language yaml
 
 background: 
+  space: An amasing place to link us all...
   transition: transitionWarp
   dash: static/arkom/astro/ext01.jpg
   spot: static/arkom/astro/cours01.jpg
@@ -4810,6 +4811,7 @@ background:
 <t tx="ifs.20190416230605.1">@language yaml
 
 background: 
+  space: Just a channel for tomorrow
   transition: transitionZip
   dash: http://www.bianoti.com/wp-content/uploads/2015/12/fonds-ecran-desert-4.jpg
   spot: http://www.bianoti.com/wp-content/uploads/2015/12/fonds-ecran-desert-19.jpg
@@ -4891,14 +4893,16 @@ background:
 <t tx="ifs.20190426133529.1">@language yaml
 
 background: 
+  space: Une identité pas comme les autres
   transition: transitionBlocks2
   dash: https://images4.alphacoders.com/106/thumb-1920-106826.jpg
-  spot: static/arkom/igo/angel.jpg 
+  spot: https://cache.desktopnexus.com/thumbseg/971/971542-bigthumbnail.jpg
   theme: black
   mode: dark</t>
 <t tx="ifs.20190426134328.1">@language yaml
 
 background: 
+  space: Une conf errante pour la nouvelle donne...
   transition: transitionCamera
   dash: https://www.kazoart.com/blog/wp-content/uploads/2019/02/petite-fille-au-ballon-bansky.jpg
   spot: https://image-api.nrj.fr/medias/2018/02/arts-du-spectacle-quels-metiers-autour-de-la-scene-istock-629556336_5a7447487a14e.jpg
@@ -4923,9 +4927,6 @@ background:
 background: 
   spot: static/arkom/astro/bar01.jpg</t>
 <t tx="josephorr.20170228222411.2">@language html
-@background-spot static/arkom/cosmobody.jpg
-@background-dash static/arkom/cosmobody.jpg
-@background-content static/arkom/cosmobody.jpg
 
 &lt;div style="width:600px;margin-left:auto;margin-right:auto; margin-top:20px"&gt;
 &lt;div style="text-align:center;font-size:70px;margin-bottom:15px;font-weight:bold;display:none"&gt;LeoVue&lt;/div&gt;
@@ -5587,11 +5588,15 @@ function setIds (startId, d) {
 
   d.id = counter++
   if (_.isArray(d)) {
-    return d.forEach(i =&gt; setIds(startId, i))
+    _.remove(d, e =&gt; { return e.name.indexOf('@private') &gt; -1 })
+    d.forEach(i =&gt; setIds(startId, i))
+    return
   }
   if (startId) {
     d.id = startId + '-' + d.id
   }
+  
+  _.remove(d.children, e =&gt; { return e.name.indexOf('@private') &gt; -1 })
   d.children.forEach(c =&gt; setIds(startId, c))
 }
 function transformLeoXML2JSON (data, startId, parser, transformer, serializer) {
@@ -7081,80 +7086,56 @@ The child nodes below contain some examples of Bootstrap Vue components in use.
 &lt;div class="hshim"&gt;&lt;/div&gt;</t>
 <t tx="josephorr.20181002174010.1">@language html
 
-&lt;div&gt;
-   &lt;!-- &lt;div style="background-image: url(static/arkom/cosmobody.jpg); background-size: cover"&gt; --&gt;
-   &lt;div style="max-width:60%; margin-left:auto;margin-right:auto;padding-bottom:30px;"&gt;
-  &lt;b-carousel id="carousel1"
-              style=""
-              controls
-              indicators
-              background="rgba(0,0,0,0)"
-              :interval="4000"
-              img-height="480"
-  &gt;
-    &lt;b-carousel-slide caption="Knowledge Organization with Leo and LeoVue"
-                      text="Create outlines with the Leo Outliner, display with LeoVue"
-                      img-src="static/images/leovue1.png"
-    &gt;&lt;/b-carousel-slide&gt;
+&lt;h1  style="text-align: center;" &gt;Deep d'Own &lt;/h1&gt;
 
-    &lt;b-carousel-slide caption="Multiple Tree Styles"
-                      text="Tree view, graphical tree view, inline, or nested menus"
-                      img-src="static/images/leovue1.1.png"
-    &gt;&lt;/b-carousel-slide&gt;
+The Bootstrap-Vue library is included with LeoVue, so all of the Bootstrap Vue components are supported.
 
-    &lt;b-carousel-slide caption="Create Content in Text, HTML or Markdown"
-                      text="Create content in Leo, display with LeoVue"
-                      img-src="static/images/leovue2.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Load External Files from your Leo Outline"
-                      text="Point to text, html or markdown files, or load from URL."
-                      img-src="static/images/leovue3.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Add Vue Components to your Content"
-                      text="Vue Bootstrap, Vue-Chartjs and others included, or add your own."
-                      img-src="static/images/leovue4.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Vue-Chartjs charts from outline or URL Data"
-                      text="Load CSV or JSON data from outline nodes or URLs, display as chart or table."
-                      img-src="static/images/leovue5.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Create Nested Presentations from Leo Outlines"
-                      text="A single @presentation directive converts a Leo subtree into a Reveal.js presentation."
-                      img-src="static/images/leovue6.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Create Diagrams from Outlines"
-                      text="Convert a Leo Subtree to a Mermaidjs Diagram with a single directive. "
-                      img-src="static/images/leovue7.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Display an Outline as a Kanban board"
-                      text="Use a Leo outline for task management, display as a Kanban"
-                      img-src="static/images/leovue8.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Display RSS, XML or JSON content"
-                      text="Use the built in RSS template, or create your own for any XML or JSON source."
-                      img-src="static/images/leovue9.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="IDE - Leo - LeoVue"
-                      text="Publish an outline of your code, Leo keeps IDE changes in sync"
-                      img-src="static/images/leovue10.png"
-    &gt;&lt;/b-carousel-slide&gt;
-    &lt;b-carousel-slide caption="Leo + Markdown + LeoVue = Wiki"
-                      text="Add links in Leo nodes or external markdown files to create a wiki."
-                      img-src="static/images/leovue11.png"
-    &gt;&lt;/b-carousel-slide&gt;
-  &lt;/b-carousel&gt; 
-  &lt;div class="app-title"&gt;
-     el Romanesco
-   &lt;/div&gt;
-   &lt;!-- &lt;p&gt;
-     &lt;a style="display:none" href="https://github.com/kaleguy/leovue/" target="_blank"&gt;GitHub&lt;/a&gt;
-     &lt;a href="#dashboard"&gt;1.21.0 Docs / Demo&lt;/a&gt;
-   &lt;/p&gt; --&gt;
-   &lt;/div&gt; 
-   &lt;/div&gt; 
-&lt;/div&gt;
-  
-</t>
+The child nodes below contain some examples of Bootstrap Vue components in use.
+
+&lt;p/&gt;
+
+&lt;b-carousel id="carousel1"
+            style="text-shadow: 1px 1px 2px #333;"
+            controls
+            indicators
+            background="#ababab"
+            :interval="4000"
+            img-width="1024"
+            img-height="480"
+&gt;
+
+      &lt;!-- Text slides with image --&gt;
+      &lt;b-carousel-slide caption="First slide"
+                        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
+                        img-src="https://picsum.photos/1024/480/?image=52"
+      &gt;&lt;/b-carousel-slide&gt;
+
+      &lt;!-- Slides with custom text --&gt;
+      &lt;b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54"&gt;
+        &lt;h1&gt;Hello world!&lt;/h1&gt;
+      &lt;/b-carousel-slide&gt;
+
+      &lt;!-- Slides with image only --&gt;
+      &lt;b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"&gt;
+      &lt;/b-carousel-slide&gt;
+
+      &lt;!-- Slides with img slot --&gt;
+      &lt;!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment --&gt;
+      &lt;b-carousel-slide&gt;
+        &lt;img slot="img" class="d-block img-fluid w-100" width="1024" height="480"
+             src="https://picsum.photos/1024/480/?image=55" alt="image slot"&gt;
+      &lt;/b-carousel-slide&gt;
+
+      &lt;!-- Slide with blank fluid image to maintain slide aspect ratio --&gt;
+      &lt;b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image"&gt;
+        &lt;p&gt;
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+          eros felis, tincidunt a tincidunt eget, convallis vel est. Ut pellentesque
+          ut lacus vel interdum.
+        &lt;/p&gt;
+      &lt;/b-carousel-slide&gt;
+
+    &lt;/b-carousel&gt;</t>
 <t tx="josephorr.20181006112633.1"></t>
 <t tx="josephorr.20181007134257.1">## Example Sites
 
