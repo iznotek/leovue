@@ -119,9 +119,13 @@ export default {
           var theme = this.$store.state.themes[val.id]
           if (this.colors && theme && theme.background && theme.background.theme) {
             var color = util.rgbaFromTheme(theme.background.theme, 0.7)
+            var bg = util.rgbaObjectFromTheme(theme.background.theme, 0.7, 30)
+            if (typeof bg === 'object') {
+              bg = 'rgba(' + bg.r + ',' + bg.g + ',' + bg.b + ',' + bg.a + ')'
+            }
             this.colors.header.bg = color
             this.colors.launcher.bg = color
-            this.colors.messageList.bg = color
+            this.colors.messageList.bg = bg
             this.colors.sentMessage.bg = color
             this.colors.receivedMessage.bg = color
             this.colors.userInput.bg = color
