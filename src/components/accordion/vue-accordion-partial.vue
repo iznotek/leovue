@@ -1,6 +1,6 @@
 <template>
 	<li :style="liStyles">
-		<a :href="item.url" :style="aStyles">
+		<a @click="click(item.id)" :style="aStyles">
 			<h2 v-text="item.title" :style="h2Styles"></h2>
 			<p v-text="item.text" :style="pStyles"></p>
 		</a>
@@ -16,6 +16,11 @@ export default {
       type: Object
     }
   },
+  methods: {
+    click (id) {
+      this.$store.dispatch('setCurrentItem', {id})
+    }
+  },
   computed: {
     liStyles () {
       const li = {
@@ -28,7 +33,13 @@ export default {
       return li
     },
     aStyles () {
-      return this.styles && this.styles.a ? this.styles.a : {}
+      const a = {
+        backgroundColor: this.item.color
+      }
+      if (this.styles && this.styles.a) {
+        Object.assign(a, this.styles.a)
+      }
+      return a
     },
     h2Styles () {
       return this.styles && this.styles.h2 ? this.styles.h2 : {}
@@ -40,6 +51,12 @@ export default {
 }
 </script>
 <style>
+	.vue-accordion li {
+		-webkit-box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
+		box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
+	}
+
 	.vue-accordion ul li {
 		// display: table;
 		vertical-align: bottom;
@@ -85,18 +102,20 @@ export default {
 		text-overflow: clip;
 		font-size: 24px;
 		text-transform: uppercase;
-		margin-bottom: 2px;
+		margin-bottom: -5px;
     }
 
     .vue-accordion ul li a p {
 		font-size: 13.5px;
     }
 
+	.vue-accordion a { opacity: 0.0 }
+
     .vue-accordion ul:hover li { height: 13%; width: 67%; }
 
     .vue-accordion ul:hover li:hover { height: 20%; width: 400%; }
 
-    .vue-accordion ul:hover li:hover a { background: rgba(0, 0, 0, 0.95); }
+    .vue-accordion ul:hover li:hover a { background: rgba(0, 0, 0, 0.85); opacity: 1.0; }
 
     .vue-accordion ul:hover li:hover a * {
 		opacity: 1;
