@@ -3,7 +3,7 @@
    <div id="dashboard" v-bind:style="dashboardStyle"> 
     <!--<modelviewer/>-->
     <typemenu v-if="connected"/>
-    <chat v-if="connected"/>
+    <chat v-if="config.chats && connected"/>
     <background/>
     <appheader/>
     <menubar ref="menubar">

@@ -71,7 +71,7 @@
           </vue-lazy-component> 
         </div> 
       </pane>
-      <pane size="33">
+      <pane v-if="config.comments" size="33">
         <comments></comments>  
       </pane>
       <!-- <pane>
@@ -467,6 +467,9 @@ export default {
     },
     connected () {
       return this.$store.state.connected
+    },
+    config () {
+      return window.lconfig
     }
   },
   beforeUpdate () {
