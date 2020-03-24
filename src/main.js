@@ -33,7 +33,8 @@ import VTooltip from 'v-tooltip'
 import VueContentPlaceholders from 'vue-content-placeholders'
 import Pdf from 'pdfvuer'
 import AsyncComputed from 'vue-async-computed'
-import VueMouseParallax from 'vue-mouse-parallax'
+// import VueMouseParallax from 'vue-mouse-parallax'
+import VueKinesis from 'vue-kinesis'
 
 // import VueYoutube from 'vue-youtube'
 import VueYouTubeEmbed from 'vue-youtube-embed'
@@ -95,7 +96,8 @@ Vue.use(Transitions)
 Vue.use(Loading)
 Vue.use(Grid)
 Vue.use(VueLazyComponent)
-Vue.use(VueMouseParallax)
+// Vue.use(VueMouseParallax)
+Vue.use(VueKinesis)
 Vue.use(AsyncComputed)
 Vue.use(VueEvents)
 Vue.use(Chat)
