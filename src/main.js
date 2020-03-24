@@ -79,6 +79,7 @@ import VueGoodLinks from 'vue-good-links'
 import 'vue-good-links/dist/vue-good-links.css'
 import VueAnime from 'vue-animejs'
 
+import PDFViewer from './content-components/pdf'
 import { charts } from './content-components/Charts'
 charts(Vue)
 
