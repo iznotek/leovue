@@ -1,7 +1,7 @@
 <template>
 
-  <div class="behind">
-    <div v-if="!connected" class="login"> 
+  
+    <!--<div v-if="!connected" class="login"> 
       <div id="tlayout">
         <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
           <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
@@ -14,59 +14,74 @@
           </div>
         </div>
       </div> 
-    </div>
+    </div>-->
    
-  
-    <div v-if="connected" class="pane" id="dx" > 
-      <div v-if="textContent(current)">
-        <div id="lhandle"
-            class="handle">
-          <div class="handle-button"
-              v-show="hasPrev(current)"
-              @click="goPrev">
-            <icon class="icon"
-                  name="chevron-left"></icon>
-          </div>
-        </div>
-        <div id="tlayout">
-          <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
-            <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
-              <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
-                <vue-lazy-component>
-                <component :is="dynComponent(current)" v-bind="$props"/>
-                </vue-lazy-component>
+    <div v-if="connected" class="pane noselect" id="dx" > 
+      <splitpanes vertical>
+      <pane>
+        <div class="behind">
+          <div v-if="textContent(current)">
+            <div id="lhandle"
+                class="handle">
+              <div class="handle-button"
+                  v-show="hasPrev(current)"
+                  @click="goPrev">
+                <icon class="icon"
+                      name="chevron-left"></icon>
+              </div>
+            </div>
+            <div id="tlayout">
+              <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+                <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
+                  <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                    <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                    <vue-lazy-component>
+                    <component :is="dynComponent(current)" v-bind="$props"/>
+                    </vue-lazy-component>
+                    </div>
+                  </div>
+                  </div>
                 </div>
               </div>
+            <div id="rhandle"
+                class="handle">
+              <div class="handle-button"
+                  v-show="hasNext(current)"
+                  @click="goNext">
+                <icon class="icon"
+                      name="chevron-right"></icon>
               </div>
             </div>
           </div>
-        <div id="rhandle"
-            class="handle">
-          <div class="handle-button"
-              v-show="hasNext(current)"
-              @click="goNext">
-            <icon class="icon"
-                  name="chevron-right"></icon>
+          <div v-if="boardContent(current)"
+              class="frame noselect"
+              id="bpane">
+            <div style="width:100%">
+            <vue-lazy-component>
+              <component :is="dynComponent(current)" v-bind="$props"/>
+              </vue-lazy-component>
+            </div>
           </div>
-        </div>
-      </div>
-      <div v-if="boardContent(current)"
-          class="frame"
-          id="bpane">
-        <div style="width:100%">
-        <vue-lazy-component>
-          <component :is="dynComponent(current)" v-bind="$props"/>
-          </vue-lazy-component>
-        </div>
-      </div>
-      <vue-lazy-component>
-      <div v-if="iframeContent(current)"
-          class="frame"
-          v-html="iframeHTML(current)"
-          id="vpane">
-      </div>
-      </vue-lazy-component>
+          <vue-lazy-component>
+          <div v-if="iframeContent(current)"
+              class="frame noselect"
+              v-html="iframeHTML(current)"
+              id="vpane">
+          </div>
+          </vue-lazy-component> 
+        </div> 
+      </pane>
+      <pane size="33">
+        <comments></comments>  
+      </pane>
+      <!-- <pane>
+        <lv-timeline  from="pubdate"
+          title="title"
+          description=""
+          group=1 />  
+      </pane> -->
+      </splitpanes>
+      
     </div> <!--
 
   <div v-if="connected" style="width:100%;height:100%">
@@ -191,7 +206,7 @@
     </div>
   </slide>
   </carousel-3d> -->
-  </div> 
+ 
 </template>
 
 <script>
@@ -201,9 +216,15 @@ import _ from 'lodash'
 const util = require('../util.js')
 import { Carousel3d, Slide } from 'vue-carousel-3d'
 import { ContentLoader } from 'vue-content-loader'
+import Comments from './Comments.vue'
+
 // import { VueperSlides, VueperSlide } from 'vueperslides'
 // import 'vueperslides/dist/vueperslides.css'
 import Login from './Login'
+import Cover from './Cover'
+
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
 
 // functions for dealing with x-frame headers
 // TODO move these
@@ -280,7 +301,12 @@ export default {
     Carousel3d,
     Slide,
     ContentLoader,
-    login: Login // ,
+    login: Login,
+    cover: Cover,
+    comments: Comments,
+    Splitpanes, 
+    Pane // ,
+    // pdfview: PDFViewer
     // VueperSlides, 
     // VueperSlide 
   },
@@ -569,6 +595,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+  .splitpanes--vertical > .splitpanes__splitter {
+    min-width: 14px;
+    background: transparent;
+  }
+
+  .splitpanes--horizontal > .splitpanes__splitter {
+    min-height: 14px;
+    background: transparent;
+  }
+
   .pane {
     color: #333;
   }
@@ -658,5 +694,14 @@ export default {
     width: 100%;
   }
   .voutline {
+  }
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
   }
 </style>
