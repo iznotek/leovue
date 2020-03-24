@@ -32,10 +32,9 @@
     </div>
 </template>
 
-      // <iframe slot="media" src="model" />
-
 <script>
 import { VueFlux, Transitions } from 'vue-flux'
+
 // import Player from './VideoPlayer'
 // import VR from './VR'
 
@@ -143,6 +142,23 @@ export default {
         }
       }
     },
+    getThemeIdFrom (id) {
+      var theme = this.$store.state.themes[id]
+      if (theme && theme.background.theme) {
+        return id
+      }
+      var pid = id
+      while (pid >= 0) {
+        const parent = JSON.search(this.$store.state.leodata, '//*[id="' + pid + '"]/parent::*')
+        if (parent && parent[0]) {
+          pid = parent[0].id
+          theme = this.$store.state.themes[pid]
+          if (theme && theme.background.theme) {
+            return pid
+          }
+        } else return 0
+      }
+    },
     // changeAmbient (bg) {
     //   this.background = backgrounds[bg]
     // },
@@ -183,7 +199,7 @@ export default {
     }
   },
   mounted () {
-    setInterval(this.check, 500)
+    // setInterval(this.check, 500)
   },
   watch: {
     '$store.state.themes': {
@@ -205,7 +221,7 @@ export default {
     '$store.state.currentItem': {
       handler: function (val, oldVal) {
         if (val) {
-          var theme = this.$store.state.themes[val.id]
+          var theme = this.$store.state.themes[this.getThemeIdFrom(val.id)]
           if (theme && theme.background) {
             var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
             var transition = isChrome ? 'transitionFade' : theme.background.transition || 'transitionFade'
