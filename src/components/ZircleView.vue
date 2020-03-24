@@ -1,13 +1,14 @@
 <template>
-    <z-view size="xxl">
-      <section slot="media"> 
-         <parallax-container>
-        <parallax-element :parallaxStrength="20" :type="'depth'"> 
-        <div v-anime="{ rotate: '360', easing: 'linear', backgroundColor: 'transparent', duration: 200000, loop: true }"> 
-          <img src="static/arkom/earth.jpg" width="475px" height="475px">
+    <z-view size="xxl" class="meteor">
+      <section slot="image"> 
+       <!-- <kinesis-container>
+        <kinesis-element :strength="10" :type="'depth'"> <!--<div v-anime="{ rotate: '360', easing: 'linear', backgroundColor: 'transparent', duration: 200000, loop: true }">  -->
+     
+        <div> 
+          <img :src="spotimage(data[0])" height="475px"> 
         </div>
-         </parallax-element>
-        </parallax-container> 
+       <!-- </kinesis-element>
+        </kinesis-container> -->
       </section>
 
       <section slot="extension">
@@ -36,25 +37,27 @@
           size="l"
           class="meteor"
           :style="style(amodel, index)"
-          :distance="175 - 50 * Math.cos( (-90 + (data.length > 7 ? 360 : 180) / data.length * index) * 3.14 / 180.0 )"
-          :angle="(-90 + (data.length > 7 ? 360 : 180) / data.length * index) + angle"
+          :distance="distance(amodel, index)"
+          :angle="angle(amodel, index)" 
           @click.native="toggle(amodel.id, amodel)"
           :to-view="{ name: 'item0', params: {depth: 1, model: amodel, key: amodel.id, textItems: text, targetEl: target, top: false}}"
           :key="index">
-            {{ amodel.vtitle }}
-            <section slot="image"> <!-- v-html="spot(amodel, 50)"> -->
-              <div class="transition" :style="style(amodel, index)"> 
-                <img class="transition" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%"> 
+            <a style="font-size: 25px">
+                {{ amodel.vtitle }} 
+            </a>
+            <section slot="image" style="height: 100%; width: 100%;"> <!-- v-html="spot(amodel, 50)"> -->
+              <div :style="style(amodel, index)"> 
+                <img class="centered" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%"> 
               </div>
             </section>
             <section slot="extension">
               <z-spot 
                 v-for="(subdata, ichild) in amodel.children"
                 v-if="isVisible(subdata)"
-                :angle="(-90 + 180 / amodel.children.length * ichild) - angle * 2"
-                :distance="107"
+                :angle="(-90 + 180 / amodel.children.length * ichild) - tweenangle * 2"
+                :distance="110"
                 class="planetoide"
-                style="background-color: rgba(255,255,255,1.0);border: none;"
+                :style="style(subdata, ichild, amodel)"
                 size="xxs"
                 :key="ichild">
               </z-spot>
@@ -74,6 +77,7 @@
 </template>
 
 <script>
+import {TweenLite, Power2} from 'gsap/TweenMax' // Elastic, Back,
 const util = require('../util.js')
 
 export default {
@@ -96,7 +100,17 @@ export default {
       hasRibbon: false,
       inline: true,
       closearrow: false,
-      myContent: ''
+      myContent: '',
+      currentView: '',
+      tween: undefined,
+      tween2: undefined,
+      movSwap: false,
+      mov: {
+        angle: -7
+      },
+      mov2: {
+        angle: 0
+      }
     }
   },
   computed: {
@@ -112,8 +126,17 @@ export default {
     cover () {
       return this.$store.state.cover
     },
-    angle () {
-      return this.$store.state.angle
+    // angle () {
+    //   return this.$store.state.angle
+    // },
+    tweenangle () {
+      var mov = this.movSwap ? this.mov.angle : this.mov2.angle // this.$store.state.angle
+      return mov
+      // if (this.$store.state.currentItemPathMapIds.findIndex(id => id === this.model.id) % 2 === 0) {
+      //   return mov
+      // } else {
+      //   return -7 + mov
+      // }
     },
     target () {
       return this.targetEl
@@ -124,6 +147,7 @@ export default {
   },
   methods: {
     isVisible: function (itemdata) {
+      if (itemdata.id === 1) { return false }
       if (/^@theme/.test(itemdata.name)) { return false } // theme node hided
       if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
       return true
@@ -142,25 +166,26 @@ export default {
       }
       return false
     },
-    style: function (itemdata, index = 0) {
+    style: function (itemdata, index = 0, parentdata = null) {
       var style = '' // "background-color: orange; border-width: 4px; border-color: var(--background-color);"
       if (itemdata) {
-        // if (itemdata.id === this.$store.state.currentItem.id) {
-        //   style = 'border-width: 20px; border-color:#ff0'
-        // }
+        if (itemdata.id === this.$store.state.currentItem.id) {
+          style = 'border-width: 3px; border-color:white; '
+        } else {
+          style = 'border-width: 0px; border-color:white; '
+        }
         var color
+        var ptheme = parentdata ? this.$store.state.themes[parentdata.id] : null
         var theme = this.$store.state.themes[itemdata.id]
         index = index > 0 ? index - 1 : index
         if (theme && theme.background.theme) {
           color = util.rgbaFromTheme(theme.background.theme)
-          // console.log(itemdata.id + ' : ' + index, '  :  ', color)
-          style = 'background-color: ' + color + ';'
+        } else if (ptheme && ptheme.background.theme) {
+          color = util.rgbaFromTheme(ptheme.background.theme, 1, 30 * index)
         } else if (this.$store.state.theme) {
-          // console.log(this.$store.state.theme)
           color = util.rgbaFromTheme(this.$store.state.theme.background.theme, 1, 30 * index)
-          // console.log(itemdata.id + ' : ' + index, '  :  ', color)
-          style = 'background-color: ' + color + ';'
         }
+        style += 'background-color: ' + color + ';'
       }
       return style
     },
@@ -199,9 +224,68 @@ export default {
         vm.$store.commit('OPEN_ITEMS', {openItemIds})
         vm.$store.dispatch('setCurrentItem', {id})
       }, 100)
+    },
+    hasTheme: function (itemdata) {
+      if (itemdata === undefined) {
+        return false
+      }
+      for (let i = 0; i < itemdata.children.length; i++) {
+        if (/^@theme/.test(itemdata.children[i].name)) {
+          return true
+        }
+      }
+      return false
+    },
+    distance: function (itemdata, index) {
+      let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
+      index = this.hasTheme(itemdata) ? index - 1 : index
+      let factor = parseInt(this.$store.state.leftPaneWidth)
+      factor = 50 - factor
+      factor = factor < 0 ? 0 : factor * 2
+      let amount = 1 - 2 * Math.abs(((-length / 2.0) + index) * 2.0 / length)
+      return 145 - factor * amount / 3
+    },
+    angle: function (itemdata, index) {
+      let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
+      index = this.hasTheme(itemdata) ? index - 1 : index
+      let amount = (length > 7 ? 360.0 : 180.0) / length
+      return -90 + amount * index - this.tweenangle
+    },
+    checkViewChanged () {
+      let vm = this
+      let currentView = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
+      if (currentView !== this.currentView) {
+        this.currentView = currentView
+        var id = this.$store.state.zircle[currentView]
+
+        if (id === undefined) {
+          // console.log(this.model.id, '   ', id, '  ', this.movSwap)
+          setTimeout(() => {
+            this.movSwap = !this.movSwap
+            if (!this.movSwap) {
+              vm.tween2.seek(0)
+            } else {
+              vm.tween.seek(0)
+            }
+          }, 500)
+        }
+      }
     }
   },
   mounted () {
+    this.tween = TweenLite.to(this.mov, 1, {
+      angle: 0,
+      ease: Power2.easeOut,
+      repeat: -1
+    })
+    this.tween2 = TweenLite.to(this.mov2, 1, {
+      angle: -7,
+      ease: Power2.easeOut,
+      repeat: -1
+    })
+
+    setInterval(this.checkViewChanged, 200)
+
     this.model = this.$store.state.leodata
     this.textItems = this.$store.state.leotext
     this.targetEl = true
@@ -253,10 +337,24 @@ export default {
 .meteor {
     // background-color: rgba(20, 40, 100, 0.7);
     opacity: 1.0;
+    border-width: 0px;
 }
 
 .comete {
     // background-color: rgba(255, 255, 255, 0.2);
     opacity: 0.01;
+}
+
+.transition {
+  transition: all 2s ease;
+  -webkit-transition: all 2s ease;
+}
+
+.centered {
+  object-fit: cover;
+  max-height: 100%;
+  max-width: 100%;    
+  display: block;
+  margin: auto auto;
 }
 </style>

@@ -3,11 +3,17 @@
   <div class="zircleviewer">
     <splitpane :leftPaneStyle="leftPaneStyle">
       <div slot="left">
-          <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}">
+          <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{opacity: showcircle ? 1.0 : 0.0, width: width, left: left}">
           </z-canvas>
+          <!-- <d3view v-if="showgraph" :style="{width: width}"/> 
+          <treeview v-if="showtree" :style="{width: width}"/> -->
+          <!-- <d3view :style="{width: '100%', opacity: showgraph ? 1.0 : 0.0}"/> 
+          <treeview :style="{width: '100%', opacity: showtree ? 1.0 : 0.0}"/> -->
           <spacemenu v-if="connected"/>
       </div>
-      <contentpane slot="right"></contentpane>
+      <div slot="right">
+        <contentpane></contentpane> 
+      </div>
     </splitpane>
   </div>
 </template>
@@ -22,6 +28,9 @@
   import ContentPane from './ContentPane'
   import SplitPane from './SplitPane'
   import 'zircle/dist/zircle.css'
+
+  // import TreeView from './TreeView'
+  // import D3View from './D3View'
   import SpaceMenu from './SpaceMenu'
   import {TweenLite, Power2} from 'gsap/TweenMax'
 
@@ -58,7 +67,7 @@
         mode: 'full',
         shape: 'circle',
         style: {
-          theme: 'dark',
+          theme: 'blue',
           mode: 'dark'
         },
         debug: false
@@ -70,7 +79,7 @@
       setTimeout(() => {
         setInterval(this.checkViewChanged, 100)
         this.$zircle.toView('zview')
-      }, 7000)
+      }, 5300)
 
       let vm = this
       this.$store.state.tween = TweenLite.to(mov, 2, {angle: 0,
@@ -86,7 +95,22 @@
       return {
         target: target,
         current: '',
-        leftTrigger: 70
+        leftTrigger: 70,
+        type: 'circle'
+      }
+    },
+    events: {
+      show (action) {
+        if (action) {
+          if (action.name) {
+            this.type = action.name
+          }
+        }
+      },
+      showLeft (state) {
+        if (state) {
+          this.type = !state.active ? 'circle' : 'tree'
+        }
       }
     },
     methods: {
@@ -133,15 +157,16 @@
     computed: {
       left () {
         if (parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
-          return (parseInt(this.$store.state.leftPaneWidth) - this.leftTrigger) / 1.8 + '%'
+          return (parseInt(this.$store.state.leftPaneWidth) - this.leftTrigger - 120) / 1.8 + '%'
         }
-        return this.$store.state.leftPaneLeft || '0px'
+        return '-50%'
       },
       width () {
-        if (parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
-          return this.leftTrigger + '%'
-        }
-        return this.$store.state.leftPaneWidth || '30%'
+        // if (parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
+        //   return this.leftTrigger + '%'
+        // }
+        // return this.$store.state.leftPaneWidth || '30%'
+        return '200%' // this.$store.state.leftPaneWidth || '30%'
       },
       ulStyle () {
         const p = '0'
@@ -150,7 +175,7 @@
       },
       leftPaneStyle () {
         const w = window.lconfig.leftPaneWidth || '30%'
-        const c = 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%)' // 'rgba(0, 0, 0, 0.3)'
+        const c = 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%)' // 'rgba(0, 0, 0, 0.3)'
         // const u = 'static/images/chou.jpg'
         return `width:${w}; background: ${c};`
       },
@@ -169,6 +194,15 @@
       },
       connected () {
         return this.$store.state.connected
+      },
+      showtree: function () {
+        return this.type === 'tree'
+      },
+      showgraph: function () {
+        return this.type === 'graph'
+      },
+      showcircle: function () {
+        return this.type === 'circle'
       }
     },
     watch: {
@@ -200,12 +234,33 @@
             var theme = this.$store.state.themes[val.id]
             if (theme && theme.background) {
               if (theme.background.theme) {
-                this.$zircle.config({style: {theme: theme.background.theme}})
+                // this.$zircle.config({style: {theme: theme.background.theme}})
               }
               if (theme.background.mode) {
-                this.$zircle.config({style: {mode: theme.background.mode}})
+                // this.$zircle.config({style: {mode: theme.background.mode}})
               }
               this.$store.commit('CURRENT_THEME', theme)
+            }
+            // this.$store.state.currentItemPathMapIds.length
+            // var name = 'item' + this.$store.state.currentItemPathMapIds.length
+            // if (name !== this.$zircle.getCurrentViewName()) {
+            //   console.log(name)
+            //   this.$zircle.toView(name)
+            // }
+
+            let current = this.$zircle.getCurrentViewName()
+            if (current && this.$store.state.zircle) {
+              var id = this.$store.state.zircle[current]
+              // console.log(current, ' ', val.id)
+              if (id !== val.id) {
+                // let model = JSON.search(this.$store.state.leodata, '//*[id="' + val.id + '"]')[0]
+                // console.log(model)
+                // this.$zircle.toView({
+                //   to: 'item7', // string. Required,
+                //   params: {depth: 7, model: model, key: model.id, textItems: this.$store.state.leotext, targetEl: true, top: false} // Optional
+                // })
+                // this.$zircle.setView('zstart')
+              }
             }
           }
         },
@@ -226,7 +281,7 @@
 
 <style lang="css">
 .zcanvas {
-    transition: all 2s ease
+    transition: all 2s ease;
 }
 .title {
     margin-left: 5%;

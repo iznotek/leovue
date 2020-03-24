@@ -1,35 +1,21 @@
 <template>
-    <z-view v-if="model" size="xxl" class="meteor">
+    <z-view v-if="model" size="xxl" class="meteor" :style="style(model)">
 
       <section slot="image"> 
-       <!--    <parallax-container>
-        <parallax-element :parallaxStrength="-20" :type="'depth'"> 
-         <div><div v-html="spot(model)"/> {{ spot(model) }} </div>
-         </parallax-element>
-        </parallax-container> -->
-
-       <!--  <div style="background-color: rgba(255,255,255,1); transition: all 1s ease; -webkit-transition: all 1s ease;" v-html="spot(model, 70)"/>-->
-
         <div class="transition" :style="style(model)"> 
           <img class="transition" :style="{'opacity': opacity(model, 0.8)}" :src="spotimage(model)" height="475px"> 
         </div>
-
-       <!--  <parallax-container>
-        <parallax-element :parallaxStrength="20" :type="'depth'"> 
-        <div style="margin-left: -100px; margin-top: -60px; opacity: 1.0; filter: alpha(opacity='1.0');"> 
-          <img :src="spotimage(model)" width="800" height="500"> 
-        </div>
-         </parallax-element>
-        </parallax-container> -->
       </section>
 
       <section slot="media">
         <div style="height: 75px" />
-        <div :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >{{ model.vtitle }}</div>
+        <div :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >
+          <a style="font-size: 35px">
+            {{ model.vtitle }} 
+          </a>
+        </div>
       </section>
 
-      <!-- <div slot="media" v-html="content"> 
-      </div> -->
       <section slot="extension">
         <z-spot 
           button 
@@ -40,6 +26,15 @@
           :distance="0" 
           :angle="0">
         </z-spot> 
+        <!-- <z-spot 
+          v-if="selected(model)"
+          style='background-color: rgba(0,0,0,0);border-width:0px;' 
+          size='m' 
+          :distance="84" 
+          :angle="-60">
+            <img :src="require(`@/assets/logo.png`)" width="95"/>
+        </z-spot> -->
+        
         <z-spot
           v-for="(amodel, index) in data.children"
           v-if="isVisible(amodel)"
@@ -52,22 +47,36 @@
           @click.native="toggle(amodel)"
           :to-view="isDataFolder(amodel) ? { name: zitem, params: { depth: zdepthinc, model: amodel, key: amodel.id, textItems: textItems, targetEl: targetEl, top: false}} : {}"
           :key="amodel.id">
+      
             <div style="height: 100px" />
             <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
-              <span>{{ amodel.vtitle }}</span>
+              <!-- <span>{{ amodel.vtitle }}</span> -->
+              <a style="font-size: 25px">
+                {{ amodel.vtitle }} 
+              </a>
             </div>
-            <section slot="image"> <!-- v-html="spot(amodel, 50)"> -->
-              <div class="transition" :style="style(amodel, index)"> 
-                <img class="transition" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%"> 
+    
+            <section slot="image" style="height: 100%; width: 100%;">
+              <div :style="style(amodel, index)"> 
+                <img class="centered" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%" > 
               </div>
             </section>
+           
             <section slot="extension">
+                <!-- <z-spot 
+                v-if="selected(amodel)"
+                style='background-color: rgba(0,0,0,0);border-width:0px;' 
+                size='s' 
+                :distance="77" 
+                :angle="-60">
+                  <img :src="require(`@/assets/logo.png`)" width="55"/>
+              </z-spot> -->
               <z-spot 
                 v-for="(subdata, ichild) in amodel.children"
                 v-if="isVisible(subdata)"
                 :angle="(-90 + 180 / amodel.children.length * ichild) + tweenangle * 2"
-                :distance="107"
-                style="background-color: rgba(255,255,255,1.0);border: none;"
+                :distance="110"
+                :style="style(subdata, ichild, amodel)"
                 class="planetoide2"
                 size="xxs"
                 :key="ichild">
@@ -337,12 +346,12 @@ export default {
       // console.log(this.model.name)
       if (/\.leo\)$/.test(itemdata.name)) { return true } // subtree
       if (/^@outline/.test(itemdata.name)) { return true } // outline
-      let nbVisibleItems = 0
-      for (let i = 0; i < itemdata.children.length; i++) {
-        if (this.isVisible(itemdata.children[i])) {
-          nbVisibleItems += 1
-        }
-      }
+      let nbVisibleItems = 1
+      // for (let i = 0; i < itemdata.children.length; i++) {
+      //   if (this.isVisible(itemdata.children[i])) {
+      //     nbVisibleItems += 1
+      //   }
+      // }
       return nbVisibleItems > 0
       // return itemdata.children && itemdata.children.length
     },
@@ -369,13 +378,13 @@ export default {
       factor = 50 - factor
       factor = factor < 0 ? 0 : factor * 2
       let amount = 1 - 2 * Math.abs(((-length / 2.0) + index) * 2.0 / length)
-      return 145 - factor * amount / 3
+      return 125 - factor * amount / 3
     },
     angle: function (itemdata, index) {
       let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
       index = this.hasTheme(itemdata) ? index - 1 : index
-      let amount = (length > 7 ? 360.0 : 180.0) / length
-      return -90 + amount * index - this.tweenangle
+      let amount = (length > 7 ? 360.0 : length > 5 ? 230.0 : 180.0) / length
+      return -100 + amount * index - this.tweenangle
     },
     current: function (itemdata) {
       if (itemdata) {
@@ -383,30 +392,34 @@ export default {
       }
       return false
     },
-    style: function (itemdata, index = 0) {
+    style: function (itemdata, index = 0, parentdata = null) {
       var style = '' // "background-color: orange; border-width: 4px; border-color: var(--background-color);"
       if (itemdata) {
-        // if (itemdata.id === this.$store.state.currentItem.id) {
-        //   style = 'border-width: 20px; border-color:#ff0'
-        // }
+        if (itemdata.id === this.$store.state.currentItem.id) {
+          style = 'border-width: 3px; border-color:white; '
+        } else {
+          style = 'border-width: 0px; border-color:white; '
+        }
         var color
+        var ptheme = parentdata ? this.$store.state.themes[parentdata.id] : null
         var theme = this.$store.state.themes[itemdata.id]
         index = index > 0 ? index - 1 : index
         if (theme && theme.background.theme) {
           color = util.rgbaFromTheme(theme.background.theme)
-          // console.log(itemdata.id + ' : ' + index, '  :  ', color)
-          style = 'background-color: ' + color + ';'
+        } else if (ptheme && ptheme.background.theme) {
+          color = util.rgbaFromTheme(ptheme.background.theme, 1, 30 * index)
         } else if (this.$store.state.theme) {
-          // console.log(this.$store.state.theme)
           color = util.rgbaFromTheme(this.$store.state.theme.background.theme, 1, 30 * index)
-          // console.log(itemdata.id + ' : ' + index, '  :  ', color)
-          style = 'background-color: ' + color + ';'
         }
+        style += 'background-color: ' + color + ';'
       }
       return style
     },
     opacity: function (itemdata, alpha = 1) {
       return alpha // (itemdata.id === this.$store.state.currentItem.id) ? alpha : alpha
+    },
+    selected: function (itemdata) {
+      return (itemdata.id === this.$store.state.currentItem.id)
     },
     spot: function (itemdata, alpha = 100) {
       var spot = this.spotimage(itemdata)
