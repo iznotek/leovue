@@ -37,8 +37,8 @@
           size="l"
           class="meteor"
           :style="style(amodel, index)"
-          :distance="distance(amodel, index)"
-          :angle="angle(amodel, index)" 
+          :distance="distance(data, index)"
+          :angle="angle(data, index)" 
           @click.native="toggle(amodel.id, amodel)"
           :to-view="{ name: 'item0', params: {depth: 1, model: amodel, key: amodel.id, textItems: text, targetEl: target, top: false}}"
           :key="index">
@@ -236,18 +236,16 @@ export default {
       }
       return false
     },
-    distance: function (itemdata, index) {
-      let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
-      index = this.hasTheme(itemdata) ? index - 1 : index
+    distance: function (data, index) {
+      let length = data.length
       let factor = parseInt(this.$store.state.leftPaneWidth)
       factor = 50 - factor
       factor = factor < 0 ? 0 : factor * 2
       let amount = 1 - 2 * Math.abs(((-length / 2.0) + index) * 2.0 / length)
       return 145 - factor * amount / 3
     },
-    angle: function (itemdata, index) {
-      let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
-      index = this.hasTheme(itemdata) ? index - 1 : index
+    angle: function (data, index) {
+      let length = data.length
       let amount = (length > 7 ? 360.0 : 180.0) / length
       return -90 + amount * index - this.tweenangle
     },
