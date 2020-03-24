@@ -108,15 +108,15 @@ export default {
     },
     sentMessage: {
       bg: 'rgba(20, 40, 100, 0.3)',
-      text: '#ecf0f1'
+      text: '#fff'
     },
     receivedMessage: {
       bg: 'rgba(20, 40, 100, 0.3)',
-      text: '#ecf0f1'
+      text: '#fff'
     },
     userInput: {
       bg: 'rgba(20, 40, 100, 0.7)',
-      text: '#ecf0f1'
+      text: '#fff'
     }
   }
 }

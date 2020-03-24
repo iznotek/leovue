@@ -267,10 +267,10 @@ export default {
       top: 0;
       left: 0;
       /* background-color: rgba(0, 0, 0, 0.6); */
-      background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 100%); /* Black*/
+      background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.0) 100%); /* Black*/
       overflow-x: hidden; /* Disable horizontal scroll */
       padding-top: 33px; /* Place content 60px from the top */
-      transition: 0.1s; /*0.5 second transition effect to slide in the sidenav*/
+      transition: 0.2s; /*0.5 second transition effect to slide in the sidenav*/
     }
 
     .bm-overlay {
