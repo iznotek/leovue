@@ -157,8 +157,8 @@
         let rightpix = right * window.innerWidth / 100
         leftPane.style.width = cur + '%'
         rightPane.style.width = right + '%'
-        vm.$store.state.leftPaneWidth = leftPane.style.width
         vm.$store.state.rightPaneWidth = rightpix
+        vm.$store.state.leftPaneWidth = leftPane.style.width
         // vm.$store.state.leftPaneLeft = cur / 2 + '%'
         // vm.$store.state.leftPaneLeft = (cur - 50) + '%'
       }, null, 'horizontal')
@@ -176,8 +176,8 @@
       // this.rightPaneWidth = 100 - parseInt(window.lconfig.leftPaneWidth) + '%'
       // leftPane.style.width = '0%'
       // rightPane.style.width = '100%'
-      leftPane.style.width = parseInt(window.lconfig.leftPaneWidth) + '%'
       rightPane.style.width = 100 - parseInt(window.lconfig.leftPaneWidth) + '%'
+      leftPane.style.width = parseInt(window.lconfig.leftPaneWidth) + '%'
       // this.$store.state.leftPaneWidth = window.lconfig.leftPaneWidth
       this.slide('right')
       // this.$store.state.leftPaneWidth = leftPane.style.width
@@ -210,8 +210,8 @@
         handler: function (val, oldVal) {
           if (val !== oldVal && leftPane !== undefined) {
             val = parseInt(val)
-            leftPane.style.width = val + '%'
             rightPane.style.width = 100 - val + '%'
+            leftPane.style.width = val + '%'
 
             if (val === 0) {
               this.showRightButton = true
@@ -275,7 +275,7 @@
   }
   .right-pane {
     overflow: hidden;
-    transition: width 0.2s
+    // transition: width 0.2s
   }
   #left-pane {
     z-index: 1000;
@@ -301,5 +301,6 @@
     position: absolute;
     margin-top: 22px; 
     margin-left: -18px; 
+    cursor: pointer;
   }
 </style>
