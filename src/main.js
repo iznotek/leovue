@@ -78,6 +78,7 @@ import VueMouseFollower from 'vue-mousefollower'
 import VueGoodLinks from 'vue-good-links'
 import 'vue-good-links/dist/vue-good-links.css'
 import VueAnime from 'vue-animejs'
+import VueRouterMultiView from 'vue-router-multi-view'
 
 import PDFViewer from './content-components/pdf'
 import { charts } from './content-components/Charts'
@@ -90,6 +91,7 @@ const Defiant = require('./lib/defiant') // eslint-disable-line
 //   require('./pwa')
 // }
 
+Vue.use(VueRouterMultiView)
 Vue.use(VueAnime)
 Vue.use(VueGoodLinks)
 Vue.use(VueMouseFollower)

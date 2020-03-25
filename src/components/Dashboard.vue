@@ -12,7 +12,9 @@
         <treeview v-if="showtree"/>
       </div>
       <div slot="right" id="main" :class="{'header-space': config.showHeader}">
-          <router-view :id="id"></router-view>
+          <router-multi-view 
+            :id="id" >
+          </router-multi-view>
       </div>
     </menubar> 
    <!--  <div slot="right" id="main" :class="{'header-space': config.showHeader}">
@@ -75,6 +77,7 @@ import D3View from './D3View'
 // import ModelViewer from './modelviewer/Viewer'
 import ParticleEffectButton from 'vue-particle-effect-buttons'
 import {OrbitSpinner} from 'epic-spinners' // OrbitSpinner
+// import _ from 'lodash'
 
 export default {
   name: 'dashboard',
@@ -302,7 +305,15 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-    // console.log(to, from)
+      // var id = to.path.split('/')[2]
+      // console.log(to, _.without(to.path.split('/')))
+      // if (this.$store.state.currentItem.id !== id) {
+      //   this.$store.dispatch('setCurrentItem', {id})
+      // }
+      // } else {
+      //   this.$zircle.
+      // }
+      // this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
     }
   }
 }
