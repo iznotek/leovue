@@ -14,12 +14,26 @@
           @click="() => handleClick(item)">
           <span>{{item}}</span>
         </radial-menu-item>
-      </radial-menu> 
-
-          <div class="logo"
-        @click="open()">
+    </radial-menu> 
+    <fade-comp
+        direction="alpha"
+        :out="!$store.state.loading">
+      <orbit-spinner
+        style="position: absolute; left: -5px; top: -5px"
+        :animation-duration="3000"
+        :size="60"
+        color="#fff"
+      />
+    </fade-comp>
+    <!-- <spring-spinner
+      style="position: absolute; left: -2px; top: -2px"
+      :animation-duration="3000"
+      :size="54"
+      color="#fff"
+    /> -->
+    <div class="logo" @click="open()">
       <!-- <icon name="bulletarrow" /> -->
-      <img :src="require(`@/assets/logo.png`)" width="55"/>
+    <img :src="require(`@/assets/logo.png`)" width="55"/>
     </div>
       <!-- <div style="color: rgba(0,0,0,0.6); margin-top: 16px;">{{ lastClicked }}</div> -->
   </div>
@@ -36,6 +50,8 @@
 
 <script>
 import { RadialMenu, RadialMenuItem } from './button/radial'
+import { SpringSpinner, OrbitSpinner } from 'epic-spinners'
+import FadeComp from '../lib/Fade'
 // const BloomingMenu = require('blooming-menu')
 const util = require('../util.js')
 
@@ -43,7 +59,10 @@ export default {
   name: 'app',
   components: {
     RadialMenu,
-    RadialMenuItem
+    RadialMenuItem,
+    SpringSpinner,
+    OrbitSpinner,
+    FadeComp
   },
   data () {
     return {

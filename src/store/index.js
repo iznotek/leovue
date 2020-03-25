@@ -1285,6 +1285,7 @@ export default new Vuex.Store({
     cover: '',
     themes: {},
     connected: false,
+    loading: true,
     currentItemPath: '',
     currentItemPathMapIds: [],
     currentItem: {
@@ -1359,6 +1360,9 @@ export default new Vuex.Store({
     },
     CONNECTED (state, o) {
       state.connected = o.state
+    },
+    LOADING (state, o) {
+      state.loading = o.state
     },
     RESETCOVER (state, o) { // set the cover page content
       state.cover = o.cover

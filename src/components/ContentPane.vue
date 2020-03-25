@@ -433,6 +433,7 @@ export default {
       else {
         this.current = this.historyItems[index]
       }
+      this.$store.commit('LOADING', {state: false})
     },
     findInHistory(id) {
       let index = this.historyItems.findIndex(item => item.item.id === id);
@@ -540,6 +541,7 @@ export default {
         this.new.pane = 'text'
         this.new.content = ''
         this.new.iframe = ''
+        this.$store.commit('LOADING', {state: true})
       },
       deep: true,
       immediate: true
