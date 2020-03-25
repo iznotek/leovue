@@ -5,7 +5,7 @@
         <kinesis-element :strength="10" :type="'depth'"> <!--<div v-anime="{ rotate: '360', easing: 'linear', backgroundColor: 'transparent', duration: 200000, loop: true }">  -->
      
         <div> 
-          <img :src="spotimage(data[0])" height="475px"> 
+          <img :src="spotimage(root[0])" height="475px"> 
         </div>
        <!-- </kinesis-element>
         </kinesis-container> -->
@@ -32,7 +32,7 @@
         <z-spot
           v-for="(amodel, index) in data"
           v-if="isVisible(amodel)"
-          ref=amodel.id
+          :ref="ref(amodel.id)"
           button
           size="l"
           class="meteor"
@@ -78,6 +78,7 @@
 
 <script>
 import {TweenLite, Power2} from 'gsap/TweenMax' // Elastic, Back,
+import _ from 'lodash'
 const util = require('../util.js')
 
 export default {
@@ -117,8 +118,11 @@ export default {
     item () {
       return this.$store.state.zitem
     },
-    data () {
+    root () {
       return this.$store.state.leodata
+    },
+    data () {
+      return this.$store.state.leodata ? this.$store.state.leodata[0].children : undefined
     },
     text () {
       return this.$store.state.leotext
@@ -236,6 +240,9 @@ export default {
       }
       return false
     },
+    ref: function (id) {
+      return 'zspot_' + id
+    },
     distance: function (data, index) {
       let length = data.length
       let factor = parseInt(this.$store.state.leftPaneWidth)
@@ -298,7 +305,7 @@ export default {
   },
   updated () {
     // console.log('ZircleView update')
-  } // ,
+  },
   // watch: {
   //   '$store.state.currentItem': {
   //     handler: function (val, oldVal) {
@@ -308,6 +315,43 @@ export default {
   //     immediate: true
   //   }
   // }
+  watch: {
+    '$route' (to, from) {
+      var fromid = from.path.split('/')[2]
+      var toid = to.path.split('/')[2]
+
+      if (this.$store.state.currentItem.id === toid) return
+
+      var childs = this.data.map(child => child.id)
+      if (!childs.includes(toid)) return
+
+      // console.log('v item: ', fromid, toid)
+      const parent = JSON.search(this.$store.state.leodata, '//*[id="' + toid + '"]/parent::*')
+      if (parent && parent[0]) {
+        const parentid = parent[0].id
+        // console.log('v test: ', fromid, parent, parentid)
+        if (fromid === parentid) {
+          let child = _.find(this.data, child => child.id === toid)
+          // console.log('v goto', 'item0', child, this.$refs[this.ref(child.id)])
+          this.$store.dispatch('setCurrentItem', {id: toid})
+          const refs = this.$refs[this.ref(child.id)]
+          if (child && refs && refs.length) {
+            this.$zircle.toView({
+              to: 'item0',
+              fromSpot: refs[0],
+              params: { depth: 1,
+                model: child,
+                key: child.id,
+                textItems: this.textItems,
+                targetEl: this.targetEl,
+                top: false
+              }
+            })
+          }
+        }
+      }
+    }
+  }
 }
 </script>
 

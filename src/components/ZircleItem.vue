@@ -38,6 +38,7 @@
         <z-spot
           v-for="(amodel, index) in data.children"
           v-if="isVisible(amodel)"
+          :ref="ref(data.id, amodel.id)"
           button
           size="l"
           class="meteor"
@@ -371,6 +372,9 @@ export default {
       }
       return false
     },
+    ref: function (id, sid) {
+      return id + '_zspot_' + sid
+    },
     distance: function (itemdata, index) {
       let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
       index = this.hasTheme(itemdata) ? index - 1 : index
@@ -392,6 +396,23 @@ export default {
       }
       return false
     },
+    getThemeIdFrom (id) {
+      var theme = this.$store.state.themes[id]
+      if (theme && theme.background.theme) {
+        return id
+      }
+      var pid = id
+      while (pid >= 0) {
+        const parent = JSON.search(this.$store.state.leodata, '//*[id="' + pid + '"]/parent::*')
+        if (parent && parent[0]) {
+          pid = parent[0].id
+          theme = this.$store.state.themes[pid]
+          if (theme && theme.background.theme) {
+            return pid
+          }
+        } else return 0
+      }
+    },
     style: function (itemdata, index = 0, parentdata = null) {
       var style = '' // "background-color: orange; border-width: 4px; border-color: var(--background-color);"
       if (itemdata) {
@@ -402,7 +423,8 @@ export default {
         }
         var color
         var ptheme = parentdata ? this.$store.state.themes[parentdata.id] : null
-        var theme = this.$store.state.themes[itemdata.id]
+        var theme = this.$store.state.themes[this.getThemeIdFrom(itemdata.id)]
+
         index = index > 0 ? index - 1 : index
         if (theme && theme.background.theme) {
           color = util.rgbaFromTheme(theme.background.theme)
@@ -490,6 +512,42 @@ export default {
     }
   },
   watch: {
+    '$route' (to, from) {
+      var fromid = from.path.split('/')[2]
+      var toid = to.path.split('/')[2]
+
+      if (this.$store.state.currentItem.id === toid) return
+
+      var childs = this.data.children.map(child => child.id)
+      if (!childs.includes(toid)) return
+      if (this.data.id !== fromid) return
+
+      // console.log('item: ', this.data.id, fromid, toid)
+      const parent = JSON.search(this.$store.state.leodata, '//*[id="' + toid + '"]/parent::*')
+      if (parent && parent[0]) {
+        const parentid = parent[0].id
+        // console.log('test: ', fromid, parentid)
+        if (fromid === parentid) {
+          let child = _.find(this.data.children, child => child.id === toid)
+          // console.log('goto', this.zitem, child, this.$refs[this.ref(this.data.id, child.id)][0])
+          this.$store.dispatch('setCurrentItem', {id: toid})
+          const refs = this.$refs[this.ref(this.data.id, child.id)]
+          if (child && refs && refs.length) {
+            this.$zircle.toView({
+              to: this.zitem, // string. Required,
+              fromSpot: refs[0],
+              params: { depth: this.zdepthinc,
+                model: child,
+                key: child.id,
+                textItems: this.textItems,
+                targetEl: this.targetEl,
+                top: false
+              }
+            })
+          }
+        }
+      }
+    },
     '$store.state.contentItemsUpdateCount': {
       handler: function (val, oldVal) {
         if (!this.isOpenInline) { return }

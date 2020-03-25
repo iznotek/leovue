@@ -228,6 +228,25 @@
       //   deep: true,
       //   immediate: true
       // },
+      '$route' (to, from) {
+        var fromid = from.path.split('/')[2]
+        var toid = to.path.split('/')[2]
+
+        if (this.$store.state.currentItem.id === toid) return
+
+        // console.log(fromid, toid)
+        if (fromid) {
+          const parent = JSON.search(this.data, '//*[id="' + fromid + '"]/parent::*')
+          if (parent && parent[0]) {
+            const parentid = parent[0].id
+            if (toid === parentid) {
+              // console.log('back')
+              this.$store.dispatch('setCurrentItem', {id: toid})
+              this.$zircle.goBack()
+            }
+          }
+        }
+      },
       '$store.state.currentItem': {
         handler: function (val, oldVal) {
           if (val) {
