@@ -46,6 +46,9 @@
 <v t="ifs.20190324100129.1"><vh>oy</vh></v>
 </v>
 </v>
+<v t="ifs.20200324194154.1"><vh>[Ark'OM](https://arkom.iznow.tech)</vh>
+<v t="ifs.20200324194333.1"><vh>[Outline ?](https://demo.ghost.io/style-test)</vh></v>
+</v>
 <v t="ifs.20190324101206.1"><vh>@private ...</vh>
 <v t="josephorr.20180123102417.1"><vh>Summary Nodes</vh>
 <v t="josephorr.20180123102440.1"><vh>Mermaid</vh>
@@ -508,9 +511,6 @@
 </v>
 </v>
 </v>
-</v>
-<v t="ifs.20200324194154.1"><vh>[Ark'OM](https://arkom.iznow.tech)</vh>
-<v t="ifs.20200324194333.1"><vh>[Outline ?](https://outline.iznow.tech/share/c7a4c5bd-3372-4be6-b3f7-caa8df85b966)</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -4807,8 +4807,8 @@ rating: 5</t>
 background: 
   space: An amasing place to link us all...
   transition: transitionWarp
-  dash: static/arkom/astro/ext01.jpg
-  spot: static/arkom/astro/cours01.jpg
+  dash: /static/arkom/astro/ext01.jpg
+  spot: /static/arkom/astro/cours01.jpg
   theme: green
   mode: dark</t>
 <t tx="ifs.20190416230605.1">@language yaml
@@ -4829,7 +4829,7 @@ background:
 <t tx="ifs.20190418155034.1">@language yaml
 
 background: 
-  dash: static/images/bubble.png
+  dash: /static/images/bubble.png
   spot: https://media.fromthegrapevine.com/assets/images/2017/8/earth-planet-0802.jpg.480x0_q71_crop-scale.jpg
   theme: blue
   mode: dark</t>
@@ -4884,15 +4884,15 @@ background:
 <t tx="ifs.20190422125241.1">@language yaml
 
 background: 
-  spot: static/arkom/astro/bar07.jpg</t>
+  spot: /static/arkom/astro/bar07.jpg</t>
 <t tx="ifs.20190422125325.1">@language yaml
 
 background: 
-  spot: static/arkom/astro/salon03.jpg</t>
+  spot: /static/arkom/astro/salon03.jpg</t>
 <t tx="ifs.20190422125336.1">@language yaml
 
 background: 
-  spot: static/arkom/astro/room02.jpg</t>
+  spot: /static/arkom/astro/room02.jpg</t>
 <t tx="ifs.20190426133529.1">@language yaml
 
 background: 
@@ -4915,7 +4915,7 @@ background:
 <t tx="ifs.20190501131619.1">@language yaml
 
 background: 
-  spot: static/arkom/astro/bar03.jpg</t>
+  spot: /static/arkom/astro/bar03.jpg</t>
 <t tx="ifs.20190501154145.1">&lt;img-left height="800" src="static/arkom/astro/plan03.jpg"&gt; &lt;/img-left&gt;
 &lt;p&gt;
 &lt;img height="800" src="static/arkom/astro/plan01.jpg"&gt;&lt;/img&gt;
@@ -4928,7 +4928,7 @@ background:
 <t tx="ifs.20190501154145.2">@language yaml
 
 background: 
-  spot: static/arkom/astro/bar01.jpg</t>
+  spot: /static/arkom/astro/bar01.jpg</t>
 <t tx="ifs.20200324194154.1"></t>
 <t tx="ifs.20200324194333.1"></t>
 <t tx="josephorr.20170228222411.2">@language html

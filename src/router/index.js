@@ -27,6 +27,7 @@ if (window.lconfig.coverPage) {
 
 // TODO: add not found link
 export default new Router({
+  mode: 'history',
   routes: [
     {
       // Outline
