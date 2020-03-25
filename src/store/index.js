@@ -1285,7 +1285,7 @@ export default new Vuex.Store({
     cover: '',
     themes: {},
     connected: false,
-    loading: true,
+    loading: false,
     currentItemPath: '',
     currentItemPathMapIds: [],
     currentItem: {
@@ -1409,7 +1409,7 @@ export default new Vuex.Store({
       if (routeName === 'Top') {
         routeName = 'Node'
       }
-      router.replace({name: routeName, params: { id }})
+      router.push({name: routeName, params: { id }}, () => {})
     },
     // for inline content, keep hash of content items
     CONTENT_ITEM (state, o) {
@@ -1449,7 +1449,7 @@ export default new Vuex.Store({
       if (routeName === 'Top') {
         routeName = 'Node'
       }
-      router.replace({name: routeName, params: { id }})
+      router.push({name: routeName, params: { id }}, () => {})
 
       if (typeof o.historyIndex !== 'undefined') {
         state.historyIndex = o.historyIndex
@@ -1648,6 +1648,7 @@ export default new Vuex.Store({
         openItemIds = _.uniq(currentOpenItemIds.concat(openItemIds))
         context.commit('OPEN_ITEMS', {openItemIds})
       }
+
       let item = JSON.search(context.state.leodata, '//*[id="' + id + '"]')
       let itemObj = {id}
       if (o.historyIndex) {
