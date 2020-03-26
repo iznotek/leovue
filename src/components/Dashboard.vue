@@ -25,7 +25,7 @@
         <img v-if="!connected" class="loginimage" :src="require(`@/assets/logo.png`)" width="170" height="170"/> 
         <!-- <img v-if="connected" class="loginimagehide" :src="require(`@/assets/logo.png`)" width="150" height="150"/> 
     </div> -->
-    <div class="login" v-if="!connected">
+    <div class="login" v-if="locked && !connected">
          <!-- <img class="loginimage" :src="require(`@/assets/logo.png`)" width="150" height="150"/> -->
 <!-- 
          <div class="logintheme">
@@ -55,14 +55,6 @@
     </div>
   </div>
 </template>
-
-//  <component :is="kebab(transitionName)" :duration="duration" :delay="delay" appear v-if="!isGroup">
-//           <div v-show="show">
-//             <div class="box">
-//               <p>{{transitionName}}</p>
-//             </div>
-//           </div>
-//         </component>
 
 <script>
 import AppHeader from './Header'
@@ -180,6 +172,9 @@ export default {
     })
     // simulate AJAX
 
+    this.$store.state.connected = !this.locked
+    this.$store.state.user = {name: 'pi'}
+
     let vm = this
     setTimeout(() => {
       var id = setInterval(() => {
@@ -187,9 +182,20 @@ export default {
         if (loader.opacity <= 0.0) {
           clearInterval(id)
           loader.hide()
-          setTimeout(() => {
-            vm.configlogin.visible = true
-          }, 2000)
+
+          if (!this.locked) {
+            // this.animLogoLogin.play()
+            let vm = this
+            setTimeout(() => {
+              vm.$store.state.leftPaneWidth = parseInt(window.lconfig.leftPaneWidth) + '%'
+              vm.$store.state.rightPaneWidth = 100 - parseInt(window.lconfig.leftPaneWidth) + '%'
+            }, 2000)
+          }
+          // else {
+          //   setTimeout(() => {
+          //     vm.configlogin.visible = true
+          //   }, 2000)
+          // }
         }
       }, 50)
     }, 5000)
@@ -247,7 +253,7 @@ export default {
     },
     login: function () {
       // console.log('login')
-      if (this.password === 'surprise') {
+      if (this.locked && this.password === window.lconfig.password) {
         // 3,14159265
         this.$store.state.connected = true
         this.$store.state.user = {name: 'guest', pw: this.password}
@@ -266,6 +272,9 @@ export default {
   computed: {
     title () {
       return window.lconfig.docTitle
+    },
+    locked () {
+      return window.lconfig.locked
     },
     showtree: function () {
       return this.type === 'tree'
