@@ -91,6 +91,7 @@
   import _ from 'lodash'
   import { JSONtoLeo } from '../services/leo-file'
   import DigitalClock from 'vue-digital-clock'
+  import router from '../router'
 
   function formatJSONData (data, textItems) {
     if (_.isArray(data)) {
@@ -167,24 +168,26 @@
         setTimeout(this.toggle, 500)
       },
       goBack () {
-        if (this.noBack) { return }
-        const history = this.$store.state.history
-        let historyIndex = this.$store.state.historyIndex
-        if (historyIndex > 0) {
-          historyIndex = historyIndex - 1
-        }
-        const id = history[historyIndex]
-        this.$store.dispatch('setCurrentItem', { id, historyIndex })
+        router.back()
+        // if (this.noBack) { return }
+        // const history = this.$store.state.history
+        // let historyIndex = this.$store.state.historyIndex
+        // if (historyIndex > 0) {
+        //   historyIndex = historyIndex - 1
+        // }
+        // const id = history[historyIndex]
+        // this.$store.dispatch('setCurrentItem', { id, historyIndex })
       },
       goForward () {
-        if (this.noForward) { return }
-        const history = this.$store.state.history
-        let historyIndex = this.$store.state.historyIndex
-        const id = history[historyIndex + 1]
-        if (historyIndex < history.length - 1) {
-          historyIndex = historyIndex + 1
-        }
-        this.$store.dispatch('setCurrentItem', { id, historyIndex })
+        router.forward()
+        // if (this.noForward) { return }
+        // const history = this.$store.state.history
+        // let historyIndex = this.$store.state.historyIndex
+        // const id = history[historyIndex + 1]
+        // if (historyIndex < history.length - 1) {
+        //   historyIndex = historyIndex + 1
+        // }
+        // this.$store.dispatch('setCurrentItem', { id, historyIndex })
       }
     },
     computed: {
