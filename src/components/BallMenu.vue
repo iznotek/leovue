@@ -15,7 +15,7 @@
           <span>{{item}}</span>
         </radial-menu-item>
     </radial-menu> 
-    <fade-comp
+    <!-- <fade-comp
         direction="alpha"
         :out="!$store.state.loading">
       <orbit-spinner
@@ -24,7 +24,7 @@
         :size="60"
         color="#fff"
       />
-    </fade-comp>
+    </fade-comp> -->
     <!-- <spring-spinner
       style="position: absolute; left: -2px; top: -2px"
       :animation-duration="3000"
@@ -32,8 +32,7 @@
       color="#fff"
     /> -->
     <div class="logo" @click="open()">
-      <!-- <icon name="bulletarrow" /> -->
-    <img :src="require(`@/assets/logo.png`)" width="55"/>
+      <img :src="require(`@/assets/logo.png`)" width="55"/>
     </div>
       <!-- <div style="color: rgba(0,0,0,0.6); margin-top: 16px;">{{ lastClicked }}</div> -->
   </div>
