@@ -1449,7 +1449,6 @@ export default new Vuex.Store({
       if (routeName === 'Top') {
         routeName = 'Node'
       }
-      router.push({name: routeName, params: { id }}, () => {})
 
       if (typeof o.historyIndex !== 'undefined') {
         state.historyIndex = o.historyIndex
@@ -1469,18 +1468,25 @@ export default new Vuex.Store({
         }
       }
       var parentid = id
+      var parenttitle
       while (parentid > 0) {
         const parent = JSON.search(state.leodata, '//*[id="' + parentid + '"]/parent::*')
         if (parent && parent[0]) {
           parentid = parent[0].id
+          parenttitle = parent[0].vtitle
           ids.push(parentid)
-          paths.push(parent[0].vtitle)
+          if (parenttitle && !parenttitle.includes('@cover')) {
+            paths.push(parent[0].vtitle)
+          }
         } else break
       }
+
+      paths.push('')
       paths = paths.reverse()
       state.currentItemPath = paths.join(' / ')
       state.currentItemPathMapIds = ids.reverse()
 
+      router.push({name: routeName, params: { id }}, () => {})
       // state.initialized = false
     },
     CURRENT_THEME (state, o) {
