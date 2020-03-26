@@ -7,7 +7,7 @@
       </div> -->
       <!--<player v-if="use.player" />-->
 
-       <flux style="z-index:1"
+     <flux style="z-index:1"
         v-mousefollower
         :options="fluxOptions"
         :images="fluxImages"
@@ -89,7 +89,7 @@ export default {
       //   'cool', 'cool'
       // ],
       fluxImages: [
-        '/static/images/bubble.png' // , // 'static/images/chou.jpg',
+        // '/static/images/bubble.png'
         // 'http://www.bianoti.com/wp-content/uploads/2015/11/Background-Pictures-17206-1920x1200-px-fond-ecran.jpg'
       ],
       // fluxCaptions: {
@@ -204,7 +204,7 @@ export default {
   watch: {
     '$store.state.themes': {
       handler: function (val, oldVal) {
-        var backs = ['/static/images/bubble.png']
+        var backs = [] // ['/static/images/bubble.png']
         if (val) {
           Object.keys(val).forEach(key => {
             let theme = val[key]
@@ -259,8 +259,8 @@ export default {
   height: 100%;
   top: 0px;
   left: 0px;
-  // background: linear-gradient(174deg, rgba(2,0,36,1) 0%, rgba(9,22,121,1) 35%, rgba(0,212,255,1) 100%);
-  background-image: url('/static/images/bubble.png');
+  background: linear-gradient(174deg, rgba(2,0,36,1) 0%, rgba(9,22,121,1) 35%, rgba(0,212,255,1) 100%);
+  // background-image: url('/static/images/bubble.png');
   background-size: cover;
 }
 .cesium {
