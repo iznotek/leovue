@@ -306,6 +306,7 @@
   color: #333
   //border-bottom: 1px solid #333
   //box-shadow: 0 1px 1px 0 rgba(116, 129, 141, 0.1)
+  box-shadow: 0px 10px 30px rgba(0,0,0,0.85)
   height: 33px
 .search
   float: left

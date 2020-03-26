@@ -260,6 +260,9 @@
     background: transparent;
     position: relative;
     cursor: col-resize;
+    -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,1.0);
+		-moz-box-shadow: 0px 10px 30px rgba(0,0,0,1.0);
+		box-shadow: 0px 10px 30px rgba(0,0,0,1.0);
     //background-image: url('../assets/vertical.png');
    // background-repeat: no-repeat;
    // background-position: 50% 46%;
