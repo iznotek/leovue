@@ -10,6 +10,7 @@ deploy.tar
 .idea/
 *.map
 
+dist/
 extras/
 static/textures/
 static/src/
