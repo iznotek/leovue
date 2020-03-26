@@ -11,7 +11,7 @@
         </div> -->
        
         <digital-clock :blink="false" />
-        <div v-if="connected" @click="fullscreen" class="icon icon-button">
+        <div @click="fullscreen" class="icon icon-button">
           <icon class="icon" name="expand"></icon>
         </div> 
         <div v-if="connected" class="button-shim"></div>
