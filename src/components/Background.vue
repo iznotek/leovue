@@ -1,5 +1,5 @@
 <template>
-    <div  class="background"> <!-- v-blur="blurConfig" -->
+    <div v-mousefollower class="background"> <!-- v-blur="blurConfig" -->
       <!-- <lazy-img :src="current" /> <!-- :placeholder="current" /> -->
       <!-- <div class="cesium" v-if="use.map">
         <cesium-viewer :animation="cesium.animation" :timeline="cesium.timeline" @ready="ready">
@@ -8,7 +8,6 @@
       <!--<player v-if="use.player" />-->
 
      <flux style="z-index:1"
-        v-mousefollower
         :options="fluxOptions"
         :images="fluxImages"
         :transitions="fluxTransitions"
