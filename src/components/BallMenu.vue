@@ -15,8 +15,9 @@
           <span>{{item}}</span>
         </radial-menu-item>
     </radial-menu> 
-    <!-- <fade-comp
-        direction="alpha"
+    <fade-comp
+        mode="alpha"
+        duration="1s"
         :out="!$store.state.loading">
       <orbit-spinner
         style="position: absolute; left: -5px; top: -5px"
@@ -24,7 +25,7 @@
         :size="60"
         color="#fff"
       />
-    </fade-comp> -->
+    </fade-comp> 
     <!-- <spring-spinner
       style="position: absolute; left: -2px; top: -2px"
       :animation-duration="3000"

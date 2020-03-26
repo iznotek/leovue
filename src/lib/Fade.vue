@@ -1,5 +1,5 @@
 <template>
-  <div class="fadeComp" :class="compClasses">
+  <div class="fadeComp" :class="compClasses" :style="compStyle">
     <slot></slot>
   </div>
 </template>
@@ -18,9 +18,13 @@
       }
     },
     props: {
-      direction: {
+      mode: {
         type: String,
         default: 'alpha'
+      },
+      duration: {
+        type: String,
+        default: '3s'
       },
       out: {
         type: Boolean,
@@ -28,6 +32,10 @@
       }
     },
     computed: {
+      compStyle: function () {
+        // this.astyle.animationDuration = this.duration
+        return {animationDuration: this.duration}
+      },
       compClasses: function () {
         this.out_alpha = false
         this.in_alpha = false
@@ -36,17 +44,17 @@
         this.out_left = false
         this.in_left = false
 
-        if (this.direction === 'alpha' && this.out) {
+        if (this.mode === 'alpha' && this.out) {
           this.out_alpha = true
-        } else if (this.direction === 'alpha' && !this.out) {
+        } else if (this.mode === 'alpha' && !this.out) {
           this.in_alpha = true
-        } else if (this.direction === 'vertical' && this.out) {
+        } else if (this.mode === 'vertical' && this.out) {
           this.out_height = true
-        } else if (this.direction === 'vertical' && !this.out) {
+        } else if (this.mode === 'vertical' && !this.out) {
           this.in_height = true
-        } else if (this.direction === 'horizontal' && this.out) {
+        } else if (this.mode === 'horizontal' && this.out) {
           this.out_left = true
-        } else if (this.direction === 'horizontal' && !this.out) {
+        } else if (this.mode === 'horizontal' && !this.out) {
           this.in_left = true
         }
 
@@ -65,8 +73,9 @@
 <style>
   .fadeComp {
     display: block;
-    position: relative;
-    height: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
     opacity: 0;
   }
   @keyframes fadeinAlpha {
