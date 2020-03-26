@@ -55,7 +55,7 @@
         return true
       },
       data () {
-        return this.$store.state.leodata
+        return this.$store.state.leodata ? this.$store.state.leodata[0].children : undefined
       },
       text () {
         return this.$store.state.leotext
