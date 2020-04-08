@@ -7,23 +7,23 @@
       </div> -->
       <!--<player v-if="use.player" />-->
 
-     <flux style="z-index:1"
+     <!-- <flux style="z-index:1"
         :options="fluxOptions"
         :images="fluxImages"
         :transitions="fluxTransitions"
         :transitionOptions="fluxTransitionOptions"
         ref="slider">
+      </flux> -->
+
+      <flux style="z-index:1"
+        :options="flux.options"
+        :images="fluxImages"
+        :transitions="flux.transitions"
+        ref="slider">
       </flux> 
     <!-- <transition name="fade"> -->
      <!--   <Component :is="background" backgroundColor="rgba(0,0,0,0)" ></Component> -->
     <!--  </transition> -->
-
-      <!--   <v-btn @click="changeBackground('aurora')">Aurora</v-btn>
-      <v-btn @click="changeBackground('smoke')">Smoke</v-btn>
-      <v-btn @click="changeBackground('pipeline')">Pipeline</v-btn>
-      <v-btn @click="changeBackground('coalesce')">Coalesce</v-btn>
-      <v-btn @click="changeBackground('shift')">Shift</v-btn>
-      <v-btn @click="changeBackground('aether')">Æther</v-btn> -->
 
       <!--<vr v-if="use.vr" style="z-index:2"/>-->
       <!-- <youtube style="z-index:2" :video-id="'QI9ta7qkazU'" player-width="100%" player-height="100%" :player-vars="{autoplay: 1}"></youtube> -->
@@ -31,43 +31,25 @@
     </div>
 </template>
 
+
 <script>
-import { VueFlux, Transitions } from 'vue-flux'
+// import { VueFlux, Transitions } from 'vue-flux'
+import {
+  VueFlux
+} from 'vue-flux'
 
 // import Player from './VideoPlayer'
 // import VR from './VR'
 
-// import Aurora from './ambient/Aurora'
-// import Smoke from './ambient/Smoke'
-// import Coalesce from './ambient/Coalesce'
-// import Pipeline from './ambient/Pipeline'
-// import Shift from './ambient/Shift'
-// import Aether from './ambient/Aether'
-
-// const backgrounds = {
-//   aurora: Aurora,
-//   smoke: Smoke,
-//   pipeline: Pipeline,
-//   coalesce: Coalesce,
-//   shift: Shift,
-//   aether: Aether
-// }
-
 export default {
   name: 'background',
   components: {
-    // Aurora,
-    // Smoke,
-    // Coalesce,
-    // Pipeline,
-    // Shift,
     flux: VueFlux // ,
     // player: Player,
     // vr: VR
   },
   data () {
     return {
-      // background: Aurora,
       required: 0,
       requiredTransition: 'transitionFade',
       index: 0,
@@ -77,6 +59,13 @@ export default {
         player: false,
         slider: true,
         vr: false
+      },
+      flux: {
+        options: {
+          autoplay: false
+        },
+        images: [],
+        transitions: [ 'fade' ]
       },
       fluxOptions: {
         autoplay: false,
@@ -88,13 +77,13 @@ export default {
       //   'cool', 'cool'
       // ],
       fluxImages: [
-        // '/static/images/bubble.png'
+        window.lconfig.dashboardImage
         // 'http://www.bianoti.com/wp-content/uploads/2015/11/Background-Pictures-17206-1920x1200-px-fond-ecran.jpg'
       ],
       // fluxCaptions: {
       //    autoplay: true
       // },
-      fluxTransitions: Transitions,
+      // fluxTransitions: Transitions,
       // fluxTransitions: {
       //   // transitionCamera: Transitions.transitionCamera,
       //   transitionFade: Transitions.transitionFade
@@ -133,10 +122,13 @@ export default {
     },
     check () {
       if (this.$refs.slider !== undefined) {
-        if (this.$refs.slider.index === this.required) {
+        // console.log(this.$refs.slider)
+        if (this.$refs.slider.Images && this.$refs.slider.Images.current && this.$refs.slider.Images.current.index === this.required) {
+          // console.log('check', this.required)
           this.index = this.required
         } else {
-          this.$refs.slider.showImage(this.required, this.requiredTransition)
+          // console.log('mov', this.required, this.$refs.slider.image2Index, this.$refs.slider.image1Index, this.$refs.slider.Images.current.index)
+          this.$refs.slider.show(this.required, 'fade') // this.requiredTransition)
           setTimeout(this.check, 500)
         }
       }
@@ -203,15 +195,16 @@ export default {
   watch: {
     '$store.state.themes': {
       handler: function (val, oldVal) {
-        var backs = [] // ['/static/images/bubble.png']
+        var backs = [window.lconfig.dashboardImage]
         if (val) {
           Object.keys(val).forEach(key => {
             let theme = val[key]
-            if (theme.background.dash) {
+            if (theme.background.dash && backs.indexOf(theme.background.dash) === -1) {
               backs.push(theme.background.dash)
             }
           })
         }
+        // console.log(backs)
         this.fluxImages = backs
       },
       deep: true,
@@ -223,15 +216,14 @@ export default {
           var theme = this.$store.state.themes[this.getThemeIdFrom(val.id)]
           if (theme && theme.background) {
             var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
-            var transition = isChrome ? 'transitionFade' : theme.background.transition || 'transitionFade'
+            var transition = isChrome ? 'fade' : theme.background.transition || 'fade'
             var index = this.fluxImages.indexOf(theme.background.dash)
             if (index > -1) {
               this.required = index
               this.requiredTransition = transition
-              if (this.$refs.slider !== undefined) {
-                this.$refs.slider.showImage(index, transition)
-              }
-              setTimeout(this.check, 500)
+              // this.$refs.slider.show(this.required, 'fade')
+              // console.log(theme.background.dash, index)
+              setTimeout(this.check, 1000)
             }
           }
         }
@@ -258,8 +250,8 @@ export default {
   height: 100%;
   top: 0px;
   left: 0px;
+  overflow: hidden;
   background: linear-gradient(174deg, rgba(2,0,36,1) 0%, rgba(9,22,121,1) 35%, rgba(0,212,255,1) 100%);
-  // background-image: url('/static/images/bubble.png');
   background-size: cover;
 }
 .cesium {

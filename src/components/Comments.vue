@@ -182,16 +182,18 @@
         </svg>
       </div>
     </div> -->
-  <div class="behind" :style="{ left: '0px', 
-                                width: '100%', 
-                                marginLeft: '0px', 
-                                top: '0%',
-                                height: '100%',
-                                background: gradient }">  
+  <div class="behind" 
+      :class="$store.state.darkmode ? 'dark' : 'light'"
+      :style="{ left: '0px', 
+        width: '100%', 
+        marginLeft: '0px', 
+        top: '0%',
+        height: '100%' }">  <!-- ,
+        background: gradient -->
 
-      <comment-grid baseURL="https://vue-comment-grid.firebaseio.com" 
-                  apiKey="AIzaSyBBRUAfEUhEnLpYJ5QlrE33ekUu7j20Yr0" 
-                  nodeName="customize" 
+      <comment-grid :baseURL="baseURL"
+                  :apiKey="apiKey"
+                  :nodeName="nodeName" 
                   :background="bgc" 
                   :commentBackgroundColor="cbgc" 
                   :commentTextColor="ctc" 
@@ -212,6 +214,7 @@
 
 <script>
   import Comments from './comment/Comments.vue'
+  import { firebaseConfig } from '../config.js'
   const util = require('../util.js')
   // import { Chrome } from 'vue-color'
 
@@ -255,7 +258,7 @@
       r: 255,
       g: 255,
       b: 255,
-      a: 1
+      a: 0.6
     },
     a: 1
   }
@@ -311,13 +314,13 @@
         commentBgColor: defaultCommentBg,
         commentTxtColor: defaultCommentTxt,
         userNamColor: defaultUserName,
-        baseURL: 'https://your-app.firebaseio.com',
-        apiKey: 'your-api-key',
-        nodeName: 'nodeNameThatYouCreated',
+        baseURL: firebaseConfig.databaseURL,
+        apiKey: firebaseConfig.apiKey,
+        nodeName: '',
         maxUserNameLength: '30',
         maxCommentLength: '1000',
         initialMessageLimit: '11',
-        maxLineLimit: '40',
+        maxLineLimit: '80',
         maxShowingDepth: '3',
         background: '',
         commentBackgroundColor: '',
@@ -506,6 +509,21 @@
       }
     },
     watch: {
+      '$store.state.currentItem': {
+        handler: function (val, oldVal) {
+          var item = val ? Object.assign({}, val) : null
+          if (item) {
+            let model = JSON.search(this.$store.state.leodata, '//*[id="' + item.id + '"]')
+            if (model && model[0]) {
+              this.nodeName = model[0].t
+              return
+            }
+          }
+          this.nodeName = ''
+        },
+        deep: true,
+        immediate: true
+      },
       maxUserLen (newValue, oldValue) {
         this.maxUserLen = this.maxUserLen < 1 ? 1 : this.maxUserLen
       },
@@ -530,255 +548,21 @@
 </script>
 
 <style scoped>
-  .app {
-    font-family: "Roboto", sans-serif;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    border-radius: 4px;
-  }
-  .loader {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-rows: minmax(150px, auto);
-    padding: 5px;
-  }
-  #loader {
-    justify-self: center;
-    align-self: center;
-  }
   .behind {
-    // position: absolute;
-    transition: all 0.2s ease;
+    position: relative;
+    overflow-y: scroll;
+    transition: all 0.5s ease;
     -webkit-transition: all 0.2s ease;
-    z-index: 2000;
+    padding: 10px;
+    padding-right: 0px;
   }
-  .innerWrapper {
-    display: grid;
-    grid-row: 1;
-    grid-column: 1;
+
+  .dark {
+    background: rgba(0,0,0,0.5);
+    /* background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%); /* Black*/
   }
-  .col {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: center;
-    align-self: start;
-    color: #1d2129;
-    background-color: #fff;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 6px;
-    height: -webkit-min-content;
-    height: -moz-min-content;
-    height: min-content;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  .col2 {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: center;
-    align-self: start;
-    color: #1d2129;
-    background-color: #fff;
-    height: -webkit-max-content;
-    height: -moz-max-content;
-    height: max-content;
-  }
-  .colText {
-    box-sizing: border-box;
-    width: 225px;
-    font-size: 12px;
-    line-height: 14px;
-    padding: 8px 10px;
-    margin-left: -100px;
-    text-align: center;
-    z-index: 9999;
-    box-shadow: 0px 0px 2px 0px #333;
-  }
-  .custom {
-    font-weight: 700;
-  }
-  .colText > input {
-    justify-self: center;
-    width: 54px;
-    color: #1d2129;
-    font-size: 14px;
-    line-height: 14px;
-    padding: 3px 5px;
-  }
-  .reminder {
-    display: grid;
-    grid-template-columns: 1fr 0.001fr 1fr;
-    grid-column-gap: 3px;
-    padding-top: 3px;
-    margin-top: 3px;
-  }
-  .line {
-    border-top: 1px solid rgba(204, 212, 216, 0.8);
-  }
-  .dot {
-    align-self: start;
-    font-size: 15px;
-    margin-top: -5.6px;
-    color: #c2c6cc;
-  }
-  .reminderText {
-    grid-column: 1/4;
-    color: #92b1b3;
-  }
-  .link {
-    display: inline-block;
-    line-height: 11.9px;
-    text-decoration: none;
-    border-bottom: 1px solid #551a8b;
-  }
-  #baseUrl {
-    margin-top: 72px;
-  }
-  #apiKey {
-    margin-top: 88px;
-  }
-  #nodeName {
-    margin-top: 104px;
-  }
-  #maxUserNameLength {
-    margin-top: 120px;
-  }
-  #maxCommentLength {
-    margin-top: 136px;
-  }
-  #initialMessageLimit {
-    margin-top: 152px;
-  }
-  #maxLineLimit {
-    margin-top: 168px;
-  }
-  #maxShowingDepth {
-    margin-top: 184px;
-  }
-  #copied {
-    margin-top: 63px;
-    box-sizing: border-box;
-    width: min-content;
-    font-size: 12px;
-    line-height: 14px;
-    padding: 8px 10px;
-    margin-left: 276px;
-    text-align: center;
-    z-index: 9999;
-    box-shadow: 0px 0px 2px 0px #333;
-  }
-  .tip {
-    grid-column: 1;
-    grid-row: 1;
-    color: #92b1b3;
-    justify-self: center;
-    align-self: start;
-    height: -webkit-min-content;
-    height: -moz-min-content;
-    height: min-content;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    margin-top: 3px;
-    margin-left: 3px;
-  }
-  #bgColor {
-    margin-top: 198px;
-    margin-left: -100px;
-  }
-  #commentBgColor {
-    margin-top: 216px;
-    margin-left: -100px;
-  }
-  #commentTxtColor {
-    margin-top: 232px;
-    margin-left: -100px;
-  }
-  #userNamColor {
-    margin-top: 248px;
-    margin-left: -100px;
-  }
-  .code {
-    font-family: "Roboto", sans-serif;
-    grid-row: 1;
-    grid-column: 1;
-    justify-self: center;
-    align-self: start;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    width: -webkit-max-content;
-    width: -moz-max-content;
-    width: max-content;
-    min-width: 345.27px;
-    height: -webkit-max-content;
-    height: -moz-max-content;
-    height: max-content;
-    padding: 8px 5px;
-    font-kerning: normal;
-    white-space: pre-wrap;
-    color: #cd984d;
-    background: #282c34;
-    font-size: 13px;
-    line-height: 16px;
-    font-weight: 700;
-    border-radius: 4px;
-    margin: 0;
-    margin-top: 45px;
-    margin-right: 5px;
-  }
-  .tag {
-    color: #e84c55;
-  }
-  .plain {
-    color: #aaa8a5;
-  }
-  .string {
-    color: #79c55a;
-  }
-  .pickerWrapper {
-    cursor: pointer;
-  }
-  .littleBox {
-    display: inline-block;
-    cursor: pointer;
-    width: 10px;
-    height: 10px;
-    /* border: 0.1px solid rgba(204, 212, 216, 0.8); */
-    box-shadow: 0px 0px 0.1px 0px rgba(204, 212, 216, 0.8);
-    margin-right: 4px;
-    margin-top: -1px;
-    line-height: 13px;
-    background-color: #fff;
-    vertical-align: middle;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  .copy {
-    cursor: pointer;
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: center;
-    align-self: start;
-    color: #fff;
-    margin-top: 52px;
-    margin-left: 308px;
-    transform: scale(1.2);
-  }
-  ::selection {
-    background: #92b1b3;
-  }
-  ::-moz-selection {
-    background: #92b1b3;
+  .light {
+    background: rgba(255,255,255,0.5);
+    /* background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.7) 100%); /* Black*/
   }
 </style>

@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import { sync } from 'vuex-router-sync'
 import StarRating from 'vue-star-rating'
+
 import Icon from 'vue-awesome/components/Icon.vue'
 import 'vue-awesome/icons/bars'
 import 'vue-awesome/icons/arrow-left'
@@ -17,8 +18,15 @@ import 'vue-awesome/icons/reply'
 import 'vue-awesome/icons/share'
 import 'vue-awesome/icons/project-diagram'
 import 'vue-awesome/icons/code-branch'
-import 'vue-awesome/icons/eye'
+import 'vue-awesome/icons/regular/eye'
 import 'vue-awesome/icons/spinner'
+import 'vue-awesome/icons/moon'
+import 'vue-awesome/icons/regular/moon'
+import 'vue-awesome/icons/sync-alt'
+import 'vue-awesome/icons/comments'
+import 'vue-awesome/icons/comment'
+import 'vue-awesome/icons/video'
+import 'vue-awesome/icons/pen-nib'
 
 import ForkMeOnGithub from 'fork-me-on-github-vue'
 import BootstrapVue from 'bootstrap-vue'
@@ -31,12 +39,10 @@ import {LMap, LTileLayer, LMarker} from 'vue2-leaflet'
 import InfoCard from 'vue-info-card'
 import VTooltip from 'v-tooltip'
 import VueContentPlaceholders from 'vue-content-placeholders'
-import Pdf from 'pdfvuer'
+
 import AsyncComputed from 'vue-async-computed'
-// import VueMouseParallax from 'vue-mouse-parallax'
 import VueKinesis from 'vue-kinesis'
 
-// import VueYoutube from 'vue-youtube'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 
 import Fullscreen from 'vue-fullscreen'
@@ -79,8 +85,15 @@ import VueGoodLinks from 'vue-good-links'
 import 'vue-good-links/dist/vue-good-links.css'
 import VueAnime from 'vue-animejs'
 import VueRouterMultiView from 'vue-router-multi-view'
+// import Editor from 'vue-editor-js'
 
-import PDFViewer from './content-components/pdf'
+// import { ElementTiptapPlugin } from 'element-tiptap'
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
+// import 'element-tiptap/lib/index.css'
+
+// import Editor from 'vue-editor-js'
+
 import { charts } from './content-components/Charts'
 charts(Vue)
 
@@ -91,6 +104,10 @@ const Defiant = require('./lib/defiant') // eslint-disable-line
 //   require('./pwa')
 // }
 
+// Vue.use(Editor)
+// Vue.use(ElementUI)
+// Vue.use(ElementTiptapPlugin)
+
 Vue.use(VueRouterMultiView)
 Vue.use(VueAnime)
 Vue.use(VueGoodLinks)
@@ -99,14 +116,14 @@ Vue.use(Transitions)
 Vue.use(Loading)
 Vue.use(Grid)
 Vue.use(VueLazyComponent)
-// Vue.use(VueMouseParallax)
+
 Vue.use(VueKinesis)
 Vue.use(AsyncComputed)
 Vue.use(VueEvents)
 Vue.use(Chat)
 Vue.use(VueContentPlaceholders)
 Vue.use(VTooltip)
-// Vue.use(VueYoutube)
+
 Vue.use(Fullscreen)
 Vue.use(VueYouTubeEmbed)
 Vue.use(ForkMeOnGithub)
@@ -132,8 +149,7 @@ Vue.use(vBlur)
 //   iconType: 'MaterialDesign'
 //   // iconType: 'iconfont'
 // })
-Vue.component('pdfview', PDFViewer)
-Vue.component('pdf', Pdf)
+
 Vue.component('star-rating', StarRating)
 Vue.component('lv-timeline', LVTimeline)
 Vue.component('word-cloud', WordCloud)

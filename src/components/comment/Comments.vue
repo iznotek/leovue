@@ -202,7 +202,38 @@
         logOutTimer: null
       }
     },
+    components: {
+      appWrapper: Wrapper,
+      signWrapper: Sign
+    },
+    created () {
+      this.initialize()
+    },
     methods: {
+      initialize () {
+        this.checkAutoLogin()
+        this.comments = []
+        this.loading = true
+        if (this.nodeName === '') return
+
+        axios
+          .get(this.baseURL + '/commentsGrid/' + this.nodeName + '/comments.json')
+          .then(res => {
+            const data = res.data
+            for (let key in data) {
+              let comment = data[key]
+              comment.id = key
+              comment.depth =
+                'commentsGrid/' + this.nodeName + '/comments/' + comment.id
+              this.comments.unshift(comment)
+            }
+            setTimeout(() => { this.loading = false }, 1000)
+          })
+          .catch(err => {
+            console.log(err)
+            setTimeout(() => { this.loading = false }, 1000)
+          })
+      },
       checkAutoLogin () {
         const token = localStorage.getItem('commentToken')
         if (!token) {
@@ -372,8 +403,15 @@
       }
     },
     watch: {
+      nodeName: {
+        immediate: true,
+        handler (val, oldVal) {
+          this.initialize()
+        }
+      },
       loading () {
         this.$nextTick(() => {
+          if (!this.$refs.svgAvatar) return
           let a = 0
           let b = 0
           let c = 0
@@ -441,27 +479,6 @@
           }
         })
       }
-    },
-    components: {
-      appWrapper: Wrapper,
-      signWrapper: Sign
-    },
-    created () {
-      this.checkAutoLogin()
-      axios
-        .get(this.baseURL + '/commentsGrid/' + this.nodeName + '/comments.json')
-        .then(res => {
-          const data = res.data
-          for (let key in data) {
-            let comment = data[key]
-            comment.id = key
-            comment.depth =
-              'commentsGrid/' + this.nodeName + '/comments/' + comment.id
-            this.comments.unshift(comment)
-          }
-          this.loading = false
-        })
-        .catch(err => console.log(err))
     }
   }
 </script>

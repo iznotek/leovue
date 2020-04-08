@@ -1,20 +1,18 @@
 
 <template>
-  <div class="zircleviewer">
-    <splitpane :leftPaneStyle="leftPaneStyle">
-      <div slot="left">
-          <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{opacity: showcircle ? 1.0 : 0.0, width: width, left: left}">
+  <div >
+    <div class="zircleviewer">
+      <div style="position: absolute; width: 100%; height: 100%;">
+        <fade-transition v-show='showcircle'>
+          <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
           </z-canvas>
-          <!-- <d3view v-if="showgraph" :style="{width: width}"/> 
-          <treeview v-if="showtree" :style="{width: width}"/> -->
-          <!-- <d3view :style="{width: '100%', opacity: showgraph ? 1.0 : 0.0}"/> 
-          <treeview :style="{width: '100%', opacity: showtree ? 1.0 : 0.0}"/> -->
-          <spacemenu v-if="connected"/>
+        </fade-transition>
+        <fade-transition v-show='!showcircle'>
+          <treeview class="zcanvas" :style="{width: width, left: left}" >
+          </treeview>
+        </fade-transition>
       </div>
-      <div slot="right">
-        <contentpane></contentpane> 
-      </div>
-    </splitpane>
+    </div>
   </div>
 </template>
 
@@ -25,14 +23,10 @@
   import ZItem from './ZircleItem'
   import ZView from './ZircleView'
   import ZIntro from './ZircleIntro'
-  import ContentPane from './ContentPane'
-  import SplitPane from './SplitPane'
   import 'zircle/dist/zircle.css'
-
-  // import TreeView from './TreeView'
-  // import D3View from './D3View'
-  import SpaceMenu from './SpaceMenu'
   import {TweenLite, Power2} from 'gsap/TweenMax'
+  import TreeView from './TreeView'
+  import {FadeTransition} from 'vue2-transitions'
 
   let mov = {
     angle: -7
@@ -45,9 +39,8 @@
   export default {
     name: 'zircleviewer',
     components: {
-      contentpane: ContentPane,
-      splitpane: SplitPane,
-      spacemenu: SpaceMenu
+      treeview: TreeView,
+      FadeTransition
     },
     views: {
       item0: ZItem,
@@ -168,16 +161,11 @@
         // return this.$store.state.leftPaneWidth || '30%'
         return '200%' // this.$store.state.leftPaneWidth || '30%'
       },
-      ulStyle () {
-        const p = '0'
-        const u = window.lconfig.leftPaneBackground || ''
-        return `padding:${p}; background-image: url(${u});`
-      },
       leftPaneStyle () {
-        const w = window.lconfig.leftPaneWidth || '30%'
+        // const w = window.lconfig.leftPaneWidth || '30%'
         const c = 'linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%)' // 'rgba(0, 0, 0, 0.3)'
         // const u = 'static/images/chou.jpg'
-        return `width:${w}; background: ${c};`
+        return `background: ${c};` // width:${w};
       },
       top () {
         // if (this.$store.state.leodata.length > 1) { return false }
@@ -296,11 +284,13 @@
 .zircleviewer
   margin: 0
   height: 100%
+  width: 100%
 </style>
 
 <style lang="css">
+
 .zcanvas {
-    transition: all 2s ease;
+    transition: all 1s ease-in-out;
 }
 .title {
     margin-left: 5%;

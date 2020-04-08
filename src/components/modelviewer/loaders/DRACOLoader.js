@@ -223,7 +223,7 @@ DRACOLoader.prototype = {
         geometryBuffer[attributeName][i] = attributeData.GetValue(i)
       }
       // Add attribute to THREEJS geometry for rendering.
-      geometry.addAttribute(attributeName,
+      geometry.setAttribute(attributeName,
           new TypedBufferAttribute(geometryBuffer[attributeName],
             numComponents))
       dracoDecoder.destroy(attributeData)

@@ -2,7 +2,12 @@
   <div style="height:0px;">
     <div class="holder">
       <div class="header" v-if="config.showHeader">
-        <span class="app-title"> {{user}}{{ config.trademark }}</span>
+        <span class="app-title"> 
+          {{user}}{{ config.trademark }}
+        </span>
+       
+          
+ 
 
         <!-- <span v-if="config.showAppTitle && config.docTitle">:</span> -->
         <span v-if="config.showAppTitle" class="doc-title">{{ docTitle }}</span>
@@ -11,10 +16,15 @@
         </div> -->
        
         <digital-clock :blink="false" />
+         <div class="space">.</div>
         <div @click="fullscreen" class="icon icon-button">
           <icon class="icon" name="expand"></icon>
         </div> 
-        <div v-if="connected" class="button-shim"></div>
+        <div v-if="connected" @click="$store.commit('DARKMODE', !$store.state.darkmode)" class="icon icon-button">
+          <icon class="icon" :name="$store.state.darkmode ? 'moon' : 'regular/moon'" flip="horizontal"></icon>
+        </div> 
+        <!-- <div v-if="connected" class="button-shim"></div> -->
+        <div class="space">.</div>
         <div v-if="connected" @click="goBack"
              class="icon icon-button disabled">
           <icon class="icon"
@@ -27,7 +37,11 @@
                 :class="{disabled: noForward}"
                 name="share"></icon>
         </div>
-       
+
+        <div class="space">.</div>   
+        <div @click="refresh" class="icon icon-button">
+          <icon class="icon" name="sync-alt"></icon>
+        </div> 
         <!-- <searchbar class="searchbar"></searchbar> -->
         <div class="vshim"></div>
 
@@ -149,6 +163,14 @@
       fullscreen () {
         this.$fullscreen.toggle(document.getElementById('dashboard'))
       },
+      refresh () {
+        let filename = 'static/docs'
+        if (window.lconfig.filename) {
+          filename = window.lconfig.filename
+        }
+        this.$store.dispatch('loadLeo', {filename, route: this.$route})
+        this.$store.dispatch('setMessages')
+      },
       toggle () {
         const menuEl = document.getElementById('imenu')
         if (this.menu) {
@@ -198,7 +220,7 @@
         if (this.$store.state.currentItemPath.includes('@cover')) {
           return window.lconfig.docTitle // + ' / Home'
         }
-        return window.lconfig.docTitle + this.$store.state.currentItemPath
+        return this.$store.state.currentItemPath
       },
       user () {
         return this.$store.state.user.name
@@ -314,16 +336,19 @@
   font-size: 14px
   margin-top: -1px
   display: none
+.space
+  float: left
+  width: 20px
 .icon
   float: left
   padding: 0
-  padding-top: 2px
-  padding-left: 7px
-  padding-right: 7px
+  margin-top: 1px
+  margin-left: 3px
+  margin-right: 3px
   color: #ccc
 .icon-button
   cursor: pointer
-  margin: 0
+  // margin: 0
   padding: 0
 .vshim
   width: 8px

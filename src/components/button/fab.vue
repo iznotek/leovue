@@ -164,10 +164,13 @@ export default {
       }
     },
     allowRotation () {
-      return this.enableRotation && this.actions && this.actions.length
+      return this.enableRotation // && this.actions && this.actions.length
     },
     mainIconSize () {
       switch (this.iconSize) {
+        case 'mini':
+          return 'md-18'
+          break
         case 'small':
           return 'md-24'
           break
@@ -184,7 +187,7 @@ export default {
     paddingAmount () {
       switch (this.iconSize) {
         case 'small':
-          return '28px'
+          return '24px'
           break
         case 'medium':
           return '32px'
@@ -197,7 +200,7 @@ export default {
       }
     },
     listPos () {
-      if (this.position === 'top-right' || this.position === 'top-left') {
+      if (this.position === 'top-right' || this.position === 'top-left' || this.position === 'free-down') {
         return {
           top: '-20px',
           paddingTop: '20px'
@@ -217,12 +220,12 @@ export default {
       return animation.leave
     },
     animation () {
-      if (this.position === 'top-right' || this.position === 'top-left') {
+      if (this.position === 'top-right' || this.position === 'top-left' || this.position === 'free-down') {
         return {
           enter: 'animated quick fadeInDown',
           leave: 'animated quick fadeOutUp'
         }
-      } else if (this.position === 'bottom-right' || this.position === 'bottom-left') {
+      } else if (this.position === 'bottom-right' || this.position === 'bottom-left' || this.position === 'free-up') {
         return {
           enter: 'animated quick fadeInUp',
           leave: 'animated quick fadeOutDown'
@@ -281,30 +284,34 @@ export default {
       this.pos = {}
       switch (this.position) {
         case 'bottom-right':
-          this.pos.right = '5vw'
-          this.pos.bottom = '4vh'
+          this.pos.right = '-40px'
+          this.pos.bottom = '30px'
           break
         case 'bottom-left':
-          this.pos.left = '5vw'
-          this.pos.bottom = '4vh'
+          this.pos.left = '100px'
+          this.pos.bottom = '30px'
           break
         case 'top-left':
-          this.pos.left = '5vw'
-          this.pos.top = '4vh'
+          this.pos.left = '100px'
+          this.pos.top = '40px'
           break
         case 'top-right':
-          this.pos.right = '5vw'
-          this.pos.top = '4vh'
+          this.pos.right = '100px'
+          this.pos.top = '40px'
+          break
+        case 'free-down':
+        case 'free-up':
+          this.pos.top = '50px'
           break
         default:
-          this.pos.right = '5vw'
-          this.pos.bottom = '4vh'
+          this.pos.right = '100px'
+          this.pos.bottom = '40px'
       }
     },
     moveTransition () {
       const wrapper = document.getElementById(`${this.position}-wrapper`)
       const el = document.getElementById(`${this.position}-action`)
-      if (this.position === 'top-right' || this.position === 'top-left') {
+      if (this.position === 'top-right' || this.position === 'top-left' || this.position === 'free-down') {
         wrapper.appendChild(el)
       } else {
         wrapper.insertBefore(el, wrapper.childNodes[0])
@@ -326,6 +333,9 @@ export default {
     }
   },
   watch: {
+    startOpened (val) {
+      this.toggle = val
+    },
     position (val) {
       this.setPosition()
       this.$nextTick(() => {
@@ -396,12 +406,15 @@ export default {
         box-shadow: 0 10px 10px rgba(0, 0, 0, 0.20), 0 4px 4px rgba(0, 0, 0, 0.15);
         z-index: 2;
         justify-content: center;
+        -webkit-transition: 3s all ease;
+        -moz-transition: 3s all ease;
+        transition: 3s all ease;
     }
     .fab-main .material-icons {
         color: white;
-        -webkit-transition: .4s all;
-        -moz-transition: .4s all;
-        transition: .4s all;
+        -webkit-transition: 0.4s all ease;
+        -moz-transition: 0.4s all ease;
+        transition: 0.4s all ease;
         margin: 0px auto;
     }
     .fab-main .material-icons.main {
@@ -509,14 +522,14 @@ export default {
         transform: translateY(10%);
     }
     .material-icons.md-18 {
-        font-size: 18px;
-        /* width: 24px;
-        height: 24px; */
+        font-size: 12px;
+        width: 18px;
+        height: 18px; 
     }
     .material-icons.md-24 {
-        font-size: 24px;
-        /* width: 24px;
-        height: 24px; */
+        font-size: 20px;
+        width: 24px;
+        height: 24px; 
     }
     .material-icons.md-36 {
         font-size: 36px;

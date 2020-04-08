@@ -1986,8 +1986,8 @@ const GLTFLoader = ( function () {
 		return Promise.resolve( sourceURI ).then( function ( sourceURI ) {
 
 			// Load Texture resource.
-
-			var loader = THREE.Loader.Handlers.get( sourceURI )
+			var manager = new THREE.LoadingManager()
+			var loader = manager.getHandler( sourceURI )
 
 			if ( ! loader ) {
 
@@ -2253,7 +2253,7 @@ const GLTFLoader = ( function () {
 			if ( ! threeAttributeName ) continue
 			if ( threeAttributeName in geometry.attributes ) continue
 
-			geometry.addAttribute( threeAttributeName, bufferAttribute )
+			geometry.setAttribute( threeAttributeName, bufferAttribute )
 
 		}
 
@@ -2379,7 +2379,7 @@ const GLTFLoader = ( function () {
 					geometry.name = baseGeometry.name
 					geometry.userData = baseGeometry.userData
 
-					for ( var key in baseGeometry.attributes ) geometry.addAttribute( key, baseGeometry.attributes[ key ] )
+					for ( var key in baseGeometry.attributes ) geometry.setAttribute( key, baseGeometry.attributes[ key ] )
 					for ( var key in baseGeometry.morphAttributes ) geometry.morphAttributes[ key ] = baseGeometry.morphAttributes[ key ]
 
 					var indices = []
@@ -2642,7 +2642,7 @@ const GLTFLoader = ( function () {
 						if ( material.aoMap && geometry.attributes.uv2 === undefined && geometry.attributes.uv !== undefined ) {
 
 							console.log( 'THREE.GLTFLoader: Duplicating UVs to support aoMap.' )
-							geometry.addAttribute( 'uv2', new THREE.BufferAttribute( geometry.attributes.uv.array, 2 ) )
+							geometry.setAttribute( 'uv2', new THREE.BufferAttribute( geometry.attributes.uv.array, 2 ) )
 
 						}
 

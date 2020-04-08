@@ -46,7 +46,7 @@
 </v>
 </v>
 <v t="ifs.20200324194154.1"><vh>[Ark'OM](https://arkom.iznow.tech)</vh>
-<v t="ifs.20200324194333.1"><vh>[Outline ?](https://demo.ghost.io/style-test)</vh></v>
+<v t="ifs.20200324194333.1"><vh>[Outline ?](https://www.genieenergetique.com)</vh></v>
 </v>
 <v t="ifs.20190324101206.1"><vh>@private ...</vh>
 <v t="josephorr.20180123102417.1"><vh>Summary Nodes</vh>
@@ -4807,8 +4807,8 @@ rating: 5</t>
 background: 
   space: An amasing place to link us all...
   transition: transitionWarp
-  dash: /static/arkom/astro/ext01.jpg
-  spot: /static/arkom/astro/cours01.jpg
+  dash: https://le3foisglanddu-iznow.s3.filebase.com/the-gentle-giant.jpg
+  spot: https://le3foisglanddu-iznow.s3.filebase.com/the-gentle-giant.jpg
   theme: green
   mode: dark</t>
 <t tx="ifs.20190416230605.1">@language yaml
@@ -4829,14 +4829,14 @@ background:
 <t tx="ifs.20190418155034.1">@language yaml
 
 background: 
-  dash: /static/images/bubble.png
+  dash: /static/images/back.jpg
   spot: https://media.fromthegrapevine.com/assets/images/2017/8/earth-planet-0802.jpg.480x0_q71_crop-scale.jpg
   theme: blue
   mode: dark</t>
 <t tx="ifs.20190421204116.1">@language yaml
 
 background: 
-  dash: http://www.bianoti.com/wp-content/uploads/2015/11/Background-Pictures-17206-1920x1200-px-fond-ecran.jpg
+  dash: http://www.pptbackgrounds.org/uploads/blue-blurry-bubbles-powerpoint-backgrounds.jpg
   spot: https://media.fromthegrapevine.com/assets/images/2019/3/מערת_מלחם_המערה_הארוכה_ביותר_בעולם._צילום_אנטון_ציקישב_Anton_Chikishev__1.JPG.824x0_q71_crop-scale.jpg
   theme: blue
   mode: dark</t>

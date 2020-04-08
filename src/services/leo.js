@@ -100,7 +100,9 @@ function transform (xml, xslString, transformer, serializer) {
 }
 
 function loadDoc (filename) {
-  console.log('loading file:', filename, window.lconfig, 'test')
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('loading file:', filename, window.lconfig)
+  }
 
   var p = new Promise((resolve, reject) => {
     axios.get(filename)

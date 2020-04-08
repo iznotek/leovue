@@ -218,7 +218,7 @@ function formatText (text, noWrapper, title) {
     case 'yaml':
       const data = jsyaml.load(text.replace('@language yaml', ''))
       const dump = jsyaml.dump(data)
-      console.log('YAML DATA..........', data)
+      // console.log('YAML DATA..........', data)
       const template = _.get(data, 'params.template', '')
       if (template) {
         text = lodashTemplate.render(data, template)

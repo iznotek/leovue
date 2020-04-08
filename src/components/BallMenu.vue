@@ -1,7 +1,7 @@
 <template>
   <div> <!-- v-html="menu"> -->
     <radial-menu
-      style="position: absolute; left: 0px; top:0px"
+      class="radial"
       :style="{backgroundColor: color, color: 'white'}"
       :itemSize="50"
       :radius="120"
@@ -33,13 +33,21 @@
       color="#fff"
     /> -->
     <div class="logo" @click="open()">
-      <img :src="require(`@/assets/logo.png`)" width="55"/>
+      <img src="/static/images/logo.png" width="55"/>
     </div>
       <!-- <div style="color: rgba(0,0,0,0.6); margin-top: 16px;">{{ lastClicked }}</div> -->
   </div>
 </template>
 
-<style>
+<style scoped>
+  .radial {
+    position: absolute; 
+    left: 0px; 
+    top:0px;
+    -webkit-transition: 3s all ease;
+    -moz-transition: 3s all ease;
+    transition: 3s all ease;
+  }
   .logo {
     position: absolute;
     transform: rotate(0deg);

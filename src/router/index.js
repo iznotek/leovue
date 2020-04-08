@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
-import TreeViewer from '@/components/TreeViewer'
-import D3Viewer from '@/components/D3Viewer'
+import Splitboard from '@/components/Splitboard'
+// import TreeViewer from '@/components/TreeViewer'
+// import D3Viewer from '@/components/D3Viewer'
 // import DbViewer from '@/components/DbViewer'
 import Settings from '@/components/Settings'
-import AccordionViewer from '@/components/AccordionViewer'
+// import AccordionViewer from '@/components/AccordionViewer'
 // import NestedViewer from '@/components/NestedViewer'
-import ZircleViewer from '@/components/ZircleViewer'
+// import ZircleViewer from '@/components/ZircleViewer'
 
 // Fix DuplicatedNavigation due to promise
 // const originalPush = Router.prototype.push
@@ -29,26 +30,26 @@ if (window.lconfig.coverPage) {
 export default new Router({
   mode: 'history',
   routes: [
-    {
-      // Outline
-      path: '/t/:id',
-      component: Dashboard,
-      children: [{
-        name: 'Node',
-        path: '',
-        component: TreeViewer
-      }]
-    },
-    {
-      // Accordeon
-      path: '/a/:id',
-      component: Dashboard,
-      children: [{
-        name: 'ANode',
-        path: '',
-        component: AccordionViewer
-      }]
-    },
+    // {
+    //   // Outline
+    //   path: '/t/:id',
+    //   component: Dashboard,
+    //   children: [{
+    //     name: 'Node',
+    //     path: '',
+    //     component: TreeViewer
+    //   }]
+    // },
+    // {
+    //   // Accordeon
+    //   path: '/a/:id',
+    //   component: Dashboard,
+    //   children: [{
+    //     name: 'ANode',
+    //     path: '',
+    //     component: AccordionViewer
+    //   }]
+    // },
     // {
     //   // Nested
     //   path: '/n/:id',
@@ -60,16 +61,16 @@ export default new Router({
     //     component: NestedViewer
     //   }]
     // },
-    {
-      // Graphic Tree
-      path: '/d/:id',
-      component: Dashboard,
-      children: [{
-        name: 'DNode',
-        path: '',
-        component: D3Viewer
-      }]
-    },
+    // {
+    //   // Graphic Tree
+    //   path: '/d/:id',
+    //   component: Dashboard,
+    //   children: [{
+    //     name: 'DNode',
+    //     path: '',
+    //     component: D3Viewer
+    //   }]
+    // },
     // {
     //   // Dendrogram
     //   path: '/z/:id',
@@ -110,7 +111,7 @@ export default new Router({
       children: [{
         name: 'ONode',
         path: '',
-        component: ZircleViewer
+        component: Splitboard
       }]
     },
 

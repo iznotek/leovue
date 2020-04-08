@@ -232,8 +232,8 @@ function showPresentation (context, title, id) {
        frameBorder="0" />
     </div>
   `
-  context.commit('IFRAME_HTML', { iframeHTML })
   context.commit('CONTENT_PANE', { type: 'site' })
+  context.commit('IFRAME_HTML', { iframeHTML })
 }
 function showKanban (context, title, id) {
   let text = `<kanban/>`
@@ -674,8 +674,8 @@ function showSite (context, title, id) {
        frameBorder="0" />
     </div>
   `
-  context.commit('IFRAME_HTML', {iframeHTML})
   context.commit('CONTENT_PANE', {type: 'site'})
+  context.commit('IFRAME_HTML', {iframeHTML})
   // context.commit('CONTENT_ITEM_UPDATE')
 }
 
@@ -1275,6 +1275,7 @@ export default new Vuex.Store({
       name: '',
       pw: ''
     },
+    darkmode: true,
     leotext: {},
     leodata: {},
     filename: '',
@@ -1321,6 +1322,9 @@ export default new Vuex.Store({
     zircle: {}
   },
   mutations: {
+    DARKMODE (state, o) {
+      state.darkmode = o
+    },
     TWEEN_ANGLE (state, o) {
       state.angle = o.a
     },
@@ -1393,12 +1397,14 @@ export default new Vuex.Store({
       state.contentPane = o.type
     },
     IFRAME_HTML (state, o) {
+      state.currentItemContent = null
       state.iframeHTML = o.iframeHTML
     },
     VIEW_TYPE (state, o) {
       state.viewType = o.type
     },
     CURRENT_ITEM_CONTENT (state, o) {
+      state.iframeHTML = null
       state.currentItemContent = o.text
     },
     CURRENT_PAGE (state, o) {
@@ -1854,7 +1860,7 @@ export default new Vuex.Store({
           } else {
             console.log('load site')
             showSite(context, item.name, id)
-            setSiteItem(context, item.name, id)
+            // setSiteItem(context, item.name, id)
           }
         } else {
           const params = {}

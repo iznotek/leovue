@@ -1,211 +1,172 @@
 <template>
+  <div v-if="connected" style="width:100%; height:100%;">
+    
+    <div style="position: relative;">
+      <edit-menu :state="this.edit" style="float: right; margin-top: -35px; margin-right: -50px;" />
+    </div>
 
-  
-    <!--<div v-if="!connected" class="login"> 
-      <div id="tlayout">
-        <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
-          <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
-            <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-              <div  :style="{width: cpWidth, marginLeft: '100px', marginRight: 'auto'}">
-                <p style="height:10%" />
-                <login class="login"/>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> 
-    </div>-->
-   
-    <div v-if="connected" class="pane noselect" id="dx" > 
-      <splitpanes vertical>
-      <pane>
-        <div class="behind">
-          <div v-if="textContent(current)">
-            <div id="lhandle"
-                class="handle">
-              <div class="handle-button"
-                  v-show="hasPrev(current)"
-                  @click="goPrev">
-                <icon class="icon"
-                      name="chevron-left"></icon>
-              </div>
-            </div>
-            <div id="tlayout">
-              <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
-                <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
-                  <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                    <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
-                    <vue-lazy-component>
-                    <component :is="dynComponent(current)" v-bind="$props"/>
-                    </vue-lazy-component>
+
+    <div class="behind" :class="$store.state.darkmode ? 'dark' : 'light'">
+    <div style="position: absolute; width: 100%; height: 100%;">
+      <fade-transition  :duration="fade.duration" :delay="fade.delay" v-show='fade.next'>
+      <div>
+        <div v-for="(item,index) in itemOdd" :key="index" >
+          
+          <div v-if="textContent(item)">
+                  <div id="lhandle"
+                      class="handle">
+                    <div class="handle-button"
+                        v-show="hasPrev(item)"
+                        @click="goPrev">
+                      <icon class="icon"
+                            name="chevron-left"></icon>
                     </div>
                   </div>
-                  </div>
-                </div>
-              </div>
-            <div id="rhandle"
-                class="handle">
-              <div class="handle-button"
-                  v-show="hasNext(current)"
-                  @click="goNext">
-                <icon class="icon"
-                      name="chevron-right"></icon>
-              </div>
-            </div>
-          </div>
-          <div v-if="boardContent(current)"
-              class="frame noselect"
-              id="bpane">
-            <div style="width:100%">
-            <vue-lazy-component>
-              <component :is="dynComponent(current)" v-bind="$props"/>
-              </vue-lazy-component>
-            </div>
-          </div>
-          <vue-lazy-component>
-          <div v-if="iframeContent(current)"
-              class="frame noselect"
-              v-html="iframeHTML(current)"
-              id="vpane">
-          </div>
-          </vue-lazy-component> 
-        </div> 
-      </pane>
-      <pane v-if="config.comments" size="33">
-        <comments></comments>  
-      </pane>
-      <!-- <pane>
-        <lv-timeline  from="pubdate"
-          title="title"
-          description=""
-          group=1 />  
-      </pane> -->
-      </splitpanes>
-      
-    </div> <!--
+                  <div id="tlayout">
+                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+                      <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
+                        <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                          <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                            
+                            <editorjs  v-if="edit && item.item.id === current.item.id"
+                              :autofocus="editor.autofocus"
+                              ref="editorjs"
+                              :holderId="'editor'+item.item.id+'1'"
+                              :placeholder="editor.placeholder"
+                              :data="item.json || initData"
+                              @save="onEditorSave"
+                              @ready="onEditorReady"
+                              @change="onEditorChange"
+                            />
+                            <!-- <tiptap v-if="edit" :item="item"/> -->
+                            <component v-else :is="dynComponent(item)" v-bind="$props"/> 
 
-  <div v-if="connected" style="width:100%;height:100%">
-    <vueper-slides ref="slider"  fixed-height="1200px">
-        <vueper-slide v-for="(item,index) in historyItems" :key="index" :style="style(item)">
-          <div slot="slideContent">
-          <div  class="pane" id="dx">
-            <instagram-loader v-if="loading"/>
-            <div v-if="textContent(item)">
-              <div id="lhandle"
-                  class="handle">
-                <div class="handle-button"
-                    v-show="hasPrev(item)"
-                    @click="goPrev">
-                  <icon class="icon"
-                        name="chevron-left"></icon>
-                </div>
-              </div>
-              <div id="tlayout">
-                <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
-                  <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
-                    <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                      <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
-                      <vue-lazy-component>
-                      <component :is="dynComponent(item)" v-bind="$props"/>
-                      </vue-lazy-component>
+                          </div>
+                        </div>
+                        </div>
                       </div>
                     </div>
+                  <div id="rhandle"
+                      class="handle">
+                    <div class="handle-button"
+                        v-show="hasNext(item)"
+                        @click="goNext">
+                      <icon class="icon"
+                            name="chevron-right"></icon>
                     </div>
                   </div>
                 </div>
-              <div id="rhandle"
-                  class="handle">
-                <div class="handle-button"
-                    v-show="hasNext(item)"
-                    @click="goNext">
-                  <icon class="icon"
-                        name="chevron-right"></icon>
+                <div v-if="boardContent(item)"
+                    class="frame"
+                    id="bpane">
+                  <div style="width:100%">
+                    <!-- <tiptap v-if="edit" :item="item"/> -->
+                      <editorjs  v-if="edit && item.item.id === current.item.id"
+                              :autofocus="editor.autofocus"
+                              ref="editorjs"
+                              :holderId="'editor'+item.item.id+'2'"
+                              :placeholder="editor.placeholder"
+                              :data="item.json || initData"
+                              @save="onEditorSave"
+                              @ready="onEditorReady"
+                              @change="onEditorChange"
+                            />
+                    <component v-else :is="dynComponent(item)" v-bind="$props"/> 
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div v-if="boardContent(item)"
-                class="frame"
-                id="bpane">
-              <div style="width:100%">
-              <vue-lazy-component>
-                <component :is="dynComponent(item)" v-bind="$props"/>
-                </vue-lazy-component>
-              </div>
-            </div>
-            <vue-lazy-component>
-            <div v-if="iframeContent(item)"
-                class="frame"
-                v-html="iframeHTML(item)"
-                id="vpane">
-            </div>
-            </vue-lazy-component>
-          </div>
-          </div>
-          </vueper-slide>
-        </vueper-slides>
-      </div>-->
+                <div v-if="iframeContent(item)"
+                    class="frame"
+                    v-html="iframeHTML(item)"
+                    id="vpane">
+                </div>
 
-  <!-- <carousel-3d ref="carousel"
-    :width="width"
-    :height="1300"
-    :count="historyLength">
-  <slide v-for="(item, index) in historyItems"
-    :index="index"
-    :key="index">  
-    <div class="pane" id="dx">
-      <instagram-loader v-if="loading"/>
-      <div v-if="textContent(item)">
-        <div id="lhandle"
-            class="handle">
-          <div class="handle-button"
-              v-show="hasPrev(item)"
-              @click="goPrev">
-            <icon class="icon"
-                  name="chevron-left"></icon>
-          </div>
         </div>
-        <div id="tlayout">
-          <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
-            <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
-              <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                <div :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
-                <vue-lazy-component>
-                <component :is="dynComponent(item)" v-bind="$props"/>
-                </vue-lazy-component>
+        </div>
+      </fade-transition>
+      </div>
+    
+      <div style="position: absolute; width: 100%; height: 100%;">
+      <fade-transition  :duration="fade.duration" :delay="fade.delay" v-show='!fade.next'>
+      <div>
+        <div v-for="(item,index) in itemEven" :key="index" >
+          
+          <div v-if="textContent(item)">
+                  <div id="lhandle"
+                      class="handle">
+                    <div class="handle-button"
+                        v-show="hasPrev(item)"
+                        @click="goPrev">
+                      <icon class="icon"
+                            name="chevron-left"></icon>
+                    </div>
+                  </div>
+                  <div id="tlayout">
+                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+                      <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
+                        <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                          <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                            
+                            <editorjs  v-if="edit && item.item.id === current.item.id"
+                              :autofocus="editor.autofocus"
+                              ref="editorjs"
+                              :holderId="'editor'+item.item.id+'1'"
+                              :placeholder="editor.placeholder"
+                              :data="item.json || editor.initData"
+                              @save="onEditorSave"
+                              @ready="onEditorReady"
+                              @change="onEditorChange"
+                            />
+                            <!-- <tiptap v-if="edit" :item="item"/> -->
+                            <component v-else :is="dynComponent(item)" v-bind="$props"/> 
+
+                          </div>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                  <div id="rhandle"
+                      class="handle">
+                    <div class="handle-button"
+                        v-show="hasNext(item)"
+                        @click="goNext">
+                      <icon class="icon"
+                            name="chevron-right"></icon>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              </div>
-            </div>
-          </div>
-        <div id="rhandle"
-            class="handle">
-          <div class="handle-button"
-              v-show="hasNext(item)"
-              @click="goNext">
-            <icon class="icon"
-                  name="chevron-right"></icon>
-          </div>
+                <div v-if="boardContent(item)"
+                    class="frame"
+                    id="bpane">
+                  <div style="width:100%">
+                    <!-- <tiptap v-if="edit" :item="item"/> -->
+                      <editorjs  v-if="edit && item.item.id === current.item.id"
+                              :autofocus="editor.autofocus"
+                              ref="editorjs"
+                              :holderId="'editor'+item.item.id+'2'"
+                              :placeholder="editor.placeholder"
+                              :data="item.json || editor.initData"
+                              @save="onEditorSave"
+                              @ready="onEditorReady"
+                              @change="onEditorChange"
+                            />
+                    <component v-else :is="dynComponent(item)" v-bind="$props"/> 
+                  </div>
+                </div>
+                <div v-if="iframeContent(item)"
+                    class="frame"
+                    v-html="iframeHTML(item)"
+                    id="vpane">
+                </div>
+
         </div>
-      </div>
-      <div v-if="boardContent(item)"
-          class="frame"
-          id="bpane">
-        <div style="width:100%">
-        <vue-lazy-component>
-          <component :is="dynComponent(item)" v-bind="$props"/>
-          </vue-lazy-component>
         </div>
-      </div>
-      <vue-lazy-component>
-      <div v-if="iframeContent(item)"
-          class="frame"
-          v-html="iframeHTML(item)"
-          id="vpane">
-      </div>
-      </vue-lazy-component>
+      </fade-transition>
+
+
     </div>
-  </slide>
-  </carousel-3d> -->
+    </div>
+
+    </div> 
  
 </template>
 
@@ -214,17 +175,17 @@ const hljs = require('highlight.js')
 import {presentation} from '../lib/presentation'
 import _ from 'lodash'
 const util = require('../util.js')
-import { Carousel3d, Slide } from 'vue-carousel-3d'
+
 import { ContentLoader } from 'vue-content-loader'
-import Comments from './Comments.vue'
+// import TipTap from './editor/TipTap'
+import EditorJs from './editor/EditorJs'
+import EditMenu from './EditMenu'
+import {FadeTransition} from 'vue2-transitions'
 
 // import { VueperSlides, VueperSlide } from 'vueperslides'
 // import 'vueperslides/dist/vueperslides.css'
 import Login from './Login'
 import Cover from './Cover'
-
-import { Splitpanes, Pane } from 'splitpanes'
-import 'splitpanes/dist/splitpanes.css'
 
 // functions for dealing with x-frame headers
 // TODO move these
@@ -298,50 +259,57 @@ function loadPresentation(item, textItems, iframe) {
 export default {
   name: 'contentpane',
   components: {
-    Carousel3d,
-    Slide,
+    EditMenu,
     ContentLoader,
     login: Login,
     cover: Cover,
-    comments: Comments,
-    Splitpanes, 
-    Pane // ,
-    // pdfview: PDFViewer
-    // VueperSlides, 
-    // VueperSlide 
+    FadeTransition,
+    editorjs: EditorJs
   },
   data () {
     return {
       xSections: [],
       handleScroll: null,
-      current: {
-        item: null,
-        content: null,
-        pane: null,
-        iframe: null
-      },
-      new: {
-        item: null,
-        content: null,
-        pane: null,
-        iframe: null
-      },
+      new: {},
+      current: {},
       history: [],
       historyItems: [],
       loading: true,
-      options: {
-        // effect: 'fade',
-        currentPage: 1,
-        thresholdDistance: 100,
-        thresholdTime: 300,
-        speed: 500,
-        timingFunction: 'ease',
-        loop: false,
-        autoplay: 0
+      edit: false,
+      editor: {
+        autofocus: false,
+        placeholder: 'Become a knowledge explorer and write something deep under your look !!',
+        initData: {},
+        savedData: {}
+      },
+      fade: {
+        duration: 1000,
+        delay: 100,
+        next: false,
+        items: [], 
+        indexOdd: -1,
+        indexEven: -1,
       }
     }
   },
   methods: {
+    onEditorSave (data, html) {
+      // console.log(JSON.stringify(response))
+      // this.editor.savedData = data;
+      // console.log(html)
+      this.current.content = '<div>' + html + '</div>'
+      this.current.json = data
+    },
+    onEditorReady () {
+      // console.log('ready')
+    },
+    onEditorChange (data, html) {
+      // console.log('changed')
+      // console.log(data)
+      // console.log(html)
+      this.current.content = '<div>' + html + '</div>'
+      this.current.json = data
+    },
     onScroll () {
       // bail if this isn't a paged item
       if (!this.xSections.length) { return }
@@ -371,6 +339,21 @@ export default {
         this.$store.dispatch('setCurrentItem', {id})
       }
       console.log('ROW CLICK', title, item)
+    },
+    edited (item) {
+      console.log(item, this.slide.items)
+      if (this.slide.items.length) {
+        var last = this.slide.items[this.slide.items.length - 1]
+        if (item.item.id != last.item.id) {
+          console.log('not last')
+          return false
+        }
+      }
+      if (item && item.edited) {
+        return true
+      } else {
+        return false
+      }
     },
     iframeContent (item) {
       if (item && item.pane === 'site') {
@@ -423,31 +406,57 @@ export default {
     style (item) {
       return { background: 'transparent' }
     },
-    goToHistory(index) {
-      if (this.$refs.carousel !== undefined) {
-        this.$refs.carousel.goSlide(index)
-      }
-      else if (this.$refs.slider !== undefined) {
-        this.$refs.slider.goToSlide(index)
-      }
-      else {
-        this.current = this.historyItems[index]
-      }
-      this.$store.commit('LOADING', {state: false})
-    },
-    findInHistory(id) {
-      let index = this.historyItems.findIndex(item => item.item.id === id);
-      // console.log(index)
-      return index
-    },
-    addItem(item) {
-      this.current = item
-      this.historyItems.push(item)
-      let index = this.historyItems.length - 1
-      setTimeout(() => this.goToHistory(index), 500)
+    // goToHistory(index) {
+    //   if (this.$refs.carousel !== undefined) {
+    //     this.$refs.carousel.goSlide(index)
+    //   }
+    //   else if (this.$refs.slider !== undefined) {
+    //     this.$refs.slider.goToSlide(index)
+    //   }
+    //   else {
+    //     this.current = this.historyItems[index]
+    //   }
+    //   this.$store.commit('LOADING', {state: false})
+    // },
+    // findInHistory(id) {
+    //   let index = this.historyItems.findIndex(item => item.item.id === id);
+    //   // console.log(index)
+    //   return index
+    // },
+    // addItem(item) {
+    //   this.current = item
+    //   this.historyItems.push(item)
+    //   let index = this.historyItems.length - 1
+    //   setTimeout(() => this.goToHistory(index), 500)
+    // },
+    setNext(item) {
+      setTimeout(() => {
+          this.edit = false
+          this.fade.items.push(item)
+          this.current = this.fade.items[this.fade.items.length-1]
+
+          if (this.fade.next) {
+            this.fade.indexEven = this.fade.items.length-1
+          } else {
+            this.fade.indexOdd = this.fade.items.length-1
+          }
+          this.fade.next = !this.fade.next
+      }, 100)
     }
   },
   computed: {
+    itemOdd () {
+      if (this.fade.indexOdd > -1)
+        return [this.fade.items[this.fade.indexOdd]]
+      else
+        return []
+    },
+    itemEven () {
+      if (this.fade.indexEven > -1)
+        return [this.fade.items[this.fade.indexEven]]
+      else
+        return []
+    },
     historyIndex () {
       return this.$store.state.historyIndex
     },
@@ -526,6 +535,24 @@ export default {
       clink.onclick = gotoSectionFunc(leodata)
     }
   },
+  events: {
+    editMenuClick (action) {
+      if (action) {
+        // if (action.name === 'comments') {
+        //   this.comments = !this.comments
+        // }
+        // if (action.name === 'meeting') {
+        //   this.meeting = !this.meeting
+        // }
+      }
+    },
+    editMenuToggle (state) {
+      if (state) {
+        this.edit = state.active
+        this.current.edited = state.active
+      }
+    }
+  },
   watch: {
     '$store.state.history': {
       handler: function (val, oldVal) {
@@ -557,13 +584,7 @@ export default {
       handler: function (val, oldVal) {
         this.new.content = val ? val : null
         if (this.new.content) {
-          this.loading = false
-          let index = this.findInHistory(this.new.item.id)
-          if (index === -1) {
-            setTimeout(() => this.addItem(Object.assign({}, this.new)), 1500)
-          } else {
-            setTimeout(() => this.goToHistory(index), 2000)
-          }
+          this.setNext(Object.assign({}, this.new))
         }
       },
       deep: true,
@@ -574,12 +595,7 @@ export default {
         this.new.iframe = val ? val : null
         if (this.new.iframe && this.new.pane == 'site') {
           this.loading = false
-          let index = this.findInHistory(this.new.item.id)
-          if (index === -1) {
-            setTimeout(() => this.addItem(Object.assign({}, this.new)), 1500)
-          } else {
-            setTimeout(() => this.goToHistory(index), 2000)
-          }
+          this.setNext(Object.assign({}, this.new))
         }
       },
       deep: true,
@@ -598,18 +614,7 @@ export default {
 }
 </style>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-  .splitpanes--vertical > .splitpanes__splitter {
-    min-width: 14px;
-    background: transparent;
-  }
-
-  .splitpanes--horizontal > .splitpanes__splitter {
-    min-height: 14px;
-    background: transparent;
-  }
-
   .pane {
     color: #333;
   }
@@ -627,28 +632,54 @@ export default {
   }
   #lhandle {
     max-width: 50px;
-    margin-right: 1%;
+    margin-right: 0%;
   }
   #rhandle {
     float: right;
   }
   .behind {
-    //background: rgba(255, 255, 255, 0.2);
-    background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
-  },
+    position: relative;
+    height: 100%;
+    transition: 0.5s;
+  }
+  .dark {
+    background: rgba(255,255,255,0.8);
+    // background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
+    color: #000;
+  }
+  .light {
+    background: rgba(0,0,0,0.5);
+    // background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 100%); /* Black*/
+    color: #FFF;
+  }
   .login {
     //height: 1000px;
     //position:'absolute';
-  },
+  }
   .handle {
     width:50px;
     // align-items: center;
     //flex: auto;
     display: inline-block;
   }
+  .around {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 25px;
+    margin: 25px;
+    border-radius: 20px;
+    // padding-top: 33px;
+    //max-width: 720px;
+    //width: 700px;
+    // min-width: 500px;
+    //overflow: auto;
+    // height: calc(100vh - 33px);
+    -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+  }
   .right-cpane {
     flex: auto;
-    //background: rgba(255, 255, 255, 0.8);
+    // background: rgba(255, 255, 255, 0.8);
     padding: 0px;
     // padding-top: 33px;
     //max-width: 720px;
@@ -676,7 +707,7 @@ export default {
     //background: #fff;
     min-height: 100%;
     margin: 0;
-    margin-left: 5%;
+    // margin-left: 5%;
     padding: 0;
     display: flex;
     flex-wrap: nowrap;

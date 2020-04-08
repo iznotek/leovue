@@ -64,8 +64,8 @@ export default {
 		background-repeat: no-repeat;
 		background-position: center center;
 		transition: all 500ms ease;
-		width: 0%;
-		height: 13%;
+		width: 40%;
+		height: 10%;
     }
 
     .vue-accordion ul li a {

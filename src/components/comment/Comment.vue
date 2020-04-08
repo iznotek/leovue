@@ -312,7 +312,7 @@
       handleBeforeReply () {
         this.clearAlert()
         this.beforeReply = !this.beforeReply
-        if (!this.svgAvatarCheck) {
+        if (!this.svgAvatarCheck && this.$refs.svgReplyAvatar) {
           let a = 0
           let b = 0
           let c = 0
@@ -826,6 +826,7 @@
     },
     mounted () {
       this.$nextTick(() => {
+        if (!this.$refs.svgAvatar) return
         for (let i = 0; i < 10; i++) {
           this.$refs.svgAvatar.innerHTML +=
             '<circle cx=' +

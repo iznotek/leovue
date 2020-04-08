@@ -58,8 +58,8 @@
             </div>
     
             <section slot="image" style="height: 100%; width: 100%;">
-              <div :style="style(amodel, index)"> 
-                <img class="centered" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%" > 
+              <div style="height: 100%; width: 100%;" :style="style(amodel, index)"> 
+                <img class="zcentered" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%" > 
               </div>
             </section>
            

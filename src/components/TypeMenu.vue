@@ -10,7 +10,7 @@
     :fixed-tooltip="fixedTooltip"
     :enable-rotation="enableRotation"
     :toggleWhenAway="false"
-    :zIndex="2000"
+    :zIndex="7000"
     @handleClick="handleClick"
     @handleToggle="handleToggle"
     >
@@ -48,29 +48,29 @@
           'large'
         ],
         actions: [
-          {
-            name: 'tree',
-            icon: 'project-diagram',
-            // tooltip: 'Tree',
-            color: 'rgba(20, 40, 100, 0.7)',
-            active: false,
-            group: 1
-          },
-          {
-            name: 'graph',
-            icon: 'code-branch',
-            // tooltip: 'Graph',
-            color: 'rgba(20, 40, 100, 0.7)',
-            active: false,
-            group: 1
-          }
+          // {
+          //   name: 'tree',
+          //   icon: 'project-diagram',
+          //   // tooltip: 'Tree',
+          //   color: 'rgba(20, 40, 100, 0.7)',
+          //   active: false,
+          //   group: 1
+          // },
+          // {
+          //   name: 'graph',
+          //   icon: 'code-branch',
+          //   // tooltip: 'Graph',
+          //   color: 'rgba(20, 40, 100, 0.7)',
+          //   active: false,
+          //   group: 1
+          // }
         ],
         color: 'rgba(20, 40, 100, 0.7)',
         position: 'bottom-left',
         positionType: 'fixed',
         tooltipEvent: 'hover',
         iconSizes: 'medium',
-        mainIcon: 'eye',
+        mainIcon: 'regular/eye',
         mainTooltip: '',
         enableRotation: true
       }

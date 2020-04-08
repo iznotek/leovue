@@ -1,25 +1,22 @@
 <template>
   <div  class="dashboard">
    <div id="dashboard" v-bind:style="dashboardStyle"> 
-    <!--<modelviewer/>-->
+    
+    <!-- <modelviewer/> -->
+
+    <chatmenu v-if="connected"/>
     <typemenu v-if="connected"/>
+    <spacemenu v-if="connected"/>
+
     <chat v-if="config.chats && connected"/>
+
     <background/>
     <appheader/>
-    <menubar ref="menubar">
-      <div slot="left">
-        <d3view v-if="showgraph"/> 
-        <treeview v-if="showtree"/>
-      </div>
-      <div slot="right" id="main" :class="{'header-space': config.showHeader}">
-          <router-multi-view 
-            :id="id" >
-          </router-multi-view>
-      </div>
-    </menubar> 
-   <!--  <div slot="right" id="main" :class="{'header-space': config.showHeader}">
-      <router-view :id="id"></router-view>
-    </div> -->
+
+    <div slot="left" id="main" :class="{'header-space': config.showHeader}"> <!-- id="main"  -->
+        <router-multi-view :id="id" >
+        </router-multi-view>
+    </div>
 
     <!-- <div class="login">
         <img v-if="!connected" class="loginimage" :src="require(`@/assets/logo.png`)" width="170" height="170"/> 
@@ -58,10 +55,11 @@
 
 <script>
 import AppHeader from './Header'
-import MenuBar from './menubar/Menu'
 import Chat from './chat/Chat'
 import CenterMenu from './CenterMenu'
+import SpaceMenu from './SpaceMenu'
 import TypeMenu from './TypeMenu'
+import ChatMenu from './ChatMenu'
 import Background from './Background'
 import TreeView from './TreeView'
 import D3View from './D3View'
@@ -77,19 +75,18 @@ export default {
     background: Background,
     appheader: AppHeader,
     typemenu: TypeMenu,
+    chatmenu: ChatMenu,
     centermenu: CenterMenu,
     chat: Chat,
-    menubar: MenuBar,
     treeview: TreeView,
     d3view: D3View,
     pbutton: ParticleEffectButton,
-    spinner: OrbitSpinner
-    // ,
+    spinner: OrbitSpinner,
+    spacemenu: SpaceMenu
     // modelviewer: ModelViewer
   },
   data () {
     return {
-      type: 'circle',
       password: '',
       configlogin: {
         // easing: 'easeOutQuart',
@@ -135,22 +132,6 @@ export default {
         showing: false,
         visible: false,
         animating: false
-      }
-    }
-  },
-  events: {
-    show (action) {
-      if (action) {
-        if (action.name) {
-          this.type = action.name
-        }
-      }
-    },
-    showLeft (state) {
-      if (state) {
-        this.type = !state.active ? 'circle' : 'tree'
-        this.$refs.menubar.toggle(state.active)
-        // this.type = 'tree'
       }
     }
   },
@@ -274,7 +255,7 @@ export default {
       return window.lconfig.docTitle
     },
     locked () {
-      return window.lconfig.locked
+      return window.lconfig.locked && process.env.NODE_ENV === 'production'
     },
     showtree: function () {
       return this.type === 'tree'
@@ -306,7 +287,6 @@ export default {
         style = { display: 'none' }
       } else {
         // const p = '0'
-        // const u = 'static/images/bubble.png'
         style = `padding:${p}; background-color: #ffffff; background-image: url(${u});`
       }
       return style
@@ -329,6 +309,7 @@ export default {
 </script>
 
 <style>
+
 .fab-main {
   left: -70px;
   position: absolute;
@@ -383,6 +364,7 @@ a {
 }
 .dashboard{
   height: 100%;
+  width: 100%;
 }
 
 .login {
@@ -392,7 +374,7 @@ a {
     position: fixed;
     top: 10%;
     left: 50%;
-    z-index: 1100;
+    z-index: 7000;
 }
 
 .loginbutton {

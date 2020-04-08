@@ -174,6 +174,7 @@
       this.renderer.shadowMap.enabled = false
       this.renderer.gammaOutput = false
       // this.renderer.physicallyCorrectLights = true
+      this.renderer.setClearColor( 0xffffff, 0.0000001 );
 
       this.scene.background = new Color(this.backgroundColor).getHex()
       this.scene.add(this.wrapper)

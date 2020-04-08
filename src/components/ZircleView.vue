@@ -46,8 +46,8 @@
                 {{ amodel.vtitle }} 
             </a>
             <section slot="image" style="height: 100%; width: 100%;"> <!-- v-html="spot(amodel, 50)"> -->
-              <div :style="style(amodel, index)"> 
-                <img class="centered" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%"> 
+              <div style="height: 100%; width: 100%;" :style="style(amodel, index)"> 
+                <img class="zcentered" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%"> 
               </div>
             </section>
             <section slot="extension">
@@ -249,12 +249,12 @@ export default {
       factor = 50 - factor
       factor = factor < 0 ? 0 : factor * 2
       let amount = 1 - 2 * Math.abs(((-length / 2.0) + index) * 2.0 / length)
-      return 145 - factor * amount / 3
+      return 125 - factor * amount / 3
     },
     angle: function (data, index) {
       let length = data.length
       let amount = (length > 7 ? 360.0 : 180.0) / length
-      return -90 + amount * index - this.tweenangle
+      return -100 + amount * index - this.tweenangle
     },
     checkViewChanged () {
       let vm = this
@@ -392,10 +392,10 @@ export default {
   -webkit-transition: all 2s ease;
 }
 
-.centered {
+.zcentered {
   object-fit: cover;
-  max-height: 100%;
-  max-width: 100%;    
+  height: 100%;
+  width: 100%;    
   display: block;
   margin: auto auto;
 }

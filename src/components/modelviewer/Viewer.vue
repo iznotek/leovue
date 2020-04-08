@@ -40,17 +40,9 @@
       return {
         models: {
           'gltf_anim': {
-            src: 'static/models/gltf/CesiumMan/glTF/CesiumMan.gltf',
+            src: '/static/models/gltf/CesiumMan/glTF/CesiumMan.gltf',
             rotate: new Euler(0, 0, 0),
             anim: true
-          },
-          'gltf': {
-            src: 'static/models/gltf/DamagedHelmet/glTF/DamagedHelmet.gltf',
-            rotate: new Euler()
-          },
-          'glb': {
-            src: 'static/models/gltf/BoomBox/glTF-Binary/BoomBox.glb',
-            rotate: new Euler(0, Math.PI, 0)
           }
         },
         lights: [
@@ -81,17 +73,17 @@
           } */
         ],
         src: null,
-        backgroundColor: 'rgba(0,0,0,0.00000001)',
+        backgroundColor: 'rgba(0,0,0,0.001)',
         visibleControls: {help: false, fullscreen: false, download: false},
         statsjs: false,
         datgui: false,
         cubemap: [
-          'textures/cube/Bridge2/posx.jpg',
-          'textures/cube/Bridge2/negx.jpg',
-          'textures/cube/Bridge2/posy.jpg',
-          'textures/cube/Bridge2/negy.jpg',
-          'textures/cube/Bridge2/posz.jpg',
-          'textures/cube/Bridge2/negz.jpg'
+          // 'textures/cube/Bridge2/posx.jpg',
+          // 'textures/cube/Bridge2/negx.jpg',
+          // 'textures/cube/Bridge2/posy.jpg',
+          // 'textures/cube/Bridge2/negy.jpg',
+          // 'textures/cube/Bridge2/posz.jpg',
+          // 'textures/cube/Bridge2/negz.jpg'
         ],
         // cameraPosition: new Vector3(0.0,0.0,20),
         scale: new Vector3(0.9,0.9,0.9),
