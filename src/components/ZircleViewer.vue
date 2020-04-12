@@ -7,10 +7,10 @@
           <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
           </z-canvas>
         </fade-transition>
-        <!-- <fade-transition v-show='!showcircle'>
+        <fade-transition v-show='!showcircle'>
           <treeview class="zcanvas" :style="{width: width, left: left}" >
           </treeview>
-        </fade-transition> -->
+        </fade-transition> 
       </div>
     </div>
   </div>
