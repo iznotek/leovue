@@ -7,10 +7,10 @@
           <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
           </z-canvas>
         </fade-transition>
-        <fade-transition v-show='!showcircle'>
+        <!-- <fade-transition v-show='!showcircle'>
           <treeview class="zcanvas" :style="{width: width, left: left}" >
           </treeview>
-        </fade-transition>
+        </fade-transition> -->
       </div>
     </div>
   </div>
@@ -22,7 +22,7 @@
   import Settings from './ZircleSettings'
   import ZItem from './ZircleItem'
   import ZView from './ZircleView'
-  import ZIntro from './ZircleIntro'
+  // import ZIntro from './ZircleIntro'
   import 'zircle/dist/zircle.css'
   import {TweenLite, Power2} from 'gsap/TweenMax'
   import TreeView from './TreeView'
@@ -52,8 +52,8 @@
       item6: ZItem,
       item7: ZItem,
       zview: ZView,
-      settings: Settings,
-      intro: ZIntro
+      settings: Settings // ,
+      // intro: ZIntro
     },
     mounted () {
       this.$zircle.config({

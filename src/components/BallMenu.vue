@@ -15,17 +15,14 @@
           <span>{{item}}</span>
         </radial-menu-item>
     </radial-menu> 
-    <fade-comp
-        mode="alpha"
-        duration="1s"
-        :out="!$store.state.loading">
+    <fade-transition :duration="1000" v-show="$store.state.loading">
       <orbit-spinner
         style="position: absolute; left: -5px; top: -5px"
         :animation-duration="3000"
         :size="60"
         color="#fff"
       />
-    </fade-comp> 
+    </fade-transition> 
     <!-- <spring-spinner
       style="position: absolute; left: -2px; top: -2px"
       :animation-duration="3000"
@@ -59,7 +56,6 @@
 <script>
 import { RadialMenu, RadialMenuItem } from './button/radial'
 import { SpringSpinner, OrbitSpinner } from 'epic-spinners'
-import FadeComp from '../lib/Fade'
 // const BloomingMenu = require('blooming-menu')
 const util = require('../util.js')
 
@@ -69,8 +65,7 @@ export default {
     RadialMenu,
     RadialMenuItem,
     SpringSpinner,
-    OrbitSpinner,
-    FadeComp
+    OrbitSpinner
   },
   data () {
     return {

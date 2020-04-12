@@ -46,7 +46,7 @@
           :distance="distance(data, index)"
           :angle="angle(data, index)" 
           @click.native="toggle(amodel)"
-          :to-view="isDataFolder(amodel) ? { name: zitem, params: { depth: zdepthinc, model: amodel, key: amodel.id, textItems: textItems, targetEl: targetEl, top: false}} : {}"
+          :to-view="isDataFolder(amodel) ? { name: zitem, params: { depth: zdepthinc, model: amodel, key: amodel.id, textItems: textItems, targetEl: target, top: false}} : {}"
           :key="amodel.id">
       
             <div style="height: 100px" />
@@ -183,6 +183,9 @@ export default {
     // id: function () {
     //   return this.prefix + (this.model !== undefined && this.model.hasOwnProperty('id')) ? this.model.id : 'undefined'
     // },
+    target: function () {
+      return this.targetEl
+    },
     nid: function () {
       return this.prefix + '_' + this.model.id
     },

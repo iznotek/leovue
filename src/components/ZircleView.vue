@@ -85,9 +85,15 @@ export default {
   name: 'zview',
   props: {
     model: Object,
-    targetEl: Boolean,
     textItems: Object,
-    top: Boolean,
+    targetEl: {
+      type: Boolean,
+      default: true
+    },
+    top: {
+      type: Boolean,
+      default: true
+    },
     accordion: Boolean,
     prefix: {
       type: String,
@@ -284,10 +290,6 @@ export default {
 
     setInterval(this.checkViewChanged, 200)
 
-    this.model = this.$store.state.leodata
-    this.textItems = this.$store.state.leotext
-    this.targetEl = true
-    this.top = true
     // if (this.$store.state.leodata.length >= 0) {
     //   this.$store.dispatch('setCurrentItem', this.$store.state.leodata[0].id)
     // // console.log(this.model)

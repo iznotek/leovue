@@ -126,14 +126,14 @@ export default {
         // console.log(this.requiredList)
         var required = this.requiredList[0]
         if (this.$refs.slider.Images && this.$refs.slider.Images.current && this.$refs.slider.Images.current.index === required.index) {
-          console.log('check', required.index)
+          // console.log('check', required.index)
           this.index = required.index
           this.requiredList.shift()
           if (this.requiredList.length) {
             this.requiredList = [this.requiredList.pop()] // keep the last only
           } else return
         } else { // if (required.index !== this.required) {
-          console.log('mov', required.index)
+          // console.log('mov', required.index)
           // console.log('mov', this.required, this.$refs.slider.image2Index, this.$refs.slider.image1Index, this.$refs.slider.Images.current.index)
           this.$refs.slider.show(required.index, 'fade') // this.requiredTransition)
           this.required = required.index

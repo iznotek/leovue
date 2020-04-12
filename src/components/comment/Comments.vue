@@ -24,7 +24,7 @@
     </svg> -->
  
   <div class="comments" :style="{background:background}" ref="wrapper" > 
-    <fade-transition duration="1000" v-show="loading">
+    <fade-transition :duration="1000" v-show="loading">
       <orbit-spinner
         class="loader"
         :animation-duration="3000"
@@ -126,7 +126,6 @@
   import Wrapper from './Comment.vue'
   import Sign from './Sign.vue'
   import { OrbitSpinner } from 'epic-spinners'
-  import FadeComp from '../../lib/Fade'
   import axios from 'axios'
   const util = require('../../util.js')
 
@@ -221,8 +220,7 @@
     components: {
       appWrapper: Wrapper,
       signWrapper: Sign,
-      OrbitSpinner,
-      FadeComp
+      OrbitSpinner
     },
     created () {
       this.initialize()

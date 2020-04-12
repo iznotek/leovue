@@ -53,7 +53,7 @@
             :key="amodel.id"
             :textItems="textItems"
             :accordion="accordion"
-            :targetEl="targetEl">
+            :targetEl="target">
           </item>
         </ul>
         <div v-show="isOpenInline" class="hshim"></div>
@@ -127,6 +127,9 @@ export default {
     }
   },
   computed: {
+    target: function () {
+      return this.targetEl
+    },
     html: function () {
       if (!this.editor) return ''
       return this.editor.getHTML()
