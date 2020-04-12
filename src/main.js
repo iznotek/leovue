@@ -27,6 +27,7 @@ import 'vue-awesome/icons/comments'
 import 'vue-awesome/icons/comment'
 import 'vue-awesome/icons/video'
 import 'vue-awesome/icons/pen-nib'
+import 'vue-awesome/icons/cog'
 
 import ForkMeOnGithub from 'fork-me-on-github-vue'
 import BootstrapVue from 'bootstrap-vue'
@@ -85,14 +86,13 @@ import VueGoodLinks from 'vue-good-links'
 import 'vue-good-links/dist/vue-good-links.css'
 import VueAnime from 'vue-animejs'
 import VueRouterMultiView from 'vue-router-multi-view'
-// import Editor from 'vue-editor-js'
+import vmodal from 'vue-js-modal'
 
+// import Editor from 'vue-editor-js'
 // import { ElementTiptapPlugin } from 'element-tiptap'
 // import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 // import 'element-tiptap/lib/index.css'
-
-// import Editor from 'vue-editor-js'
 
 import { charts } from './content-components/Charts'
 charts(Vue)
@@ -108,6 +108,8 @@ const Defiant = require('./lib/defiant') // eslint-disable-line
 // Vue.use(ElementUI)
 // Vue.use(ElementTiptapPlugin)
 
+Vue.use(vmodal)
+Vue.use(Transitions)
 Vue.use(VueRouterMultiView)
 Vue.use(VueAnime)
 Vue.use(VueGoodLinks)

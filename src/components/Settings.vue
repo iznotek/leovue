@@ -1,61 +1,63 @@
 <template>
-  <div class="settings">
-    <div>
-      <h1 style="margin-left:0">LeoVue</h1>
-      <div>Version 1.21.0</div>
-      <div class="hshim"></div>
-      <div><a href="https://github.com/kaleguy/leoviewer">LeoVue on Github</a></div>
-      <div class="hshim"></div>
-      <div v-if="staticSite">
-        <div><a href="static/site/index.html">HTML Site</a></div>
-      </div>
-      <div class="hshim"></div>
-      <div>
-        <div class="link" @click="main">Return to Main</div>
-      </div>
+  <modal 
+    name="settings"
+    classes="settings"
+    transition="nice-modal-fade"
+    :draggable="true"
+    :resizable="true"
+    @before-open="beforeOpen"
+    @before-close="beforeClose"
+  >
+    <div 
+      slot="top-right"
+      class="ct-top-right"
+      @click="$modal.hide('settings')"
+    >
+      EXIT
     </div>
-  </div>
+    <!-- <img src="/static/images/back.jpg" /> -->
+  </modal>
 </template>
 
 <script>
-  export default {
-    name: 'settings',
-    components: {
+export default {
+  name: 'InputFocusModal',
+  methods: {
+    beforeOpen (event) {
+      console.log('open')
     },
-    methods: {
-      main () {
-        this.$router.replace({path: '/'})
+    beforeClose (event) {
+      if (!this.$store.state.connected) {
+        event.stop()
       }
-    },
-    data () {
-      return {
-      }
-    },
-    computed: {
-      id: function () {
-        if (!this.$route.params.id) {
-          return +1
-        } else {
-          return this.$route.params.id
-        }
-      },
-      staticSite: function () {
-        if (window.lconfig.staticSite) {
-          return true
-        }
-        return false
-      }
-    },
-    watch: {
-      '$route' (to, from) {
-        // console.log(to, from)
-      }
+      console.log('close')
     }
   }
+}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="sass" scoped>
-  .settings
-    padding: 40px
+<style lang="scss">
+  .settings {
+    background-image: url("/static/images/back.jpg");
+    border-radius: 1%;
+    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.8);
+    border: 0px solid rgba(255, 255, 255, 0.65);
+  }
+  .ct-top-right {
+    cursor: pointer;
+    padding-top: 20px;
+    padding-right: 30px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 0px 20px black;
+  }
+  .scale-enter-active,
+  .scale-leave-active {
+    transition: all 0.5s;
+  }
+  .scale-enter,
+  .scale-leave-active {
+    opacity: 0;
+    transform: scale(0.3) translateY(24px);
+  }
 </style>

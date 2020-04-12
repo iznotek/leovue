@@ -1,6 +1,6 @@
 <template>
-  <div class="loader" v-if="loading">
-    <svg width="150" height="150" id="loader">
+  <!-- <div class="loader">
+    <!-- <svg width="150" height="150" id="loader">
       <circle fill="red">
         <animate attributeName="cx" values="15;135;15" keyTimes="0;0.5;1" calcMode="spline" keySplines="0.74 0.11 0.3 0.85; 0.74 0.11 0.3 0.85;" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="r" values="15;7.5;2;7.5;15" keyTimes="0;0.25;0.5;0.75;1" dur="3s" repeatCount="indefinite"/>
@@ -21,10 +21,22 @@
         <animate attributeName="r" values="15;7.5;2;7.5;15" keyTimes="0;0.25;0.5;0.75;1" dur="3s" repeatCount="indefinite"/>
         <animate attributeName="cy" values="135;15;135" keyTimes="0;0.5;1" calcMode="spline" keySplines="0.74 0.11 0.3 0.85; 0.74 0.11 0.3 0.85;" dur="6s" repeatCount="indefinite"/>
       </circle>
-    </svg>
-  </div>
-  <div class="comments" :style="{background:background}" ref="wrapper" v-else> 
-    <div class="innerWrapper">
+    </svg> -->
+ 
+  <div class="comments" :style="{background:background}" ref="wrapper" > 
+    <fade-comp
+        mode="alpha"
+        duration="1s"
+        :out="!loading">
+      <orbit-spinner
+        class="loader"
+        :animation-duration="3000"
+        :size="60"
+        color="#fff"
+      />
+    </fade-comp> 
+
+    <div v-if="!loading" class="innerWrapper">
       <div class="addComment" key="addComment">
         <div class="avatar" :style="styleShadow">
           <svg ref="svgAvatar"> </svg>
@@ -103,7 +115,7 @@
           :wrapperSize="wrapperSize.toString()"
         ></app-wrapper>
         <div class="noCommentWrapper" @click="$refs.addComment.focus()" v-if="comments.length<1" key="noComment">
-          <span class="noCommentText">Be the first to comment.</span>
+          <span class="noCommentText" :style="{color: themeColor, border: '1px solid ' + themeColor}" >Be the first to comment.</span>
         </div>
       </transition-group>
       <div class="updateLimit" @click="updateLimit" v-if="limit < comments.length">
@@ -116,6 +128,8 @@
 <script>
   import Wrapper from './Comment.vue'
   import Sign from './Sign.vue'
+  import { OrbitSpinner } from 'epic-spinners'
+  import FadeComp from '../../lib/Fade'
   import axios from 'axios'
   const util = require('../../util.js')
 
@@ -199,12 +213,15 @@
         auth: false,
         wrapperSize: '',
         requestLoading: false,
-        logOutTimer: null
+        logOutTimer: null,
+        themeColor: 'blue'
       }
     },
     components: {
       appWrapper: Wrapper,
-      signWrapper: Sign
+      signWrapper: Sign,
+      OrbitSpinner,
+      FadeComp
     },
     created () {
       this.initialize()
@@ -370,6 +387,23 @@
         this.alertMessage = ''
         this.alertClass = ''
         this.alert = false
+      },
+      getThemeIdFrom (id) {
+        var theme = this.$store.state.themes[id]
+        if (theme && theme.background.theme) {
+          return id
+        }
+        var pid = id
+        while (pid >= 0) {
+          const parent = JSON.search(this.$store.state.leodata, '//*[id="' + pid + '"]/parent::*')
+          if (parent && parent[0]) {
+            pid = parent[0].id
+            theme = this.$store.state.themes[pid]
+            if (theme && theme.background.theme) {
+              return pid
+            }
+          } else return 0
+        }
       }
     },
     computed: {
@@ -392,14 +426,6 @@
       },
       filterNewCommentLineCount () {
         return this.filterNewComment.split('\n').length
-      },
-      themeColor () {
-        var color = 'blue'
-        var theme = this.$store.state.theme
-        if (theme && theme.background.theme) {
-          color = theme.background.theme
-        }
-        return util.rgbaFromTheme(color)
       }
     },
     watch: {
@@ -409,7 +435,22 @@
           this.initialize()
         }
       },
+      '$store.state.currentItem': {
+        handler: function (val, oldVal) {
+          if (val) {
+            var color = 'blue'
+            var theme = this.$store.state.themes[this.getThemeIdFrom(val.id)]
+            if (theme && theme.background) {
+              color = theme.background.theme
+            }
+            this.themeColor = util.rgbaFromTheme(color)
+          }
+        },
+        deep: true,
+        immediate: true
+      },
       loading () {
+        return
         this.$nextTick(() => {
           if (!this.$refs.svgAvatar) return
           let a = 0
@@ -485,14 +526,20 @@
 
 <style scoped>
   @import url("https://fonts.googleapis.com/css?family=Roboto:400,700");
-
-  .loader {
+  .loader-orig {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: minmax(150px, auto);
     padding: 5px;
   }
-  #loader {
+  .loader {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    margin-top: 50%;
+  }
+  #loader-orig {
     justify-self: center;
     align-self: center;
   }

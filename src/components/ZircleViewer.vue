@@ -72,7 +72,7 @@
       setTimeout(() => {
         setInterval(this.checkViewChanged, 100)
         this.$zircle.toView('zview')
-      }, 5300)
+      }, 1300)
 
       let vm = this
       this.$store.state.tween = TweenLite.to(mov, 2, {angle: 0,
@@ -303,18 +303,6 @@
     opacity: 1;
     line-height: 1.02em;
     pointer-events: none !important;
-}
-.footer {
-    margin-left: 5%;
-    position: absolute;
-    bottom: 20px;
-    width: 90%;
-    font-size: 32px;
-    pointer-events: none !important;
-    color: #454545;
-    z-index: 9999;
-    opacity: 1;
-    text-align: center;
 }
 .title.home {
     text-align: center;

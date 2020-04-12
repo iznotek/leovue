@@ -64,8 +64,8 @@ export default {
 		background-repeat: no-repeat;
 		background-position: center center;
 		transition: all 500ms ease;
-		width: 40%;
-		height: 10%;
+		width: 0%;
+		height: 13%;
     }
 
     .vue-accordion ul li a {
@@ -111,7 +111,7 @@ export default {
 
 	.vue-accordion a { opacity: 0.0 }
 
-    .vue-accordion ul:hover li { height: 13%; width: 67%; }
+    .vue-accordion ul:hover li { height: 13%; width: 80%; }
 
     .vue-accordion ul:hover li:hover { height: 20%; width: 400%; }
 

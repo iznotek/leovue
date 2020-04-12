@@ -429,17 +429,11 @@ export default {
         -ms-transform: rotate(315deg); /* IE 9 */
         -webkit-transform: rotate(315deg); /* Chrome, Safari, Opera */
         transform: rotate(315deg);
-        opacity: 0;
-        -webkit-transition: opacity .3s ease-in, -webkit-transform .4s; /* Safari */
-        transition: opacity .3s ease-in, transform .4s;
     }
     .fab-main .material-icons.close.rotate {
         -ms-transform: rotate(315deg); /* IE 9 */
         -webkit-transform: rotate(315deg); /* Chrome, Safari, Opera */
         transform: rotate(315deg);
-        opacity: 1;
-        -webkit-transition: opacity .3s ease-in, -webkit-transform .4s; /* Safari */
-        transition: opacity .3s ease-in, transform .4s;
     }
     .fab-child {
         border-radius: 100px;

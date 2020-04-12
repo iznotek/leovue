@@ -3,10 +3,11 @@
    <div id="dashboard" v-bind:style="dashboardStyle"> 
     
     <!-- <modelviewer/> -->
+    <settings/>
 
     <chatmenu v-if="connected"/>
     <typemenu v-if="connected"/>
-    <spacemenu v-if="connected"/>
+    <spacemenu v-if="connected && this.$store.state.spacemenu"/>
 
     <chat v-if="config.chats && connected"/>
 
@@ -64,6 +65,8 @@ import Background from './Background'
 import TreeView from './TreeView'
 import D3View from './D3View'
 
+import Settings from './Settings'
+
 // import ModelViewer from './modelviewer/Viewer'
 import ParticleEffectButton from 'vue-particle-effect-buttons'
 import {OrbitSpinner} from 'epic-spinners' // OrbitSpinner
@@ -82,7 +85,8 @@ export default {
     d3view: D3View,
     pbutton: ParticleEffectButton,
     spinner: OrbitSpinner,
-    spacemenu: SpaceMenu
+    spacemenu: SpaceMenu,
+    Settings
     // modelviewer: ModelViewer
   },
   data () {
@@ -136,50 +140,53 @@ export default {
     }
   },
   mounted () {
-    let loader = this.$loading.show({
-      // Optional parameters
-      container: this.$refs.dashboard,
-      backgroundColor: '#001127',
-      color: '#0AF',
-      opacity: 1,
-      canCancel: true,
-      loader: 'dots',
-      zIndex: 10000
-      // onCancel: this.onCancel,
-    }, {
-      default: this.$createElement('spinner', {props: {size: 120, animationDuration: 1700, color: '#FFF'}})
-      // before: this.$createElement('before'),
-      // after: this.$createElement('after')
-    })
-    // simulate AJAX
+    let vm = this
+    let loading = true
 
     this.$store.state.connected = !this.locked
     this.$store.state.user = {name: 'pi'}
 
-    let vm = this
-    setTimeout(() => {
-      var id = setInterval(() => {
-        loader.opacity -= 0.07
-        if (loader.opacity <= 0.0) {
-          clearInterval(id)
-          loader.hide()
+    if (loading) {
+      let loader = this.$loading.show({
+        // Optional parameters
+        container: this.$refs.dashboard,
+        backgroundColor: '#001127',
+        color: '#0AF',
+        opacity: 1,
+        canCancel: true,
+        loader: 'dots',
+        zIndex: 10000
+        // onCancel: this.onCancel,
+      }, {
+        default: this.$createElement('spinner', {props: {size: 120, animationDuration: 1700, color: '#FFF'}})
+        // before: this.$createElement('before'),
+        // after: this.$createElement('after')
+      })
+      // simulate AJAX
 
-          if (!this.locked) {
-            // this.animLogoLogin.play()
-            let vm = this
-            setTimeout(() => {
-              vm.$store.state.leftPaneWidth = parseInt(window.lconfig.leftPaneWidth) + '%'
-              vm.$store.state.rightPaneWidth = 100 - parseInt(window.lconfig.leftPaneWidth) + '%'
-            }, 2000)
+      setTimeout(() => {
+        var id = setInterval(() => {
+          loader.opacity -= 0.07
+          if (loader.opacity <= 0.0) {
+            clearInterval(id)
+            loader.hide()
+
+            if (!this.locked) {
+              // this.animLogoLogin.play()
+              setTimeout(() => {
+                vm.$store.state.leftPaneWidth = parseInt(window.lconfig.leftPaneWidth) + '%'
+                vm.$store.state.rightPaneWidth = 100 - parseInt(window.lconfig.leftPaneWidth) + '%'
+              }, 2000)
+            }
+            // else {
+            //   setTimeout(() => {
+            //     vm.configlogin.visible = true
+            //   }, 2000)
+            // }
           }
-          // else {
-          //   setTimeout(() => {
-          //     vm.configlogin.visible = true
-          //   }, 2000)
-          // }
-        }
-      }, 50)
-    }, 5000)
+        }, 50)
+      }, 1000)
+    }
 
     this.animLogoRight = this.$anime({
       targets: '.loginimage',

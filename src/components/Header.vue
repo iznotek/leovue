@@ -17,6 +17,9 @@
        
         <digital-clock :blink="false" />
          <div class="space">.</div>
+         <div v-if="connected" @click="$modal.show('settings')" class="icon icon-button">
+          <icon class="icon" name="cog"></icon>
+        </div> 
         <div @click="fullscreen" class="icon icon-button">
           <icon class="icon" name="expand"></icon>
         </div> 

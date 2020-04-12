@@ -1,18 +1,25 @@
 <template>
   <div>
     <splitpanes 
+      ref="splitpanes"
       vertical
+      @pane-maximize="maximized($event)"
       @resize="resize($event)" 
       @resized="resize($event)" 
-      style="position: fixed; top: 0px; left: 0px; padding-top: 33px; transition: 0.2s; width: 100%"
+      style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; padding-top: 33px; transition: 0s; width: 100%"
       >
-      <pane :size="sizes.left" :class="$store.state.darkmode ? 'dark' : 'light'">
+      <pane v-if="left" :size="sizes.left" :class="$store.state.darkmode ? 'dark' : 'light'">
         <zircle-viewer style="z-index: 6002;"></zircle-viewer> 
+        <!-- <div class="footer">
+        <div class="footer-content">
+          
+        </div>
+        </div> -->
       </pane>
-      <pane v-if="connected" :size="sizes.center">
+      <pane v-if="connected && center" :size="sizes.center">
         <content-pane style="z-index: 6002;"></content-pane> 
       </pane>
-      <pane v-if="connected && (comments || meeting)" :size="sizes.right">
+      <pane v-if="connected && right && (comments || meeting)" :size="sizes.right">
         <splitpanes horizontal>
           <pane v-if="comments" size="70">
             <comments style="z-index: 60003;"></comments>  
@@ -77,59 +84,92 @@
         meeting: false,
         showLeftButton: true,
         showRightButton: true,
+        left: true,
+        center: true,
+        right: true,
         sizes: {
-          left: 40,
-          center: 40,
-          right: 20
+          left: 23,
+          center: 60,
+          right: 17
         },
-        saved: {},
+        lock: false,
+        saved: [],
         mode: 'split',
         color: 'white'
       }
     },
     methods: {
+      maximize: function (id) {
+        let totalMinSizes = 0
+        var panes = this.$refs.splitpanes.panes
+        panes = panes.map((pane, i) => {
+          this.saved[i] = pane.size
+          pane.size = i === id ? pane.max : pane.min
+          if (i !== id) totalMinSizes += pane.min
+          return pane
+        })
+        panes[id].size -= totalMinSizes
+        this.$refs.splitpanes.panes = panes
+        this.$refs.splitpanes.$emit('pane-maximize', panes[id])
+      },
+      restore: function (sizes) {
+        var panes = this.$refs.splitpanes.panes
+        panes = panes.map((pane, i) => {
+          pane.size = sizes[i]
+          return pane
+        })
+        this.$refs.splitpanes.panes = panes
+        this.$store.state.leftPaneWidth = sizes[0] + '%'
+        // this.$refs.splitpanes.$emit('pane-maximize', panes[id])
+      },
+      maximized: function (id) {
+        // if (!this.left) this.$store.state.leftPaneWidth = '0%'
+        // var panes = this.$refs.splitpanes.panes
+        // if (panes.length > 2) this.sizes.right = panes[2].size
+        // if (panes.length > 1) this.sizes.center = panes[1].size
+        // if (panes.length > 0) this.sizes.left = panes[0].size
+        // console.log(this.sizes)
+        this.$store.state.leftPaneWidth = this.$refs.splitpanes.panes[0].size + '%'
+        // console.log(data)
+      },
       resize: function (data) {
         if (data) {
-          if (data.length > 2) this.sizes.right = data[2].size
-          if (data.length > 1) this.sizes.center = data[1].size
-          if (data.length > 0) this.sizes.left = data[0].size
+          // if (data.length > 2) this.sizes.right = data[2].size
+          // if (data.length > 1) this.sizes.center = data[1].size
+          // if (data.length > 0) this.sizes.left = data[0].size
           // console.log(this.sizes)
-          this.$store.state.leftPaneWidth = this.sizes.left + '%'
+          this.$store.state.leftPaneWidth = data[0].size + '%'
+          // console.log(data)
         }
       },
       slide: function (direction) {
         if (this.mode === 'split') {
           if (direction === 'left') {
-            this.saved = this.sizes
-            this.sizes.left = 0
-            this.sizes.center = 100 - this.sizes.right
+            this.maximize(1)
             this.showLeftButton = false
             this.showRightButton = true
             this.mode = 'left'
           } else {
-            this.saved = this.sizes
-            this.sizes.center = 0
-            this.sizes.left = 100
+            this.maximize(0)
             this.showLeftButton = true
             this.showRightButton = false
             this.mode = 'right'
           }
         } else if (this.mode === 'left') {
           if (direction === 'right') {
-            this.sizes = this.saved
+            this.restore(this.saved)
             this.showRightButton = true
             this.showLeftButton = true
             this.mode = 'split'
           }
         } else if (this.mode === 'right') {
           if (direction === 'left') {
-            this.sizes = this.saved
+            this.restore(this.saved)
             this.showRightButton = true
             this.showLeftButton = true
             this.mode = 'split'
           }
         }
-        // this.$store.state.leftPaneWidth = this.sizes.left
       }
     },
     computed: {
@@ -148,6 +188,13 @@
       }
     },
     mounted: function () {
+      setInterval(() => {
+        if (this.$store.state.spacemenu && (this.$refs.splitpanes.panes[0].size === 0)) {
+          this.$store.commit('SPACEMENU', false)
+        } else if (!this.$store.state.spacemenu && (this.$refs.splitpanes.panes[0].size !== 0)) {
+          this.$store.commit('SPACEMENU', true)
+        }
+      }, 100)
     },
     updated: function () {
     },
@@ -212,6 +259,15 @@
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
+<style lang="scss">
+.splitpanes {
+  &__pane {
+    .splitpanes--vertical & {transition: width 0s ease-out;}
+    .splitpanes--horizontal & {transition: height 0s ease-out;}
+  }
+}
+</style>
+
 <style>
   .splitpanes__splitter {
     z-index: 5000;
@@ -219,10 +275,12 @@
 
   .splitpanes--vertical {
     z-index: 5000;
+    transition: all 0s;
   }
 
   .splitpanes--horizontal {
     z-index: 5000;
+    transition: all 0s;
   }
 
   .splitpanes--vertical > .splitpanes__splitter {
@@ -240,6 +298,25 @@
 </style> 
 
 <style scoped>
+
+  .footer {
+      position: relative;
+      min-height: 150px;
+  }
+  .footer-content {
+      position: absolute;
+      bottom: -85vh;
+      width: 100%;
+      height: 150px;
+      font-size: 32px;
+      pointer-events: none !important;
+      z-index: 9999;
+      opacity: 1;
+      text-align: center;
+      -webkit-box-shadow: 0px -10px 30px rgba(0,0,0,0.85);
+      -moz-box-shadow: 0px -10px 30px rgba(0,0,0,0.85);
+      box-shadow: 0px -10px 30px rgba(0,0,0,0.85);
+  }
 
   .dark {
     transition: 0.5s background ease;

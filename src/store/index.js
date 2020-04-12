@@ -1276,6 +1276,7 @@ export default new Vuex.Store({
       pw: ''
     },
     darkmode: true,
+    spacemenu: false,
     leotext: {},
     leodata: {},
     filename: '',
@@ -1324,6 +1325,9 @@ export default new Vuex.Store({
   mutations: {
     DARKMODE (state, o) {
       state.darkmode = o
+    },
+    SPACEMENU (state, o) {
+      state.spacemenu = o
     },
     TWEEN_ANGLE (state, o) {
       state.angle = o.a

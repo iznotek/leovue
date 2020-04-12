@@ -8,7 +8,7 @@
 
     <div class="behind" :class="$store.state.darkmode ? 'dark' : 'light'">
     <div style="position: absolute; width: 100%; height: 100%;">
-      <fade-transition  :duration="fade.duration" :delay="fade.delay" v-show='fade.next'>
+      <component :is="fade.transition"  :duration="fade.duration" :delay="fade.delay" v-show='fade.next'>
       <div>
         <div v-for="(item,index) in itemOdd" :key="index" >
           
@@ -33,7 +33,7 @@
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'1'"
                               :placeholder="editor.placeholder"
-                              :data="item.json || initData"
+                              :data="item.json || editor.initData"
                               @save="onEditorSave"
                               @ready="onEditorReady"
                               @change="onEditorChange"
@@ -66,7 +66,7 @@
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'2'"
                               :placeholder="editor.placeholder"
-                              :data="item.json || initData"
+                              :data="item.json || editor.initData"
                               @save="onEditorSave"
                               @ready="onEditorReady"
                               @change="onEditorChange"
@@ -82,11 +82,11 @@
 
         </div>
         </div>
-      </fade-transition>
+      </component>
       </div>
     
       <div style="position: absolute; width: 100%; height: 100%;">
-      <fade-transition  :duration="fade.duration" :delay="fade.delay" v-show='!fade.next'>
+      <component :is="fade.transition" :duration="fade.duration" :delay="fade.delay" v-show='!fade.next'>
       <div>
         <div v-for="(item,index) in itemEven" :key="index" >
           
@@ -160,7 +160,7 @@
 
         </div>
         </div>
-      </fade-transition>
+      </component>
 
 
     </div>
@@ -180,12 +180,17 @@ import { ContentLoader } from 'vue-content-loader'
 // import TipTap from './editor/TipTap'
 import EditorJs from './editor/EditorJs'
 import EditMenu from './EditMenu'
-import {FadeTransition} from 'vue2-transitions'
+
+const transitions = ['fade-transition', 
+  'zoom-center-transition', 'zoom-x-transition', 'zoom-y-transition',
+  'collapse-transition', 
+  'scale-transition',
+  'slide-y-up-transition', 'slide-y-down-transition', 'slide-x-left-transition', 'slide-x-right-transition']
 
 // import { VueperSlides, VueperSlide } from 'vueperslides'
 // import 'vueperslides/dist/vueperslides.css'
-import Login from './Login'
-import Cover from './Cover'
+// import Login from './Login'
+// import Cover from './Cover'
 
 // functions for dealing with x-frame headers
 // TODO move these
@@ -261,9 +266,8 @@ export default {
   components: {
     EditMenu,
     ContentLoader,
-    login: Login,
-    cover: Cover,
-    FadeTransition,
+    // login: Login,
+    // cover: Cover,
     editorjs: EditorJs
   },
   data () {
@@ -289,6 +293,7 @@ export default {
         items: [], 
         indexOdd: -1,
         indexEven: -1,
+        transition: transitions[0]
       }
     }
   },
@@ -441,6 +446,10 @@ export default {
             this.fade.indexOdd = this.fade.items.length-1
           }
           this.fade.next = !this.fade.next
+
+          setTimeout(() => {
+            this.$store.commit('LOADING', {state: false})
+          }, 1000)
       }, 100)
     }
   },
@@ -664,8 +673,9 @@ export default {
   }
   .around {
     background: rgba(255, 255, 255, 0.2);
-    padding: 25px;
-    margin: 25px;
+    padding: 30px;
+    margin: 0px;
+    margin-top: 25px;
     border-radius: 20px;
     // padding-top: 33px;
     //max-width: 720px;
@@ -673,9 +683,9 @@ export default {
     // min-width: 500px;
     //overflow: auto;
     // height: calc(100vh - 33px);
-    -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
-    -moz-box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
-    box-shadow: 0px 10px 30px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
   }
   .right-cpane {
     flex: auto;
