@@ -24,23 +24,20 @@
     </svg> -->
  
   <div class="comments" :style="{background:background}" ref="wrapper" > 
-    <fade-comp
-        mode="alpha"
-        duration="1s"
-        :out="!loading">
+    <fade-transition duration="1000" v-show="loading">
       <orbit-spinner
         class="loader"
         :animation-duration="3000"
         :size="60"
         color="#fff"
       />
-    </fade-comp> 
+    </fade-transition> 
 
     <div v-if="!loading" class="innerWrapper">
       <div class="addComment" key="addComment">
-        <div class="avatar" :style="styleShadow">
-          <svg ref="svgAvatar"> </svg>
-        </div>
+        <div class="avatar" >
+          <!-- :style="styleShadow"><svg ref="svgAvatar"> </svg> -->
+        </div> 
         <div class="commentBox" key="commentBox" v-show="!showSignPanel && !auth || auth ">
             <div class="userName" :style="{color: userNameColor}">
               {{userName}}
@@ -145,6 +142,10 @@
         required: true
       },
       nodeName: {
+        type: String,
+        required: true
+      },
+      nodeColor: {
         type: String,
         required: true
       },
@@ -387,23 +388,6 @@
         this.alertMessage = ''
         this.alertClass = ''
         this.alert = false
-      },
-      getThemeIdFrom (id) {
-        var theme = this.$store.state.themes[id]
-        if (theme && theme.background.theme) {
-          return id
-        }
-        var pid = id
-        while (pid >= 0) {
-          const parent = JSON.search(this.$store.state.leodata, '//*[id="' + pid + '"]/parent::*')
-          if (parent && parent[0]) {
-            pid = parent[0].id
-            theme = this.$store.state.themes[pid]
-            if (theme && theme.background.theme) {
-              return pid
-            }
-          } else return 0
-        }
       }
     },
     computed: {
@@ -435,19 +419,11 @@
           this.initialize()
         }
       },
-      '$store.state.currentItem': {
-        handler: function (val, oldVal) {
-          if (val) {
-            var color = 'blue'
-            var theme = this.$store.state.themes[this.getThemeIdFrom(val.id)]
-            if (theme && theme.background) {
-              color = theme.background.theme
-            }
-            this.themeColor = util.rgbaFromTheme(color)
-          }
-        },
-        deep: true,
-        immediate: true
+      nodeColor: {
+        immediate: true,
+        handler (val, oldVal) {
+          this.themeColor = util.rgbaFromTheme(val)
+        }
       },
       loading () {
         return
@@ -533,11 +509,11 @@
     padding: 5px;
   }
   .loader {
-    display: block;
-    margin-left: auto;
+    position: absolute;
     margin-right: auto;
-    width: 40%;
+    margin-left: 40%;
     margin-top: 50%;
+    z-index: 5;
   }
   #loader-orig {
     justify-self: center;
@@ -613,6 +589,7 @@
   .comments > .innerWrapper {
     overflow-x: auto;
     padding: 10px 2px;
+    z-index: 100;
   }
   .comments>>>.noCommentWrapper {
     display: grid;

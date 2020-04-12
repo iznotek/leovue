@@ -238,15 +238,15 @@
       '$store.state.currentItem': {
         handler: function (val, oldVal) {
           if (val) {
-            var theme = this.$store.state.themes[val.id]
-            if (theme && theme.background) {
-              if (theme.background.theme) {
+            var deep = this.$store.getters.getDeepLookForNode(val)
+            if (deep && deep.look) {
+              if (deep.look.theme) {
                 // this.$zircle.config({style: {theme: theme.background.theme}})
               }
-              if (theme.background.mode) {
+              if (deep.look.mode) {
                 // this.$zircle.config({style: {mode: theme.background.mode}})
               }
-              this.$store.commit('CURRENT_THEME', theme)
+              this.$store.commit('CURRENT_DEEP', deep)
             }
             // this.$store.state.currentItemPathMapIds.length
             // var name = 'item' + this.$store.state.currentItemPathMapIds.length

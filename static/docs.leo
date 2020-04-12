@@ -6,36 +6,36 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="josephorr.20181002174010.1"><vh>@cover</vh>
-<v t="ifs.20190418155034.1"><vh>@theme</vh></v>
+<v t="josephorr.20181002174010.1"><vh>@space le3foisglanddu.fr</vh>
+<v t="ifs.20190418155034.1"><vh>@deep</vh></v>
 <v t="josephorr.20170228222411.2"><vh>@board iz now</vh>
-<v t="ifs.20190421204116.1"><vh>@theme</vh></v>
+<v t="ifs.20190421204116.1"><vh>@deep</vh></v>
 <v t="ifs.20190414205247.1"><vh>l'astro</vh>
-<v t="ifs.20190415223632.1"><vh>@theme</vh></v>
+<v t="ifs.20190415223632.1"><vh>@deep</vh></v>
 <v t="ifs.20190501154145.1"><vh>plans</vh>
-<v t="ifs.20190501154145.2"><vh>@theme</vh></v>
+<v t="ifs.20190501154145.2"><vh>@deep</vh></v>
 </v>
 <v t="ifs.20190501131551.1"><vh>@pdf [desc](static/arkom/astro/Astroport.pdf)</vh>
-<v t="ifs.20190501131619.1"><vh>@theme</vh></v>
+<v t="ifs.20190501131619.1"><vh>@deep</vh></v>
 </v>
 <v t="ifs.20190421204708.1"><vh>bar</vh>
-<v t="ifs.20190422125241.1"><vh>@theme</vh></v>
+<v t="ifs.20190422125241.1"><vh>@deep</vh></v>
 </v>
 <v t="ifs.20190421205559.1"><vh>salons</vh>
-<v t="ifs.20190422125325.1"><vh>@theme</vh></v>
+<v t="ifs.20190422125325.1"><vh>@deep</vh></v>
 </v>
 <v t="ifs.20190421205734.1"><vh>rooms</vh>
-<v t="ifs.20190422125336.1"><vh>@theme</vh></v>
+<v t="ifs.20190422125336.1"><vh>@deep</vh></v>
 </v>
 </v>
 <v t="ifs.20190324101042.1"><vh>l'idéal</vh>
-<v t="ifs.20190416230605.1"><vh>@theme</vh></v>
+<v t="ifs.20190416230605.1"><vh>@deep</vh></v>
 </v>
 <v t="ifs.20190324101106.1"><vh>l'errante</vh>
-<v t="ifs.20190426134328.1"><vh>@theme</vh></v>
+<v t="ifs.20190426134328.1"><vh>@deep</vh></v>
 </v>
 <v t="ifs.20190324100058.1"><vh>l'igo</vh>
-<v t="ifs.20190426133529.1"><vh>@theme</vh></v>
+<v t="ifs.20190426133529.1"><vh>@deep</vh></v>
 <v t="ifs.20190324100302.1"><vh>oasis</vh></v>
 <v t="ifs.20190324100253.1"><vh>sceno</vh></v>
 <v t="ifs.20190324100212.1"><vh>ethno</vh></v>
@@ -4804,7 +4804,7 @@ rating: 5</t>
 ## A place to link them all...</t>
 <t tx="ifs.20190415223632.1">@language yaml
 
-background: 
+look: 
   space: An amasing place to link us all...
   transition: transitionWarp
   dash: https://le3foisglanddu-iznow.s3.filebase.com/the-gentle-giant.jpg
@@ -4813,7 +4813,7 @@ background:
   mode: dark</t>
 <t tx="ifs.20190416230605.1">@language yaml
 
-background: 
+look: 
   space: Just a channel for tomorrow
   transition: transitionZip
   dash: http://www.bianoti.com/wp-content/uploads/2015/12/fonds-ecran-desert-4.jpg
@@ -4828,14 +4828,14 @@ background:
       </t>
 <t tx="ifs.20190418155034.1">@language yaml
 
-background: 
+look: 
   dash: /static/images/back.jpg
   spot: https://media.fromthegrapevine.com/assets/images/2017/8/earth-planet-0802.jpg.480x0_q71_crop-scale.jpg
   theme: blue
   mode: dark</t>
 <t tx="ifs.20190421204116.1">@language yaml
 
-background: 
+look: 
   dash: http://www.pptbackgrounds.org/uploads/blue-blurry-bubbles-powerpoint-backgrounds.jpg
   spot: https://media.fromthegrapevine.com/assets/images/2019/3/מערת_מלחם_המערה_הארוכה_ביותר_בעולם._צילום_אנטון_ציקישב_Anton_Chikishev__1.JPG.824x0_q71_crop-scale.jpg
   theme: blue
@@ -4883,19 +4883,19 @@ background:
 </t>
 <t tx="ifs.20190422125241.1">@language yaml
 
-background: 
+look: 
   spot: /static/arkom/astro/bar07.jpg</t>
 <t tx="ifs.20190422125325.1">@language yaml
 
-background: 
+look: 
   spot: /static/arkom/astro/salon03.jpg</t>
 <t tx="ifs.20190422125336.1">@language yaml
 
-background: 
+look: 
   spot: /static/arkom/astro/room02.jpg</t>
 <t tx="ifs.20190426133529.1">@language yaml
 
-background: 
+look: 
   space: Une identité pas comme les autres
   transition: transitionBlocks2
   dash: https://images4.alphacoders.com/106/thumb-1920-106826.jpg
@@ -4904,7 +4904,7 @@ background:
   mode: dark</t>
 <t tx="ifs.20190426134328.1">@language yaml
 
-background: 
+look: 
   space: Une conf errante pour la nouvelle donne...
   transition: transitionCamera
   dash: https://www.kazoart.com/blog/wp-content/uploads/2019/02/petite-fille-au-ballon-bansky.jpg
@@ -4914,7 +4914,7 @@ background:
 <t tx="ifs.20190501131551.1"></t>
 <t tx="ifs.20190501131619.1">@language yaml
 
-background: 
+look: 
   spot: /static/arkom/astro/bar03.jpg</t>
 <t tx="ifs.20190501154145.1">&lt;img-left height="800" src="static/arkom/astro/plan03.jpg"&gt; &lt;/img-left&gt;
 &lt;p&gt;
@@ -4927,7 +4927,7 @@ background:
 </t>
 <t tx="ifs.20190501154145.2">@language yaml
 
-background: 
+look: 
   spot: /static/arkom/astro/bar01.jpg</t>
 <t tx="ifs.20200324194154.1"></t>
 <t tx="ifs.20200324194333.1"></t>

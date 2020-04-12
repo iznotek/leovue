@@ -105,9 +105,9 @@ export default {
     '$store.state.currentItem': {
       handler: function (val, oldVal) {
         if (val) {
-          var theme = this.$store.state.themes[val.id]
-          if (theme && theme.background && theme.background.theme) {
-            var color = util.rgbaFromTheme(theme.background.theme, 0.7)
+          var deep = this.$store.getters.getDeepLookForNode(val)
+          if (deep && deep.look && deep.look.theme) {
+            var color = util.rgbaFromTheme(deep.look.theme, 0.7)
             this.color = color
           }
         }

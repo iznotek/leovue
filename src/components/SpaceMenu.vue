@@ -74,23 +74,23 @@ export default {
     }
   },
   watch: {
-    '$store.state.themes': {
+    '$store.state.deeps': {
       handler: function (val, oldVal) {
         var spaces = []
         if (val) {
           Object.keys(val).forEach(id => {
-            let theme = val[id]
-            if (theme.background.space) {
+            let deep = val[id]
+            if (deep.look.space) {
               let item = JSON.search(this.$store.state.leodata, '//*[id="' + id + '"]')
               if (item) {
                 item = item[0]
                 if (item) {
                   var space = {
-                    text: theme.background.space,
+                    text: deep.look.space,
                     title: item.vtitle,
-                    image: theme.background.spot,
+                    image: deep.look.spot,
                     id: id,
-                    color: util.rgbaFromTheme(theme.background.theme || 'black', 0.8)
+                    color: util.rgbaFromTheme(deep.look.theme || 'black', 0.8)
                   }
                   spaces.push(space)
                 }

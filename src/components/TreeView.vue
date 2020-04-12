@@ -33,7 +33,6 @@
     },
     methods: {
       isVisible: function (itemdata) {
-        if (/^@theme/.test(itemdata.name)) { return false } // theme node hided
         if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
         return true
       },

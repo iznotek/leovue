@@ -357,20 +357,10 @@ export default {
       // return itemdata.children && itemdata.children.length
     },
     isVisible: function (itemdata) {
-      if (itemdata === undefined || (itemdata !== undefined && /^@theme/.test(itemdata.name))) { return false } // theme node hided
-      return true
+      return itemdata !== undefined
     },
     hasTheme: function (itemdata) {
-      if (itemdata === undefined) {
-        return false
-      }
-
-      for (let i = 0; i < itemdata.children.length; i++) {
-        if (/^@theme/.test(itemdata.children[i].name)) {
-          return true
-        }
-      }
-      return false
+      return itemdata && itemdata.deep && itemdata.deep.look
     },
     ref: function (id, sid) {
       return id + '_zspot_' + sid
@@ -396,23 +386,6 @@ export default {
       }
       return false
     },
-    getThemeIdFrom (id) {
-      var theme = this.$store.state.themes[id]
-      if (theme && theme.background.theme) {
-        return id
-      }
-      var pid = id
-      while (pid >= 0) {
-        const parent = JSON.search(this.$store.state.leodata, '//*[id="' + pid + '"]/parent::*')
-        if (parent && parent[0]) {
-          pid = parent[0].id
-          theme = this.$store.state.themes[pid]
-          if (theme && theme.background.theme) {
-            return pid
-          }
-        } else return 0
-      }
-    },
     style: function (itemdata, index = 0, parentdata = null) {
       var style = '' // "background-color: orange; border-width: 4px; border-color: var(--background-color);"
       if (itemdata) {
@@ -421,17 +394,18 @@ export default {
         } else {
           style = 'border-width: 0px; border-color:white; '
         }
-        var color
-        var ptheme = parentdata ? this.$store.state.themes[parentdata.id] : null
-        var theme = this.$store.state.themes[this.getThemeIdFrom(itemdata.id)]
-
+        var color = 'blue'
+        var gdeep = this.$store.state.deep
+        var pdeep = parentdata ? this.$store.state.deeps[parentdata.id] : null
+        var deep = this.$store.state.deeps[itemdata.id]
+        // console.log(itemdata, deep.look.theme)
         index = index > 0 ? index - 1 : index
-        if (theme && theme.background.theme) {
-          color = util.rgbaFromTheme(theme.background.theme)
-        } else if (ptheme && ptheme.background.theme) {
-          color = util.rgbaFromTheme(ptheme.background.theme, 1, 30 * index)
-        } else if (this.$store.state.theme) {
-          color = util.rgbaFromTheme(this.$store.state.theme.background.theme, 1, 30 * index)
+        if (deep && deep.look && deep.look.theme) {
+          color = util.rgbaFromTheme(deep.look.theme)
+        } else if (pdeep && pdeep.look && pdeep.look.theme) {
+          color = util.rgbaFromTheme(pdeep.look.theme, 1, 30 * index)
+        } else if (gdeep && gdeep.look && gdeep.look.theme) {
+          color = util.rgbaFromTheme(gdeep.look.theme, 1, 30 * index)
         }
         style += 'background-color: ' + color + ';'
       }
@@ -456,9 +430,9 @@ export default {
     },
     spotimage: function (itemdata) {
       if (itemdata) {
-        var theme = this.$store.state.themes[itemdata.id]
-        if (theme && theme.background.spot) {
-          return theme.background.spot
+        var deep = this.$store.state.deeps[itemdata.id]
+        if (deep && deep.look.spot) {
+          return deep.look.spot
         } else {
           return require(`@/assets/spot.png`)
         }

@@ -116,10 +116,10 @@ export default {
     '$store.state.currentItem': {
       handler: function (val, oldVal) {
         if (val) {
-          var theme = this.$store.state.themes[val.id]
-          if (this.colors && theme && theme.background && theme.background.theme) {
-            var color = util.rgbaFromTheme(theme.background.theme, 0.7)
-            var bg = util.rgbaObjectFromTheme(theme.background.theme, 0.7, 30)
+          var deep = this.$store.getters.getDeepLookForNode(val)
+          if (this.colors && deep && deep.look && deep.look.theme) {
+            var color = util.rgbaFromTheme(deep.look.theme, 0.7)
+            var bg = util.rgbaObjectFromTheme(deep.look.theme, 0.7, 30)
             if (typeof bg === 'object') {
               bg = 'rgba(' + bg.r + ',' + bg.g + ',' + bg.b + ',' + bg.a + ')'
             }

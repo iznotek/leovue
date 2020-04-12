@@ -50,8 +50,8 @@ export default {
   },
   data () {
     return {
+      requiredList: [],
       required: 0,
-      requiredTransition: 'transitionFade',
       index: 0,
       length: 0,
       use: {
@@ -62,6 +62,7 @@ export default {
       },
       flux: {
         options: {
+          allowToSkipTransition: false,
           autoplay: false
         },
         images: [],
@@ -121,33 +122,23 @@ export default {
       }
     },
     check () {
-      if (this.$refs.slider !== undefined) {
-        // console.log(this.$refs.slider)
-        if (this.$refs.slider.Images && this.$refs.slider.Images.current && this.$refs.slider.Images.current.index === this.required) {
-          // console.log('check', this.required)
-          this.index = this.required
-        } else {
+      if (this.$refs.slider !== undefined && this.requiredList.length) {
+        // console.log(this.requiredList)
+        var required = this.requiredList[0]
+        if (this.$refs.slider.Images && this.$refs.slider.Images.current && this.$refs.slider.Images.current.index === required.index) {
+          console.log('check', required.index)
+          this.index = required.index
+          this.requiredList.shift()
+          if (this.requiredList.length) {
+            this.requiredList = [this.requiredList.pop()] // keep the last only
+          } else return
+        } else { // if (required.index !== this.required) {
+          console.log('mov', required.index)
           // console.log('mov', this.required, this.$refs.slider.image2Index, this.$refs.slider.image1Index, this.$refs.slider.Images.current.index)
-          this.$refs.slider.show(this.required, 'fade') // this.requiredTransition)
-          setTimeout(this.check, 500)
+          this.$refs.slider.show(required.index, 'fade') // this.requiredTransition)
+          this.required = required.index
         }
-      }
-    },
-    getThemeIdFrom (id) {
-      var theme = this.$store.state.themes[id]
-      if (theme && theme.background.theme) {
-        return id
-      }
-      var pid = id
-      while (pid >= 0) {
-        const parent = JSON.search(this.$store.state.leodata, '//*[id="' + pid + '"]/parent::*')
-        if (parent && parent[0]) {
-          pid = parent[0].id
-          theme = this.$store.state.themes[pid]
-          if (theme && theme.background.theme) {
-            return pid
-          }
-        } else return 0
+        setTimeout(this.check, 500)
       }
     },
     // changeAmbient (bg) {
@@ -193,14 +184,14 @@ export default {
     // setInterval(this.check, 500)
   },
   watch: {
-    '$store.state.themes': {
+    '$store.state.deeps': {
       handler: function (val, oldVal) {
         var backs = [window.lconfig.dashboardImage]
         if (val) {
           Object.keys(val).forEach(key => {
-            let theme = val[key]
-            if (theme.background.dash && backs.indexOf(theme.background.dash) === -1) {
-              backs.push(theme.background.dash)
+            let deep = val[key]
+            if (deep.look.dash && backs.indexOf(deep.look.dash) === -1) {
+              backs.push(deep.look.dash)
             }
           })
         }
@@ -213,17 +204,18 @@ export default {
     '$store.state.currentItem': {
       handler: function (val, oldVal) {
         if (val) {
-          var theme = this.$store.state.themes[this.getThemeIdFrom(val.id)]
-          if (theme && theme.background) {
+          var deep = this.$store.getters.getDeepLookForNode(val)
+          if (deep && deep.look) {
             var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
-            var transition = isChrome ? 'fade' : theme.background.transition || 'fade'
-            var index = this.fluxImages.indexOf(theme.background.dash)
+            var transition = isChrome ? 'fade' : deep.look.transition || 'fade'
+            var index = this.fluxImages.indexOf(deep.look.dash)
             if (index > -1) {
-              this.required = index
-              this.requiredTransition = transition
+              // console.log(this.requiredList)
+              this.requiredList.push({index: index, transition: transition})
+
               // this.$refs.slider.show(this.required, 'fade')
-              // console.log(theme.background.dash, index)
-              setTimeout(this.check, 1000)
+              // console.log(deep.look.dash, index)
+              setTimeout(this.check, 500)
             }
           }
         }

@@ -740,32 +740,39 @@ function extractCover (ldata) {
 }
 
 /**
- * extract @theme nodes section
+ * extract @look nodes section, can only be the first child
  * @param ldata
  * @returns {string}
  */
-function extractThemes (ldata) {
-  let themes = {}
+function extractDeeps (ldata) {
+  let deeps = {}
   const textItems = ldata.textItems
   ldata.data.forEach(d => {
-    _.merge(themes, extractTheme(d, textItems))
+    _.merge(deeps, extractDeep(d, textItems))
   })
-  return themes
+  return deeps
 }
-function extractTheme (d, textItems, parentid = 1) {
-  let themes = {}
-  if (/^@theme/.test(d.name)) {
-    let itemText = textItems[d.t]
-    let theme = jsyaml.load(itemText.replace('@language yaml', ''))
-    if (theme) {
-      // console.log('FOUND THEME: ', theme)
-      themes[parentid] = theme
+function extractDeep (d, textItems, parent = null) {
+  var deeps = {}
+  if (parent) {
+    parent.deep = {}
+    if (/^@deep/.test(d.name)) {
+      let itemText = textItems[d.t]
+      let deep = jsyaml.load(itemText.replace('@language yaml', ''))
+      if (deep && parent) {
+        // console.log('FOUND LOOK: ', look)
+        parent.deep = deep
+        deeps[parent.id] = deep
+      }
     }
   }
   d.children.forEach(child => {
-    _.merge(themes, extractTheme(child, textItems, d.id))
+    _.merge(deeps, extractDeep(child, textItems, d))
   })
-  return themes
+  if (d.children.length && /^@deep/.test(d.children[0].name)) {
+    d.children.shift()
+  }
+  return deeps
 }
 
 /**
@@ -781,14 +788,14 @@ function setData (context, ldata, filename, route) {
   context.commit('RESET') // content item has not been drawn
   context.commit('INIT_DATA') // loaded the leo data
   let cover = extractCover(ldata) // cover page, pull out any nodes with @cover directive
-  let themes = extractThemes(ldata)
+  let deeps = extractDeeps(ldata)
   const text = ldata.textItems
   context.commit('LEO', {
     data: ldata.data,
     text,
     filename: filename,
     cover: cover,
-    themes: themes
+    deeps: deeps
   })
   loadDataSets(context, ldata)
   loadDataTables(context, ldata)
@@ -1285,7 +1292,7 @@ export default new Vuex.Store({
     contentPane: 'text',
     viewType: 'o',
     cover: '',
-    themes: {},
+    deeps: {},
     connected: false,
     loading: false,
     currentItemPath: '',
@@ -1319,7 +1326,7 @@ export default new Vuex.Store({
     subpath: '',
     angle: 0,
     tween: null,
-    theme: null,
+    deep: {},
     zircle: {}
   },
   mutations: {
@@ -1361,7 +1368,7 @@ export default new Vuex.Store({
       state.idx = c.idx
       state.idxDocs = c.docs
       state.cover = o.cover
-      state.themes = o.themes
+      state.deeps = o.deeps
       state.filename = o.filename
       window.lconfig.leodata = o.data
       window.lconfig.leotext = o.text
@@ -1429,6 +1436,9 @@ export default new Vuex.Store({
     CONTENT_ITEM_UPDATE (state, o) {
       state.contentItemsUpdateCount = state.contentItemsUpdateCount + 1
     },
+    CURRENT_DEEP (state, o) {
+      state.deep = o
+    },
     CURRENT_ITEM (state, o) {
       const id = o.id
       // check current for identical
@@ -1452,9 +1462,19 @@ export default new Vuex.Store({
       if (next - id !== 1) {
         next = 0
       }
-      state.currentItem.id = id
-      state.currentItem.prev = prev
-      state.currentItem.next = next
+
+      var obj = JSON.search(state.leodata, '//*[id="' + id + '"]')
+      if (obj && obj[0]) obj = obj[0]
+      // state.deep = obj.deep
+
+      var item = {}
+      item.id = id
+      // item.obj = obj
+      item.prev = prev
+      item.next = next
+      // console.log(item)
+
+      state.currentItem = item
       let routeName = state.route.name
       if (routeName === 'Top') {
         routeName = 'Node'
@@ -1471,36 +1491,31 @@ export default new Vuex.Store({
       var paths = []
       var ids = []
       if (id > 0) {
-        const item = JSON.search(state.leodata, '//*[id="' + id + '"]')
-        if (item && item[0]) {
-          ids.push(id)
-          paths.push(item[0].vtitle)
-        }
+        ids.push(id)
+        paths.push(obj.vtitle)
       }
       var parentid = id
-      var parenttitle
+      // var parenttitle
       while (parentid > 0) {
         const parent = JSON.search(state.leodata, '//*[id="' + parentid + '"]/parent::*')
         if (parent && parent[0]) {
           parentid = parent[0].id
-          parenttitle = parent[0].vtitle
+          // parenttitle = parent[0].vtitle
           ids.push(parentid)
-          if (parenttitle && !parenttitle.includes('@cover')) {
-            paths.push(parent[0].vtitle)
-          }
+          // if (parenttitle && !parenttitle.includes('@cover')) {
+          paths.push(parent[0].vtitle)
+          // }
         } else break
       }
 
-      paths.push('')
+      // paths.push('')
       paths = paths.reverse()
+      paths.shift()
       state.currentItemPath = paths.join(' / ')
       state.currentItemPathMapIds = ids.reverse()
 
       router.push({name: routeName, params: { id }}, () => {})
       // state.initialized = false
-    },
-    CURRENT_THEME (state, o) {
-      state.theme = o
     },
     ZIRCLE_VIEW (state, o) {
       state.zircle[o.view] = o.id
@@ -1512,6 +1527,28 @@ export default new Vuex.Store({
     },
     SUBPATH (state, o) {
       state.subpath = o.subpath
+    }
+  },
+  getters: {
+    getDeepLookForNode (state) {
+      return (item) => {
+        if (!item) return -1
+        let deep = state.deeps[item.id]
+        if (deep && deep.look) {
+          return deep
+        }
+        let pid = item.id
+        while (pid >= 0) {
+          const parent = JSON.search(state.leodata, '//*[id="' + pid + '"]/parent::*')
+          if (parent && parent[0]) {
+            pid = parent[0].id
+            deep = state.deeps[pid]
+            if (deep && deep.look) {
+              return deep
+            }
+          } else return 0
+        }
+      }
     }
   },
   actions: {
@@ -1671,6 +1708,7 @@ export default new Vuex.Store({
         itemObj = {id, historyIndex: o.historyIndex}
       }
       context.commit('CURRENT_ITEM', itemObj)
+
       // current page is the page of presentation or section of @page content
       // reset for first item in series
       if (_.get(item, '[0].presentation')) {
@@ -1690,7 +1728,7 @@ export default new Vuex.Store({
         // if (item && item.children) {
         //   for (let i = 0; i < item.children.length; i++) {
         //     // console.log(i + ': ' + item.children[i].name)
-        //     if (/^@theme/.test(item.children[i].name)) {
+        //     if (/^@meta/.test(item.children[i].name)) {
         //       let itemText = context.state.leotext[item.children[i].t]
         //       let themeObj = jsyaml.load(itemText.replace('@language yaml', ''))
         //       if (themeObj) {

@@ -194,6 +194,7 @@
       <comment-grid :baseURL="baseURL"
                   :apiKey="apiKey"
                   :nodeName="nodeName" 
+                  :nodeColor="nodeColor" 
                   :background="bgc" 
                   :commentBackgroundColor="cbgc" 
                   :commentTextColor="ctc" 
@@ -307,7 +308,7 @@
     a: 1
   }
   export default {
-    name: 'app',
+    name: 'CommentView',
     data () {
       return {
         bgColor: defaultBg,
@@ -317,6 +318,7 @@
         baseURL: firebaseConfig.databaseURL,
         apiKey: firebaseConfig.apiKey,
         nodeName: '',
+        nodeColor: 'white',
         maxUserNameLength: '30',
         maxCommentLength: '1000',
         initialMessageLimit: '11',
@@ -490,20 +492,11 @@
         return 'rgba(' + this.commentTxtColor.rgba.r + ', ' + this.commentTxtColor.rgba.g + ', ' + this.commentTxtColor.rgba.b + ', ' + this.commentTxtColor.rgba.a + ')'
       },
       unc () {
-        var color = 'white'
-        var theme = this.$store.state.theme
-        if (theme && theme.background.theme) {
-          color = theme.background.theme
-          return color
-        }
-        return 'rgba(' + this.userNamColor.rgba.r + ', ' + this.userNamColor.rgba.g + ', ' + this.userNamColor.rgba.b + ', ' + this.userNamColor.rgba.a + ')'
+        return this.nodeColor
+        // return 'rgba(' + this.userNamColor.rgba.r + ', ' + this.userNamColor.rgba.g + ', ' + this.userNamColor.rgba.b + ', ' + this.userNamColor.rgba.a + ')'
       },
       gradient () {
         var color = 'black'
-        // var theme = this.$store.state.theme
-        // if (theme && theme.background.theme) {
-        //   color = theme.background.theme
-        // }
         return 'linear-gradient(90deg, ' + util.rgbaFromTheme(color, 0.3) + ' 0%, ' + util.rgbaFromTheme(color, 0.7) + ' 100%)'
         // return 'linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 100%);' // + util.rgbaFromTheme(color, 0.8) +
       }
@@ -511,14 +504,21 @@
     watch: {
       '$store.state.currentItem': {
         handler: function (val, oldVal) {
-          var item = val ? Object.assign({}, val) : null
-          if (item) {
-            let model = JSON.search(this.$store.state.leodata, '//*[id="' + item.id + '"]')
-            if (model && model[0]) {
-              this.nodeName = model[0].t
-              return
+          if (val) {
+            var deep = this.$store.getters.getDeepLookForNode(val)
+            if (deep && deep.look && deep.look.theme) {
+              this.nodeColor = deep.look.theme
+            }
+            var item = val ? Object.assign({}, val) : null
+            if (item) {
+              let model = JSON.search(this.$store.state.leodata, '//*[id="' + item.id + '"]')
+              if (model && model[0]) {
+                this.nodeName = model[0].t
+                return
+              }
             }
           }
+          this.nodeColor = 'white'
           this.nodeName = ''
         },
         deep: true,

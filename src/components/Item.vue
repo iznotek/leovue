@@ -137,9 +137,9 @@ export default {
     selectedImage: function () {
       // var color = 'rgba(0,0,0,0.5)'
       if (this.model) {
-        var theme = this.$store.state.themes[this.model.id]
-        if (theme && theme.background.spot) {
-          return 'url(' + theme.background.spot + ')'
+        var deep = this.$store.state.deeps[this.model.id]
+        if (deep && deep.look && deep.look.spot) {
+          return 'url(' + deep.look.spot + ')'
         }
       }
       return ''
@@ -153,21 +153,11 @@ export default {
       let color = ''
       let color2 = ''
       if (this.model) {
-        var theme = this.$store.state.themes[this.model.id]
-        if (theme && theme.background.theme) {
-          color = util.rgbaFromTheme(theme.background.theme, alpha, this.active ? decal : -decal)
+        var deep = this.$store.getters.getDeepLookForNode(this.model)
+        if (deep && deep.look && deep.look.theme) {
+          color = util.rgbaFromTheme(deep.look.theme, alpha, this.active ? decal : -decal)
           color2 = util.rgbaFromTheme('black', alpha2, this.active ? decal : -decal)
           return 'linear-gradient(' + angle + 'deg, ' + color + ' 0%, ' + color2 + ' 100%)'
-        }
-        const parent = JSON.search(this.$store.state.leodata, '//*[id="' + this.model.id + '"]/parent::*')
-        if (parent && parent[0]) {
-          var pid = parent[0].id
-          theme = this.$store.state.themes[pid]
-          if (theme && theme.background.theme) {
-            color = util.rgbaFromTheme(theme.background.theme, alpha, this.active ? decal : -decal)
-            color2 = util.rgbaFromTheme('black', alpha2, this.active ? decal : -decal)
-            return 'linear-gradient(' + angle + 'deg, ' + color + ' 0%, ' + color2 + ' 100%)'
-          }
         }
       }
       color = util.rgbaFromObject({r: 0, g: 0, b: 0, a: 1.0}, alpha, this.active ? decal : -decal)
@@ -266,8 +256,7 @@ export default {
   },
   methods: {
     isVisible: function (itemdata) {
-      if (/^@theme/.test(itemdata.name)) { return false } // theme node hided
-      if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
+      if (/^@cover/.test(itemdata.name)) { return false }
       return true
     },
     toEditor: function (lang) {

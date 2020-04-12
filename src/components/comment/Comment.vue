@@ -1,9 +1,9 @@
 <template>
   <div class="comments">
     <div class="wrapper" @mouseenter="showHideBar = true; $emit('close-hide-bar',false);" @mouseleave="showHideBar = false; $emit('close-hide-bar',true);" >
-      <div class="avatar" :style="styleShadow">
+      <!-- <div class="avatar" :style="styleShadow">
         <svg ref="svgAvatar"> </svg>
-      </div>
+      </div> -->
       <div class="commentWrapper" v-if="hideMessage">
         <div class="nameWrapper">
           <div class="name" :style="{color: userNameColor}">{{name}}</div>

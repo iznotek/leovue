@@ -152,7 +152,6 @@ export default {
   methods: {
     isVisible: function (itemdata) {
       if (itemdata.id === 1) { return false }
-      if (/^@theme/.test(itemdata.name)) { return false } // theme node hided
       if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
       return true
     },
@@ -161,9 +160,9 @@ export default {
     },
     spotimage: function (itemdata) {
       if (itemdata) {
-        var theme = this.$store.state.themes[itemdata.id]
-        if (theme && theme.background.spot) {
-          return theme.background.spot
+        var deep = this.$store.state.deeps[itemdata.id]
+        if (deep && deep.look.spot) {
+          return deep.look.spot
         } else {
           return require(`@/assets/spot.png`) // 'static/arkom/spot.png'
         }
@@ -178,16 +177,18 @@ export default {
         } else {
           style = 'border-width: 0px; border-color:white; '
         }
-        var color
-        var ptheme = parentdata ? this.$store.state.themes[parentdata.id] : null
-        var theme = this.$store.state.themes[itemdata.id]
+        var color = 'blue'
+        var gdeep = this.$store.state.deep
+        var pdeep = parentdata ? this.$store.state.deeps[parentdata.id] : null
+        var deep = this.$store.state.deeps[itemdata.id]
+
         index = index > 0 ? index - 1 : index
-        if (theme && theme.background.theme) {
-          color = util.rgbaFromTheme(theme.background.theme)
-        } else if (ptheme && ptheme.background.theme) {
-          color = util.rgbaFromTheme(ptheme.background.theme, 1, 30 * index)
-        } else if (this.$store.state.theme) {
-          color = util.rgbaFromTheme(this.$store.state.theme.background.theme, 1, 30 * index)
+        if (deep && deep.look && deep.look.theme) {
+          color = util.rgbaFromTheme(deep.look.theme)
+        } else if (pdeep && pdeep.look && pdeep.look.theme) {
+          color = util.rgbaFromTheme(pdeep.look.theme, 1, 30 * index)
+        } else if (gdeep && gdeep.look && gdeep.look.theme) {
+          color = util.rgbaFromTheme(gdeep.look.theme, 1, 30 * index)
         }
         style += 'background-color: ' + color + ';'
       }
@@ -230,15 +231,7 @@ export default {
       }, 100)
     },
     hasTheme: function (itemdata) {
-      if (itemdata === undefined) {
-        return false
-      }
-      for (let i = 0; i < itemdata.children.length; i++) {
-        if (/^@theme/.test(itemdata.children[i].name)) {
-          return true
-        }
-      }
-      return false
+      return itemdata && itemdata.deep && itemdata.deep.look
     },
     ref: function (id) {
       return 'zspot_' + id

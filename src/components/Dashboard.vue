@@ -14,7 +14,7 @@
     <background/>
     <appheader/>
 
-    <div slot="left" id="main" :class="{'header-space': config.showHeader}"> <!-- id="main"  -->
+    <div id="main" :class="{'header-space': config.showHeader}"> <!-- id="main"  -->
         <router-multi-view :id="id" >
         </router-multi-view>
     </div>

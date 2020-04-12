@@ -10,19 +10,14 @@
       >
       <pane v-if="left" :size="sizes.left" :class="$store.state.darkmode ? 'dark' : 'light'">
         <zircle-viewer style="z-index: 6002;"></zircle-viewer> 
-        <!-- <div class="footer">
-        <div class="footer-content">
-          
-        </div>
-        </div> -->
-      </pane>
+      </pane> 
       <pane v-if="connected && center" :size="sizes.center">
         <content-pane style="z-index: 6002;"></content-pane> 
       </pane>
       <pane v-if="connected && right && (comments || meeting)" :size="sizes.right">
         <splitpanes horizontal>
           <pane v-if="comments" size="70">
-            <comments style="z-index: 60003;"></comments>  
+            <comments style="z-index: 6003;"></comments>  
           </pane>
           <pane v-if="meeting" size="30">
             <meeting style="z-index: 6004;" ></meeting>
@@ -221,9 +216,9 @@
       '$store.state.currentItem': {
         handler: function (val, oldVal) {
           if (val) {
-            var theme = this.$store.state.themes[val.id]
-            if (theme && theme.background && theme.background.theme) {
-              var color = util.rgbaFromTheme(theme.background.theme, 1.0)
+            var deep = this.$store.getters.getDeepLookForNode(val)
+            if (deep && deep.look && deep.look.theme) {
+              var color = util.rgbaFromTheme(deep.look.theme, 1.0)
               this.color = color
             }
           }
