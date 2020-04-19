@@ -16,33 +16,33 @@
         </div> -->
        
         <digital-clock :blink="false" />
-         <div class="space">.</div>
-         <div v-if="connected" @click="$modal.show('settings')" class="icon icon-button">
-          <icon class="icon" name="cog"></icon>
-        </div> 
+         <div class="space"></div>
         <div @click="fullscreen" class="icon icon-button">
           <icon class="icon" name="expand"></icon>
         </div> 
-        <div v-if="connected" @click="$store.commit('DARKMODE', !$store.state.darkmode)" class="icon icon-button">
+        <div v-if="ready" @click="$store.commit('DARKMODE', !$store.state.darkmode)" class="icon icon-button">
           <icon class="icon" :name="$store.state.darkmode ? 'moon' : 'regular/moon'" flip="horizontal"></icon>
+        </div>          
+        <div v-if="ready" @click="$modal.show('settings')" class="icon icon-button">
+          <icon class="icon" name="cog"></icon>
         </div> 
         <!-- <div v-if="connected" class="button-shim"></div> -->
-        <div class="space">.</div>
-        <div v-if="connected" @click="goBack"
+        <div class="space"></div>
+        <div v-if="ready" @click="goBack"
              class="icon icon-button disabled">
           <icon class="icon"
                 :class="{disabled: noBack}"
                 name="reply"></icon>
         </div>
-        <div v-if="connected" @click="goForward"
+        <div v-if="ready" @click="goForward"
              class="icon icon-button">
           <icon class="icon"
                 :class="{disabled: noForward}"
                 name="share"></icon>
         </div>
 
-        <div class="space">.</div>   
-        <div @click="refresh" class="icon icon-button">
+        <div class="space"></div>   
+        <div v-if="ready"  @click="refresh" class="icon icon-button">
           <icon class="icon" name="sync-alt"></icon>
         </div> 
         <!-- <searchbar class="searchbar"></searchbar> -->
@@ -217,7 +217,7 @@
     },
     computed: {
       docTitle () {
-        if (!this.connected) {
+        if (!this.ready) {
           return '' // window.lconfig.docTitle
         }
         if (this.$store.state.currentItemPath.includes('@cover')) {
@@ -227,6 +227,9 @@
       },
       user () {
         return this.$store.state.user.name
+      },
+      ready () {
+        return this.$store.state.ready
       },
       connected () {
         return this.$store.state.connected
@@ -341,7 +344,9 @@
   display: none
 .space
   float: left
-  width: 20px
+  display: inline
+  width: 15px
+  padding: 1px
 .icon
   float: left
   padding: 0

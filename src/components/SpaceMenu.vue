@@ -74,27 +74,23 @@ export default {
     }
   },
   watch: {
-    '$store.state.deeps': {
+    '$store.state.leodata': {
       handler: function (val, oldVal) {
         var spaces = []
-        if (val) {
-          Object.keys(val).forEach(id => {
-            let deep = val[id]
-            if (deep.look.space) {
-              let item = JSON.search(this.$store.state.leodata, '//*[id="' + id + '"]')
-              if (item) {
-                item = item[0]
-                if (item) {
-                  var space = {
-                    text: deep.look.space,
-                    title: item.vtitle,
-                    image: deep.look.spot,
-                    id: id,
-                    color: util.rgbaFromTheme(deep.look.theme || 'black', 0.8)
-                  }
-                  spaces.push(space)
-                }
+        if (val && val.length) {
+          // console.log(val)
+          val.forEach(item => {
+            let deep = this.$store.state.deeps[item.id]
+            // console.log(item)
+            if (deep && deep.look) {
+              var space = {
+                text: deep.look.space || '',
+                title: item.vtitle,
+                image: deep.look.spot,
+                id: item.id,
+                color: util.rgbaFromTheme(deep.look.theme || 'black', 0.8)
               }
+              spaces.push(space)
             }
           })
         }

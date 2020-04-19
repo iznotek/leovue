@@ -1,6 +1,7 @@
 <template>
   <div>
-    <splitpanes 
+
+   <splitpanes 
       ref="splitpanes"
       vertical
       @pane-maximize="maximized($event)"
@@ -11,7 +12,7 @@
       <pane v-if="left" :size="sizes.left" :class="$store.state.darkmode ? 'dark' : 'light'">
         <zircle-viewer style="z-index: 6002;"></zircle-viewer> 
       </pane> 
-      <pane v-if="connected && center" :size="sizes.center">
+      <pane v-if="ready && center" :size="sizes.center">
         <content-pane style="z-index: 6002;"></content-pane> 
       </pane>
       <pane v-if="connected && right && (comments || meeting)" :size="sizes.right">
@@ -26,23 +27,23 @@
       </pane>
     </splitpanes>
 
-    <div v-if="connected" class="noselect" style="position:fixed; top: 40px; margin-left: -10px; z-index: 6005;" :style="{left: $store.state.leftPaneWidth}">
+    <div v-if="ready" class="noselect" style="position:fixed; top: 40px; margin-left: -5px; z-index: 6005;" :style="{left: leftBall}">
         <ball-menu class="split-ball"/>
         <div class="arrow-left"
             v-show="showLeftButton"
             @click="slide('left')">
-          <!-- <icon name="bulletarrow" /> -->
+ 
           <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
         </div>
         <div class="arrow-right"
             v-show="showRightButton"
             @click="slide('right')">
-          <!-- <icon name="bulletarrow" /> -->
+   
           <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
         </div>
 
         <middle-menu v-if="false" class="middle-menu"/>
-      </div>
+      </div> 
   </div>
 </template>
 
@@ -75,17 +76,18 @@
     },
     data: function () {
       return {
+        init: false,
         comments: true,
         meeting: false,
         showLeftButton: true,
         showRightButton: true,
         left: true,
         center: true,
-        right: true,
+        right: false,
         sizes: {
-          left: 23,
-          center: 60,
-          right: 17
+          left: 100,
+          center: 0,
+          right: 0
         },
         lock: false,
         saved: [],
@@ -108,14 +110,17 @@
         this.$refs.splitpanes.$emit('pane-maximize', panes[id])
       },
       restore: function (sizes) {
+        if (!this.$refs.splitpanes) return
         var panes = this.$refs.splitpanes.panes
         panes = panes.map((pane, i) => {
           pane.size = sizes[i]
           return pane
         })
         this.$refs.splitpanes.panes = panes
-        this.$store.state.leftPaneWidth = sizes[0] + '%'
+        this.resize(panes)
+        // this.$store.state.leftPaneWidth = sizes[0] + '%'
         // this.$refs.splitpanes.$emit('pane-maximize', panes[id])
+        // console.log(sizes)
       },
       maximized: function (id) {
         // if (!this.left) this.$store.state.leftPaneWidth = '0%'
@@ -124,16 +129,17 @@
         // if (panes.length > 1) this.sizes.center = panes[1].size
         // if (panes.length > 0) this.sizes.left = panes[0].size
         // console.log(this.sizes)
-        this.$store.state.leftPaneWidth = this.$refs.splitpanes.panes[0].size + '%'
-        // console.log(data)
+        // this.$store.state.leftPaneWidth = this.$refs.splitpanes.panes[0].size + '%'
+        // console.log(id)
       },
       resize: function (data) {
         if (data) {
-          // if (data.length > 2) this.sizes.right = data[2].size
-          // if (data.length > 1) this.sizes.center = data[1].size
-          // if (data.length > 0) this.sizes.left = data[0].size
-          // console.log(this.sizes)
-          this.$store.state.leftPaneWidth = data[0].size + '%'
+          if (data.length > 2) this.sizes.right = data[2].size
+          if (data.length > 1) this.sizes.center = data[1].size
+          if (data.length > 0) this.sizes.left = data[0].size
+          // if (!isNaN(data[0].size)) {
+          //   this.$store.state.leftPaneWidth = data[0].size + '%'
+          // }
           // console.log(data)
         }
       },
@@ -168,8 +174,14 @@
       }
     },
     computed: {
+      leftBall: function () {
+        return this.sizes.left + '%'
+      },
       connected: function () {
         return this.$store.state.connected
+      },
+      ready: function () {
+        return this.$store.state.ready
       },
       astyle: function () {
         return '-webkit-filter: opacity(0.5) drop-shadow(0 0 0 ' + this.color + '); filter: opacity(0.5) drop-shadow(0 0 0' + this.color + '); z-index=2000;'
@@ -213,6 +225,18 @@
       }
     },
     watch: {
+      '$store.state.ready': {
+        handler: function (val, oldVal) {
+          if (val) {
+            // setTimeout(() => {
+            //   var size = parseInt(this.$store.state.leftPaneWidth) + 1
+            //   this.restore([size, (100 - size)])
+            // }, 1000)
+          }
+        },
+        deep: true,
+        immediate: true
+      },
       '$store.state.currentItem': {
         handler: function (val, oldVal) {
           if (val) {
@@ -230,6 +254,9 @@
         handler: function (val, oldVal) {
           if (val !== oldVal) {
             val = parseInt(val)
+
+            var size = parseInt(val) + 1
+            this.restore([size, (100 - size)])
 
             if (val === 0) {
               this.showRightButton = true

@@ -137,6 +137,7 @@ export default {
         Helper.nextTick(function () {
           layerInfo.inner = false
         })
+        this.$emit('opened', true)
       }
     },
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,6 +150,7 @@ export default {
           this.isOpened = false
         })
         currentMenu.inner = true
+        this.$emit('opened', false)
       }
     },
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

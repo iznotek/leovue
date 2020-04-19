@@ -61,7 +61,8 @@
         </template>
         <template v-else>
             <template v-if="mainTooltip">
-                <div v-bind:v-tooltip="{ content: mainTooltip, placement: tooltipPosition, classes: 'fab-tooltip'}"
+                <div @click="toggle = !toggle" 
+                     v-bind:v-tooltip="{ content: mainTooltip, placement: tooltipPosition, classes: 'fab-tooltip'}"
                      class="fab-main pointer" :style="{ 'background-color': bgColor, 'padding': paddingAmount }"
                 >
                     <!-- <i class="material-icons md-36 main" :class="{ rotate: toggle && allowRotation }">{{mainIcon}}</i>
@@ -71,7 +72,8 @@
                 </div>
             </template>
             <template v-else>
-                <div class="fab-main pointer" :style="{ 'background-color': bgColor, 'padding': paddingAmount }"
+                <div @click="toggle = !toggle" 
+                    class="fab-main pointer" :style="{ 'background-color': bgColor, 'padding': paddingAmount }"
                 >
                     <!-- <i class="material-icons md-36 main" :class="{ rotate: toggle && allowRotation }">{{mainIcon}}</i>
                     <i class="material-icons md-36 close" :class="{ rotate: toggle && allowRotation }">add</i> -->
@@ -429,11 +431,17 @@ export default {
         -ms-transform: rotate(315deg); /* IE 9 */
         -webkit-transform: rotate(315deg); /* Chrome, Safari, Opera */
         transform: rotate(315deg);
+        opacity: 0;
+        -webkit-transition: opacity .3s ease-in, -webkit-transform .4s; /* Safari */
+        transition: opacity .3s ease-in, transform .4s;
     }
     .fab-main .material-icons.close.rotate {
         -ms-transform: rotate(315deg); /* IE 9 */
         -webkit-transform: rotate(315deg); /* Chrome, Safari, Opera */
         transform: rotate(315deg);
+        opacity: 1;
+        -webkit-transition: opacity .3s ease-in, -webkit-transform .4s; /* Safari */
+        transition: opacity .3s ease-in, transform .4s;
     }
     .fab-child {
         border-radius: 100px;

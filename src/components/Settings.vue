@@ -24,13 +24,11 @@ export default {
   name: 'InputFocusModal',
   methods: {
     beforeOpen (event) {
-      console.log('open')
     },
     beforeClose (event) {
-      if (!this.$store.state.connected) {
-        event.stop()
-      }
-      console.log('close')
+      // event.stop()
+      // if (!this.$store.state.connected) {
+      // }
     }
   }
 }
@@ -38,8 +36,8 @@ export default {
 
 <style lang="scss">
   .settings {
-    background-image: url("/static/images/back.jpg");
-    border-radius: 1%;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 2%;
     box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.8);
     border: 0px solid rgba(255, 255, 255, 0.65);
   }

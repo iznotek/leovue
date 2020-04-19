@@ -94,10 +94,14 @@ import vmodal from 'vue-js-modal'
 // import 'element-ui/lib/theme-chalk/index.css'
 // import 'element-tiptap/lib/index.css'
 
+import { blockstack, bs } from './services/blockstack'
 import { charts } from './content-components/Charts'
-charts(Vue)
 
 const Defiant = require('./lib/defiant') // eslint-disable-line
+
+charts(Vue)
+Vue.prototype.$blockstack = blockstack
+Vue.prototype.$bs = bs
 
 // Enable progressive web app support (with offline-plugin)
 // if (process.env.NODE_ENV === 'production') {

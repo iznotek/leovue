@@ -667,7 +667,7 @@ function showSite (context, title, id) {
   }
   const iframeHTML = `
     <div class=iframe-${ext} style="width:100%">
-    <iframe
+    <iframe id="iframe-${id}"
        src="${url}" height="100%" width="100%"
        marginwidth="0" marginheight="0"
        hspace="0" vspace="0"
@@ -706,7 +706,7 @@ function setSiteItem (context, title, id) {
   }
   const iframeHTML = `
     <div class="vinline">
-    <iframe
+    <iframe id="iframe-${id}"
        src="${url}" height="100%" width="100%"
        marginwidth="0" marginheight="0"
        hspace="0" vspace="0"
@@ -1293,6 +1293,7 @@ export default new Vuex.Store({
     viewType: 'o',
     cover: '',
     deeps: {},
+    ready: false,
     connected: false,
     loading: false,
     currentItemPath: '',
@@ -1314,7 +1315,7 @@ export default new Vuex.Store({
     history: [0],
     historyIndex: 0,
     leftPaneLeft: 0,
-    leftPaneWidth: 1200,
+    leftPaneWidth: '100%',
     rightPaneWidth: 0,
     iframeHTML: '',
     contentItemsUpdateCount: 0,
@@ -1327,6 +1328,7 @@ export default new Vuex.Store({
     angle: 0,
     tween: null,
     deep: {},
+    space: null,
     zircle: {}
   },
   mutations: {
@@ -1370,6 +1372,7 @@ export default new Vuex.Store({
       state.cover = o.cover
       state.deeps = o.deeps
       state.filename = o.filename
+      state.space = o.space || window.location.hostname
       window.lconfig.leodata = o.data
       window.lconfig.leotext = o.text
     },
@@ -1438,6 +1441,9 @@ export default new Vuex.Store({
     },
     CURRENT_DEEP (state, o) {
       state.deep = o
+    },
+    CURRENT_SPACE (state, o) {
+      state.space = o
     },
     CURRENT_ITEM (state, o) {
       const id = o.id
@@ -1514,6 +1520,7 @@ export default new Vuex.Store({
       state.currentItemPath = paths.join(' / ')
       state.currentItemPathMapIds = ids.reverse()
 
+      // console.log('CURRENT_ITEM: ', id)
       router.push({name: routeName, params: { id }}, () => {})
       // state.initialized = false
     },
@@ -1534,7 +1541,8 @@ export default new Vuex.Store({
       return (item) => {
         if (!item) return -1
         let deep = state.deeps[item.id]
-        if (deep && deep.look) {
+        if (!deep) return -1
+        if (deep && deep.look && deep.look.theme) {
           return deep
         }
         let pid = item.id
@@ -1542,8 +1550,9 @@ export default new Vuex.Store({
           const parent = JSON.search(state.leodata, '//*[id="' + pid + '"]/parent::*')
           if (parent && parent[0]) {
             pid = parent[0].id
-            deep = state.deeps[pid]
-            if (deep && deep.look) {
+            var pdeep = state.deeps[pid]
+            if (pdeep && pdeep.look && pdeep.look.theme) {
+              deep.look.theme = pdeep.look.theme
               return deep
             }
           } else return 0
@@ -1583,6 +1592,12 @@ export default new Vuex.Store({
           // Slide changed, see data.state for slide number
         }
       })
+    },
+    loadGraph (context, o) {
+      context.commit('RESET') // content item has not been drawn
+      context.commit('INIT_DATA') // loaded the leo data
+      context.commit('LEO', o)
+      // context.commit('CURRENT_SPACE', item.vtitle)
     },
     loadLeo (context, o) {
       getLeoJSON(o.filename, o.id).then(ldata => {
@@ -1684,6 +1699,7 @@ export default new Vuex.Store({
       if (o.id === context.state.currentItem.id && !o.reset) { return }
       // if in iframe, just raise event and leave
       if (window.parent !== window.self) { return }
+
       // open parent nodes, close others
       const openItems = JSON.search(context.state.leodata, '//*[id="' + id + '"]/ancestor::*')
       let openItemIds = openItems.reduce((acc, o) => {
@@ -1707,21 +1723,29 @@ export default new Vuex.Store({
       if (o.historyIndex) {
         itemObj = {id, historyIndex: o.historyIndex}
       }
-      context.commit('CURRENT_ITEM', itemObj)
 
-      // current page is the page of presentation or section of @page content
-      // reset for first item in series
-      if (_.get(item, '[0].presentation')) {
-        context.commit('CURRENT_PAGE', {id: 0})
-      }
-      if (_.get(item, '[0].page')) {
-        context.commit('CURRENT_PAGE', {id: 0})
-      }
       if (item) {
         item = item[0]
         if (!item) {
           console.log('No item[0] for item:', item)
           return
+        }
+
+        context.commit('CURRENT_ITEM', itemObj)
+
+        // current page is the page of presentation or section of @page content
+        // reset for first item in series
+        if (_.get(item, '.presentation')) {
+          context.commit('CURRENT_PAGE', {id: 0})
+        }
+        if (_.get(item, '.page')) {
+          context.commit('CURRENT_PAGE', {id: 0})
+        }
+
+        if (/^@space /.test(item.name)) {
+          context.commit('CURRENT_SPACE', item.vtitle) // content item has not been drawn
+        } else if (!context.state.space) {
+          context.commit('CURRENT_SPACE', window.location.hostname)
         }
 
         // look for theme and

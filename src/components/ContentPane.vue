@@ -1,16 +1,16 @@
 <template>
-  <div v-if="connected" style="width:100%; height:100%;">
+  <div  style="width:100%; height:100%;">
     
-    <div style="position: relative;">
-      <edit-menu :state="this.edit" style="float: right; margin-top: -35px; margin-right: -50px;" />
-    </div>
+    <div v-if="connected && editable" style="position: relative;">
+      <edit-menu :state="edit" style="float: right; margin-top: -35px; margin-right: -50px;" />
+    </div> 
 
 
     <div class="behind" :class="$store.state.darkmode ? 'dark' : 'light'">
     <div style="position: absolute; width: 100%; height: 100%;">
       <component :is="fade.transition"  :duration="fade.duration" :delay="fade.delay" v-show='fade.next'>
       <div>
-        <div v-for="(item,index) in itemOdd" :key="index" >
+        <div v-for="(item,index) in itemOdd" :key="index" :style="{zIndex: item.item.id === current.item.id ? 6004 : 6000}">
           
           <div v-if="textContent(item)">
                   <div id="lhandle"
@@ -23,7 +23,7 @@
                     </div>
                   </div>
                   <div id="tlayout">
-                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
                       <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
                           <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
@@ -88,7 +88,7 @@
       <div style="position: absolute; width: 100%; height: 100%;">
       <component :is="fade.transition" :duration="fade.duration" :delay="fade.delay" v-show='!fade.next'>
       <div>
-        <div v-for="(item,index) in itemEven" :key="index" >
+        <div v-for="(item,index) in itemEven" :key="index" :style="{zIndex: item.item.id === current.item.id ? 6004 : 6000}">
           
           <div v-if="textContent(item)">
                   <div id="lhandle"
@@ -101,7 +101,7 @@
                     </div>
                   </div>
                   <div id="tlayout">
-                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: 'calc(100vh - 33px)'}">
+                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
                       <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
                           <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
@@ -222,7 +222,7 @@ window.loadURL = function (src) {
 };
 function overrideXFrame(item, textItems) {
   // console.log('override xframe')
-  const iframe = document.getElementsByTagName('iframe')[0];
+  const iframe = document.getElementById('iframe-' + item.id);
   if (!iframe){ return }
   window.iframe = iframe
   const url = iframe.src
@@ -435,15 +435,27 @@ export default {
     //   setTimeout(() => this.goToHistory(index), 500)
     // },
     setNext(item) {
+      // console.log(item)
+      if (!item || (item && item.item && item.item.id <= 0)) return
       setTimeout(() => {
           this.edit = false
-          this.fade.items.push(item)
-          this.current = this.fade.items[this.fade.items.length-1]
-
-          if (this.fade.next) {
-            this.fade.indexEven = this.fade.items.length-1
+          
+          let index
+          let obj = this.fade.items.find(obj => obj.item.id === item.item.id)
+          if (!obj) {
+            this.fade.items.push(item)
+            index = this.fade.items.length-1
+          } else if (obj.item.id !== this.current.item.id) {
+            index = this.fade.items.findIndex(obj => obj.item.id === item.item.id)
           } else {
-            this.fade.indexOdd = this.fade.items.length-1
+            return
+          }
+
+          this.current = this.fade.items[index]
+          if (this.fade.next) {
+            this.fade.indexEven = index
+          } else {
+            this.fade.indexOdd = index
           }
           this.fade.next = !this.fade.next
 
@@ -489,6 +501,9 @@ export default {
     },
     config () {
       return window.lconfig
+    },
+    editable () {
+      return this.$store.state.contentPane !== 'site'
     }
   },
   beforeUpdate () {
@@ -514,13 +529,16 @@ export default {
   },
   updated () {
     const blocks = this.$el.querySelectorAll('code')
-    // debugger
     blocks.forEach(function(block) {
       hljs.highlightBlock(block);
     });
-    const id = this.$store.state.currentItem.id
-    const item = JSON.search(this.data, '//*[id="' + id + '"]')[0]
-    overrideXFrame(item, this.$store.state.leotext)
+
+    if (this.$store.state.contentPane === 'site') {
+      const id = this.$store.state.currentItem.id
+      const item = JSON.search(this.data, '//*[id="' + id + '"]')[0]
+      overrideXFrame(item, this.$store.state.leotext)
+    }
+
     const clinks = document.getElementsByClassName('csection-link')
     let leodata = this.$store.state.leodata
     let me = this
@@ -582,30 +600,22 @@ export default {
       deep: true,
       immediate: true
     },
-    '$store.state.contentPane': {
-      handler: function (val, oldVal) {
-        this.new.pane = val ? val : null
-      },
-      deep: true,
-      immediate: true
-    },
     '$store.state.currentItemContent': {
       handler: function (val, oldVal) {
-        this.new.content = val ? val : null
-        if (this.new.content) {
-          this.setNext(Object.assign({}, this.new))
-        }
+        if (!val) return
+        this.new.content = val
+        this.new.pane = this.$store.state.contentPane
+        this.setNext(Object.assign({}, this.new))
       },
       deep: true,
       immediate: true
     },
     '$store.state.iframeHTML': {
       handler: function (val, oldVal) {
-        this.new.iframe = val ? val : null
-        if (this.new.iframe && this.new.pane == 'site') {
-          this.loading = false
-          this.setNext(Object.assign({}, this.new))
-        }
+        if (!val) return
+        this.new.iframe = val
+        this.new.pane = this.$store.state.contentPane
+        this.setNext(Object.assign({}, this.new))
       },
       deep: true,
       immediate: true

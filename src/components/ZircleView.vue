@@ -1,11 +1,14 @@
 <template>
-    <z-view size="xxl" class="meteor">
+    <z-view size="xxl" class="meteor" :style="style(space)">
       <section slot="image"> 
        <!-- <kinesis-container>
         <kinesis-element :strength="10" :type="'depth'"> <!--<div v-anime="{ rotate: '360', easing: 'linear', backgroundColor: 'transparent', duration: 200000, loop: true }">  -->
      
-        <div> 
-          <img :src="spotimage(root[0])" height="475px"> 
+        <!-- <div> 
+          <img :src="spotimage(space)" height="475px"> 
+        </div> -->
+        <div class="transition" :style="style(space)"> 
+          <img class="transition" :style="{'opacity': opacity(space, 0.9)}" :src="spotimage(space)" height="475px"> 
         </div>
        <!-- </kinesis-element>
         </kinesis-container> -->
@@ -28,7 +31,7 @@
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 1px;  border-color:white' size=xxs :distance="132" :angle="-82" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width:3px;   border-color:white' size=xs :distance="190" :angle="-160" />
       </section>
-      <section v-if="connected" slot="extension">
+      <section v-if="$store.state.ready" slot="extension">
         <z-spot
           v-for="(amodel, index) in data"
           v-if="isVisible(amodel)"
@@ -102,6 +105,7 @@ export default {
   },
   data: function () {
     return {
+      graph: null,
       reset: true,
       openFlag: false,
       hasRibbon: false,
@@ -127,8 +131,11 @@ export default {
     root () {
       return this.$store.state.leodata
     },
+    space () {
+      return this.graph
+    },
     data () {
-      return this.$store.state.leodata ? this.$store.state.leodata[0].children : undefined
+      return this.graph ? this.graph.children : null
     },
     text () {
       return this.$store.state.leotext
@@ -170,10 +177,10 @@ export default {
         if (deep && deep.look.spot) {
           return deep.look.spot
         } else {
-          return require(`@/assets/spot.png`) // 'static/arkom/spot.png'
+          return require(`@/assets/spot.png`)
         }
       }
-      return false
+      return '/static/images/spot.jpg'
     },
     style: function (itemdata, index = 0, parentdata = null) {
       var style = '' // "background-color: orange; border-width: 4px; border-color: var(--background-color);"
@@ -196,6 +203,7 @@ export default {
         } else if (gdeep && gdeep.look && gdeep.look.theme) {
           color = util.rgbaFromTheme(gdeep.look.theme, 1, 30 * index)
         }
+
         style += 'background-color: ' + color + ';'
       }
       return style
@@ -311,6 +319,39 @@ export default {
   //   }
   // }
   watch: {
+    '$store.state.space': {
+      handler: function (val, oldVal) {
+        if (val) {
+          console.log('Look for space: ' + val)
+          let agraph = null
+          if (this.$store.state.leodata && this.$store.state.leodata.length) {
+            this.$store.state.leodata.forEach((data) => {
+              if (data.vtitle.includes(val)) {
+                agraph = data
+              }
+            })
+          } else {
+            console.log('load a graph first !!')
+          }
+          this.graph = agraph
+          if (!agraph) {
+            this.graph = this.$store.state.leodata[0]
+            console.log('Fallback at id: ', this.graph.id)
+          } else {
+            console.log('Found at id: ', this.graph.id)
+          }
+          // console.log(this.graph)
+
+          // only at startup
+          if (this.$store.state.currentItem.id <= 0) {
+            var id = this.graph.id
+            this.$store.dispatch('setCurrentItem', {id})
+          }
+        }
+      },
+      deep: true,
+      immediate: true
+    },
     '$route' (to, from) {
       var fromid = from.path.split('/')[2]
       var toid = to.path.split('/')[2]

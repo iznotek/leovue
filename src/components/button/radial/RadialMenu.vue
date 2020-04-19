@@ -61,6 +61,10 @@ const RadialMenu = {
     open: {
       type: Boolean,
       default: undefined
+    },
+    canOpen: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -113,6 +117,7 @@ const RadialMenu = {
 
     handleClick () {
       this.$emit('click')
+      if (!this.canOpen) return
       this.toggleMenu()
     },
 

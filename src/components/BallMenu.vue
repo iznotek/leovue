@@ -2,13 +2,14 @@
   <div> <!-- v-html="menu"> -->
     <radial-menu
       class="radial"
+      @click="open()"
       :style="{backgroundColor: color, color: 'white'}"
       :itemSize="50"
       :radius="120"
       :size="50"
       :angle-restriction="-180">
         <radial-menu-item 
-          v-for="(item, index) in items" 
+          v-for="(item, index) in getItems()" 
           :key="index" 
           :style="{backgroundColor: color, color: 'white'}"
           @click="() => handleClick(item)">
@@ -29,7 +30,7 @@
       :size="54"
       color="#fff"
     /> -->
-    <div class="logo" @click="open()">
+    <div class="logo" @click="signIn()">
       <img src="/static/images/logo.png" width="55"/>
     </div>
       <!-- <div style="color: rgba(0,0,0,0.6); margin-top: 16px;">{{ lastClicked }}</div> -->
@@ -70,7 +71,10 @@ export default {
   data () {
     return {
       color: 'white',
-      items: ['you', 'will', 'be', 'here', 'a', 'world'],
+      items: {
+        guest: ['you', 'will', 'be', 'here', 'a', 'world'],
+        user: ['give', 'a', 'space', 'save', 'the', 'time']
+      },
       lastClicked: 'click on something!',
       bloomingMenu: null
     }
@@ -86,14 +90,34 @@ export default {
     // console.log(this.bloomingMenu)
   },
   methods: {
+    getItems () {
+      return !this.$store.state.connected ? this.items.guest : this.items.user
+    },
     open () {
-
     },
     handleClick (item) {
       this.lastClicked = item
+      if (item === 'here') {
+        if (!this.$bs.isUserSignedIn()) {
+          this.$bs.redirectToSignIn()
+        }
+      }
+      if (item === 'save') {
+        this.$bs.save({
+          data: this.$store.state.leodata,
+          text: this.$store.state.leotext,
+          cover: this.$store.state.cover,
+          deeps: this.$store.state.deeps
+        })
+      }
     },
     menu () {
       // return this.bloomingMenu.render()
+    }
+  },
+  computed: {
+    connected () {
+      return this.$store.state.connected
     }
   },
   watch: {

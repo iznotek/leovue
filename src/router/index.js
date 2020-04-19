@@ -5,7 +5,7 @@ import Splitboard from '@/components/Splitboard'
 // import TreeViewer from '@/components/TreeViewer'
 // import D3Viewer from '@/components/D3Viewer'
 // import DbViewer from '@/components/DbViewer'
-import Settings from '@/components/Settings'
+// import Settings from '@/components/Settings'
 // import AccordionViewer from '@/components/AccordionViewer'
 // import NestedViewer from '@/components/NestedViewer'
 // import ZircleViewer from '@/components/ZircleViewer'
@@ -18,9 +18,7 @@ import Settings from '@/components/Settings'
 
 Vue.use(Router)
 
-let baseMode = window.lconfig.baseMode
-if (!baseMode) { baseMode = 'o' }
-
+let baseMode = 'iznow'
 let startPage = '/1'
 if (window.lconfig.coverPage) {
   startPage = '/2'
@@ -106,7 +104,7 @@ export default new Router({
     */
 
     {
-      path: '/o/:id',
+      path: '/iznow/:id',
       component: Dashboard,
       children: [{
         name: 'ONode',
@@ -115,10 +113,10 @@ export default new Router({
       }]
     },
 
-    {
-      path: '/settings',
-      component: Settings
-    },
+    // {
+    //   path: '/settings',
+    //   component: Settings
+    // },
     {
       path: '*',
       redirect: '/' + baseMode + startPage

@@ -1,74 +1,79 @@
 <template>
-  <div class="wrapper index">
-    <div class="ag-main">
-      <section class="login-wrapper">
-        <div class="login-body">
-          <!--<div class="columns">
-            <div class="column is-12">
-                <InputChannel @change="handleChannel" placeholder="Input a room name here"></InputChannel>
+  <div  v-if="!meeting">
+    <div class="wrapper index">
+      <div class="ag-main">
+        <section class="login-wrapper">
+          <div class="login-body">
+            <!--<div class="columns">
+              <div class="column is-12">
+                  <InputChannel @change="handleChannel" placeholder="Input a room name here"></InputChannel>
+              </div>
+            </div> -->
+            <div class="columns">
+              <div class="column is-7">
+                <BaseOptions 
+                  @change="handleBaseMode">
+                </BaseOptions>
+              </div>
+              <div class="column is-5">
+                <AdvancedOptions 
+                  :onRadioChange="handleTranscode" 
+                  :onSelectChange="handleVideoProfile">
+                </AdvancedOptions>
+              </div>
             </div>
-          </div> -->
-          <div class="columns">
-            <div class="column is-7">
-              <BaseOptions 
-                @change="handleBaseMode">
-              </BaseOptions>
-            </div>
-            <div class="column is-5">
-              <AdvancedOptions 
-                :onRadioChange="handleTranscode" 
-                :onSelectChange="handleVideoProfile">
-              </AdvancedOptions>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <div id="attendeeMode" class="control">
-                <label class="radio">
-                  <input @click="handleAttendeeMode"
-                  value="video" type="radio" 
-                  name="attendee" checked />
-                  <span class="radio-btn">
-                  </span>
-                  <span class="radio-img video">
-                  </span>
-                  <span class="radio-msg">Video Call : join with video call</span>
-                </label>
-                <br />
-                <label class="radio">
-                  <input @click="handleAttendeeMode"
-                  value="audio-only" type="radio" 
-                  name="attendee" />
-                  <span class="radio-btn">
-                  </span>
-                  <span class="radio-img audio">
-                  </span>
-                  <span class="radio-msg">Audio-only : join with audio call</span>
-                </label>
-                <br />
-                <label class="radio">
-                  <input @click="handleAttendeeMode"
-                  value="audience" type="radio" 
-                  name="attendee" />
-                  <span class="radio-btn">
-                  </span>
-                  <span class="radio-img audience">
-                  </span>
-                  <span class="radio-msg">Audience : join as an audience</span>
-                </label>
+            <div class="columns">
+              <div class="column">
+                <div id="attendeeMode" class="control">
+                  <label class="radio">
+                    <input @click="handleAttendeeMode"
+                    value="video" type="radio" 
+                    name="attendee" checked />
+                    <span class="radio-btn">
+                    </span>
+                    <span class="radio-img video">
+                    </span>
+                    <span class="radio-msg">Video Call : join with video call</span>
+                  </label>
+                  <br />
+                  <label class="radio">
+                    <input @click="handleAttendeeMode"
+                    value="audio-only" type="radio" 
+                    name="attendee" />
+                    <span class="radio-btn">
+                    </span>
+                    <span class="radio-img audio">
+                    </span>
+                    <span class="radio-msg">Audio-only : join with audio call</span>
+                  </label>
+                  <br />
+                  <label class="radio">
+                    <input @click="handleAttendeeMode"
+                    value="audience" type="radio" 
+                    name="attendee" />
+                    <span class="radio-btn">
+                    </span>
+                    <span class="radio-img audience">
+                    </span>
+                    <span class="radio-msg">Audience : join as an audience</span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="login-footer">
-          <a id="joinBtn" 
-            @click="handleJoin"
-            :disabled="!joinBtn" 
-            class="ag-rounded button is-info">Join
-          </a>
-        </div>
-      </section>
+          <div class="login-footer">
+            <a id="joinBtn" 
+              @click="handleJoin"
+              :disabled="!joinBtn" 
+              class="ag-rounded button is-info">Join
+            </a>
+          </div>
+        </section>
+      </div>
     </div>
+  </div>
+  <div v-else  class="full">
+    <meeting/>
   </div>
 </template>
 
@@ -77,17 +82,21 @@ import * as Cookies from 'js-cookie'
 import BaseOptions from '../components/BaseOptions'
 import AdvancedOptions from '../components/AdvancedOptions'
 import InputChannel from '../components/InputChannel'
+import Meeting from './Meeting'
+
 export default {
   components: {
     BaseOptions,
     AdvancedOptions,
-    InputChannel
+    InputChannel,
+    Meeting
   },
 
   data () {
     return {
-      joinBtn: false,
-      channel: '',
+      meeting: false,
+      joinBtn: true,
+      channel: 'iznow',
       baseMode: 'rtc',
       transcode: 'vp8',
       attendeeMode: 'video',
@@ -126,7 +135,8 @@ export default {
       Cookies.set('transcode', this.transcode)
       Cookies.set('attendeeMode', this.attendeeMode)
       Cookies.set('videoProfile', this.videoProfile)
-      this.$router.push('/meeting')
+      this.meeting = true
+      // this.$router.push('/meeting')
     }
   },
 
@@ -143,6 +153,7 @@ export default {
 <style scoped>
 
 .full {
+  position: relative;
   height: 100%;
   min-height: 100%;
   font-size: 14px!important;

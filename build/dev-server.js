@@ -7,6 +7,7 @@ if (!process.env.NODE_ENV) {
 
 var opn = require('opn')
 var path = require('path')
+var cors = require('cors')
 var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -27,7 +28,7 @@ var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
-  quiet: true
+  quiet: false
 })
 
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
@@ -53,6 +54,8 @@ Object.keys(proxyTable).forEach(function (context) {
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 
+app.use(cors())
+
 // serve webpack bundle output
 app.use(devMiddleware)
 
@@ -63,6 +66,10 @@ app.use(hotMiddleware)
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
+
+// blockstack manifest
+var staticPath = path.posix.join(config.dev.assetsPublicPath, 'manifest.json')
+app.use(staticPath, express.static('./manifest.json'))
 
 var uri = 'http://localhost:' + port
 

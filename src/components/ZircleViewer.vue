@@ -69,9 +69,11 @@
       zcanvas = document.getElementById('zcanvas')
       zcanvas.style.backgroundColor = 'rgba(0, 0, 0, 0.0)'
 
+      this.$zircle.setView('zview')
+      this.viewname = this.$zircle.getCurrentViewName()
+
       setTimeout(() => {
-        setInterval(this.checkViewChanged, 100)
-        this.$zircle.toView('zview')
+        setInterval(this.checkViewChanged, 500)
       }, 1300)
 
       let vm = this
@@ -86,6 +88,7 @@
     updated () {},
     data: function () {
       return {
+        viewname: '',
         target: target,
         current: '',
         leftTrigger: 70,
@@ -107,12 +110,17 @@
       }
     },
     methods: {
+      initialize () {
+        setTimeout(() => {
+          setInterval(this.checkViewChanged, 500)
+        }, 1300)
+      },
       checkViewChanged () {
         let vm = this
         let current = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
         if (current !== this.current) {
-          this.current = current
           var id = this.$store.state.zircle[current]
+          // console.log(id, current, this.$store.state.zircle)
           var run = false
           if (id > 0) {
             // console.log('zircleupdate: ', id)
@@ -120,14 +128,18 @@
             // setTimeout(() => this.$store.dispatch('setCurrentItem', {id}), 2000)
             this.$store.dispatch('setCurrentItem', {id})
           } else {
+            this.$store.commit('ZIRCLE_VIEW', {view: current, id: this.$store.state.currentItem.id})
             // console.log('zircleupdate: ', 'cover')
-            if (window.lconfig.coverPage === false) {
-              id = 1
-              run = true
-              this.$store.dispatch('setCurrentItem', {id})
-              // setTimeout(() => this.$store.dispatch('setCurrentItem', {id}), 2000)
-            }
+            // if (window.lconfig.coverPage === false) {
+            //   id = 1
+            //   run = true
+            //   this.$store.dispatch('setCurrentItem', {id})
+            //   // setTimeout(() => this.$store.dispatch('setCurrentItem', {id}), 2000)
+            // }
             // else swipe content pane ?!
+          }
+          if (this.$store.state.currentItem.id === id) {
+            this.current = current
           }
 
           if (run === true) {
@@ -194,6 +206,18 @@
       }
     },
     watch: {
+      '$store.state.space': {
+        handler: function (val, oldVal) {
+          if (val) {
+            // console.log({view: this.viewname, id: this.$store.state.currentItem.id || 1})
+            this.$store.commit('ZIRCLE_VIEW', {view: this.viewname, id: this.$store.state.currentItem.id})
+            // this.initialize()
+            // this.$zircle.setView('zview')
+          }
+        },
+        deep: true,
+        immediate: true
+      },
       // '$store.state.leftPaneLeft': {
       //   handler: function (val, oldVal) {
       //     let zcanvas = document.getElementById('zcanvas')

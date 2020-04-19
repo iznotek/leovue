@@ -1,5 +1,5 @@
 <template>
-    <div v-mousefollower class="background"> <!-- v-blur="blurConfig" -->
+    <div > <!-- v-blur="blurConfig" -->
       <!-- <lazy-img :src="current" /> <!-- :placeholder="current" /> -->
       <!-- <div class="cesium" v-if="use.map">
         <cesium-viewer :animation="cesium.animation" :timeline="cesium.timeline" @ready="ready">
@@ -14,13 +14,19 @@
         :transitionOptions="fluxTransitionOptions"
         ref="slider">
       </flux> -->
+      <div class="background" >
+        <flux v-mousefollower class="element" style="z-index:1"
+          :options="flux.options"
+          :images="fluxImages"
+          :transitions="flux.transitions"
+          ref="slider">
+        </flux> 
+       <!--  <fade-transition :duration="fluxOptions.duration" :delay="fluxOptions.delay" v-show='!fade.next'>
 
-      <flux style="z-index:1"
-        :options="flux.options"
-        :images="fluxImages"
-        :transitions="flux.transitions"
-        ref="slider">
-      </flux> 
+        </fade-transition>
+        <fade-transition :duration="fluxOptions.duration" :delay="fluxOptions.delay" v-show='fade.next'>
+        </fade-transition> -->
+      </div>
     <!-- <transition name="fade"> -->
      <!--   <Component :is="background" backgroundColor="rgba(0,0,0,0)" ></Component> -->
     <!--  </transition> -->
@@ -63,6 +69,7 @@ export default {
       flux: {
         options: {
           allowToSkipTransition: false,
+          allowFullscreen: true,
           autoplay: false
         },
         images: [],
@@ -70,7 +77,8 @@ export default {
       },
       fluxOptions: {
         autoplay: false,
-        delay: 1000,
+        delay: 100,
+        duration: 2000,
         autohideTime: 0,
         infinite: false
       },
@@ -166,6 +174,18 @@ export default {
     }
   },
   computed: {
+    // itemOdd () {
+    //   if (this.fade.indexOdd > -1)
+    //     return [this.fade.items[this.fade.indexOdd]]
+    //   else
+    //     return []
+    // },
+    // itemEven () {
+    //   if (this.fade.indexEven > -1)
+    //     return [this.fade.items[this.fade.indexEven]]
+    //   else
+    //     return []
+    // },
     current () {
       return this.fluxImages[this.index]
     },
@@ -241,10 +261,19 @@ export default {
   width: 100%;
   height: 100%;
   top: 0px;
-  left: 0px;
+  bottom: 0;
+  position: absolute;
   overflow: hidden;
   background: linear-gradient(174deg, rgba(2,0,36,1) 0%, rgba(9,22,121,1) 35%, rgba(0,212,255,1) 100%);
   background-size: cover;
+  object-fit: fill;
+}
+.element {
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  position: absolute;
 }
 .cesium {
   width: 100%;

@@ -5,9 +5,9 @@
     <!-- <modelviewer/> -->
     <settings/>
 
-    <chatmenu v-if="connected"/>
-    <typemenu v-if="connected"/>
-    <spacemenu v-if="connected && this.$store.state.spacemenu"/>
+    <chatmenu v-if="connected && config.comments"/>
+    <typemenu v-if="ready"/>
+    <spacemenu v-if="ready && this.$store.state.spacemenu && !config.static"/>
 
     <chat v-if="config.chats && connected"/>
 
@@ -64,6 +64,7 @@ import ChatMenu from './ChatMenu'
 import Background from './Background'
 import TreeView from './TreeView'
 import D3View from './D3View'
+import Logo from './Logo'
 
 import Settings from './Settings'
 
@@ -71,6 +72,8 @@ import Settings from './Settings'
 import ParticleEffectButton from 'vue-particle-effect-buttons'
 import {OrbitSpinner} from 'epic-spinners' // OrbitSpinner
 // import _ from 'lodash'
+
+const util = require('../util.js')
 
 export default {
   name: 'dashboard',
@@ -86,12 +89,16 @@ export default {
     pbutton: ParticleEffectButton,
     spinner: OrbitSpinner,
     spacemenu: SpaceMenu,
+    logo: Logo,
     Settings
     // modelviewer: ModelViewer
   },
   data () {
     return {
       password: '',
+      logo: null,
+      loading: true,
+      loader: null,
       configlogin: {
         // easing: 'easeOutQuart',
         // size: 6,
@@ -141,16 +148,15 @@ export default {
   },
   mounted () {
     let vm = this
-    let loading = true
+    // this.$store.state.connected = !this.locked
+    // this.$store.state.user = {name: 'pi'}
 
-    this.$store.state.connected = !this.locked
-    this.$store.state.user = {name: 'pi'}
-
-    if (loading) {
-      let loader = this.$loading.show({
+    if (this.loading) {
+      this.logo = this.$createElement('logo', {ref: 'logo'})
+      this.loader = this.$loading.show({
         // Optional parameters
         container: this.$refs.dashboard,
-        backgroundColor: '#001127',
+        backgroundColor: '#000', // '#001127',
         color: '#0AF',
         opacity: 1,
         canCancel: true,
@@ -158,34 +164,12 @@ export default {
         zIndex: 10000
         // onCancel: this.onCancel,
       }, {
-        default: this.$createElement('spinner', {props: {size: 120, animationDuration: 1700, color: '#FFF'}})
+        default: this.logo //  {props: {size: 150, animationDuration: 1700, color: '#FFF'}}
+        // default: this.$createElement('spinner', {props: {size: 150, animationDuration: 1700, color: '#FFF'}})
         // before: this.$createElement('before'),
         // after: this.$createElement('after')
       })
       // simulate AJAX
-
-      setTimeout(() => {
-        var id = setInterval(() => {
-          loader.opacity -= 0.07
-          if (loader.opacity <= 0.0) {
-            clearInterval(id)
-            loader.hide()
-
-            if (!this.locked) {
-              // this.animLogoLogin.play()
-              setTimeout(() => {
-                vm.$store.state.leftPaneWidth = parseInt(window.lconfig.leftPaneWidth) + '%'
-                vm.$store.state.rightPaneWidth = 100 - parseInt(window.lconfig.leftPaneWidth) + '%'
-              }, 2000)
-            }
-            // else {
-            //   setTimeout(() => {
-            //     vm.configlogin.visible = true
-            //   }, 2000)
-            // }
-          }
-        }, 50)
-      }, 1000)
     }
 
     this.animLogoRight = this.$anime({
@@ -273,6 +257,9 @@ export default {
     connected: function () {
       return this.$store.state.connected
     },
+    ready: function () {
+      return this.$store.state.ready
+    },
     id: function () {
       if (!this.$route.params.id) {
         return +1
@@ -300,6 +287,40 @@ export default {
     }
   },
   watch: {
+    '$store.state.space': {
+      handler: function (val, oldVal) {
+        if (val) {
+          if (this.loading) {
+            let vm = this
+            vm.$store.state.ready = true
+            setTimeout(() => {
+              this.loader.opacity = 0
+              this.$refs.logo.hide()
+              setTimeout(() => {
+                this.loader.hide()
+                vm.$store.state.leftPaneWidth = parseInt(window.lconfig.leftPaneWidth) + '%'
+              }, 2000)
+            }, 2000)
+          }
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+    '$store.state.currentItem': {
+      handler: function (val, oldVal) {
+        if (val) {
+          var deep = this.$store.getters.getDeepLookForNode(val)
+          if (deep && deep.look && deep.look.theme) {
+            if (this.loading) {
+              this.loader.backgroundColor = util.rgbaFromTheme(deep.look.theme)
+            }
+          }
+        }
+      },
+      deep: true,
+      immediate: true
+    },
     '$route' (to, from) {
       // var id = to.path.split('/')[2]
       // console.log(to, _.without(to.path.split('/')))
@@ -316,6 +337,14 @@ export default {
 </script>
 
 <style>
+
+.vld-background {
+  transition: all 2s ease;
+}
+
+.vld-icon {
+  transition: all 2s ease;
+}
 
 .fab-main {
   left: -70px;

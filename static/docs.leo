@@ -46,7 +46,7 @@
 </v>
 </v>
 <v t="ifs.20200324194154.1"><vh>[Ark'OM](https://arkom.iznow.tech)</vh>
-<v t="ifs.20200324194333.1"><vh>[Outline ?](https://www.genieenergetique.com)</vh></v>
+<v t="ifs.20200324194333.1"><vh>[Outline ?](https://app.sigle.io/le3foisglanddu.id.blockstack/q-xZtpzIuaydN-vUDgSPb)</vh></v>
 </v>
 <v t="ifs.20190324101206.1"><vh>@private ...</vh>
 <v t="josephorr.20180123102417.1"><vh>Summary Nodes</vh>
@@ -511,6 +511,15 @@
 </v>
 </v>
 </v>
+</v>
+<v t="pipi.20200413010540.1"><vh>@space iznow.tech</vh>
+<v t="pipi.20200416172953.1"><vh>@deep</vh></v>
+</v>
+<v t="pipi.20200413010607.1"><vh>@space elromanesco.com</vh>
+<v t="pipi.20200416173013.1"><vh>@deep</vh></v>
+</v>
+<v t="pipi.20200413010628.1"><vh>@space alittlestone.productions</vh>
+<v t="pipi.20200416173025.1"><vh>@deep</vh></v>
 </v>
 </vnodes>
 <tnodes>
@@ -4829,9 +4838,10 @@ look:
 <t tx="ifs.20190418155034.1">@language yaml
 
 look: 
+  space: an amazing peace... of guy
   dash: /static/images/back.jpg
   spot: https://media.fromthegrapevine.com/assets/images/2017/8/earth-planet-0802.jpg.480x0_q71_crop-scale.jpg
-  theme: blue
+  theme: marron
   mode: dark</t>
 <t tx="ifs.20190421204116.1">@language yaml
 
@@ -7385,5 +7395,32 @@ comments: This is a math book. It was on the Openlibrary site.</t>
 <t tx="josephorr.20190105100838.1"></t>
 <t tx="josephorr.20190105100846.1"></t>
 <t tx="josephorr.20190105100914.1"></t>
+<t tx="pipi.20200413010540.1"></t>
+<t tx="pipi.20200413010607.1"></t>
+<t tx="pipi.20200413010628.1"></t>
+<t tx="pipi.20200416172953.1">@language yaml
+
+look: 
+  space: an amazing peace... of tech
+  dash: https://www.kyrio.com/wp-content/uploads/2018/03/abstract-network-hero.jpg
+  spot: https://images.idgesg.net/images/article/2018/01/binary_neural_network_artificial_intelligence_machine_learning_thinkstock_636754212_tinted-100747913-large.3x2.jpg
+  theme: blue
+  mode: dark</t>
+<t tx="pipi.20200416173013.1">@language yaml
+
+look: 
+  space: an amazing peace... of life
+  dash: https://wallup.net/wp-content/uploads/2017/11/23/450683-romanesco-food-macro-green-depth_of_field-fractal-closeup-748x421.jpg
+  spot: https://i.pinimg.com/originals/93/d3/f1/93d3f19f8e804a117f032c36e18aca05.jpg
+  theme: green
+  mode: dark</t>
+<t tx="pipi.20200416173025.1">@language yaml
+
+look: 
+  space: an amazing peace... of art
+  dash: https://learndiscoverbefree.com/wp-content/uploads/2015/03/rgb-pile-of-stones1.jpg
+  spot: https://www.thewhisperofgod.com/wp-content/uploads/Fotolia_79247204_S.jpg
+  theme: black
+  mode: dark</t>
 </tnodes>
 </leo_file>
