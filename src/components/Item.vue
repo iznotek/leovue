@@ -140,7 +140,7 @@ export default {
     selectedImage: function () {
       // var color = 'rgba(0,0,0,0.5)'
       if (this.model) {
-        var deep = this.$store.state.deeps[this.model.id]
+        var deep = this.model.deep
         if (deep && deep.look && deep.look.spot) {
           return 'url(' + deep.look.spot + ')'
         }

@@ -173,7 +173,7 @@ export default {
     },
     spotimage: function (itemdata) {
       if (itemdata) {
-        var deep = this.$store.state.deeps[itemdata.id]
+        var deep = itemdata.deep
         if (deep && deep.look.spot) {
           return deep.look.spot
         } else {
@@ -192,8 +192,8 @@ export default {
         }
         var color = 'blue'
         var gdeep = this.$store.state.deep
-        var pdeep = parentdata ? this.$store.state.deeps[parentdata.id] : null
-        var deep = this.$store.state.deeps[itemdata.id]
+        var pdeep = parentdata ? parentdata.deep : null
+        var deep = itemdata.deep
 
         index = index > 0 ? index - 1 : index
         if (deep && deep.look && deep.look.theme) {

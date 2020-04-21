@@ -80,7 +80,7 @@ export default {
         if (val && val.length) {
           // console.log(val)
           val.forEach(item => {
-            let deep = this.$store.state.deeps[item.id]
+            let deep = item.deep
             // console.log(item)
             if (deep && deep.look) {
               var space = {
@@ -94,6 +94,7 @@ export default {
             }
           })
         }
+        // console.log(spaces)
         this.items = spaces
       },
       deep: true,

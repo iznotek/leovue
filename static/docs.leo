@@ -4853,42 +4853,34 @@ look:
 <t tx="ifs.20190421204708.1">&lt;img-left
   height="500"
   src="static/arkom/astro/bar01.jpg"&gt;
-   &lt;div slot="txt"&gt;
-       &lt;h2&gt;l'astro bar...&lt;/h2&gt;
-       &lt;ul&gt;
-         &lt;li&gt;classe&lt;/li&gt;
-         &lt;li&gt;simple&lt;/li&gt;
-         &lt;li&gt;élégant&lt;/li&gt;
-       &lt;/ul&gt;
-    &lt;/div&gt;
 &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/bar02.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/bar03.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/bar04.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/bar05.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/bar06.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/bar07.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/bar08.jpg"&gt; &lt;/img-left&gt;
 
 &lt;div slot="foot"&gt;so good ...&lt;/div&gt;
 </t>
 <t tx="ifs.20190421205559.1">&lt;img-left height="500" src="static/arkom/astro/salon01.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/salon02.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/salon03.jpg"&gt; &lt;/img-left&gt;
 </t>
 <t tx="ifs.20190421205734.1">&lt;img-left height="500" src="static/arkom/astro/room01.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/room02.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="500" src="static/arkom/astro/desk01.jpg"&gt; &lt;/img-left&gt;
 </t>
 <t tx="ifs.20190422125241.1">@language yaml
@@ -4927,12 +4919,12 @@ look:
 look: 
   spot: /static/arkom/astro/bar03.jpg</t>
 <t tx="ifs.20190501154145.1">&lt;img-left height="800" src="static/arkom/astro/plan03.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img height="800" src="static/arkom/astro/plan01.jpg"&gt;&lt;/img&gt;
 &lt;img height="800" src="static/arkom/astro/plan02.jpg"&gt; &lt;/img&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="800" src="static/arkom/astro/plan04.jpg"&gt; &lt;/img-left&gt;
-&lt;p&gt;
+&lt;p/&gt;
 &lt;img-left height="800" src="static/arkom/astro/plan05.jpg"&gt; &lt;/img-left&gt;
 </t>
 <t tx="ifs.20190501154145.2">@language yaml

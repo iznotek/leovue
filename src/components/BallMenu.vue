@@ -106,8 +106,8 @@ export default {
         this.$bs.save({
           data: this.$store.state.leodata,
           text: this.$store.state.leotext,
-          cover: this.$store.state.cover,
-          deeps: this.$store.state.deeps
+          json: this.$store.state.leojson,
+          cover: this.$store.state.cover
         })
       }
     },

@@ -744,35 +744,35 @@ function extractCover (ldata) {
  * @param ldata
  * @returns {string}
  */
-function extractDeeps (ldata) {
-  let deeps = {}
+function resolveDeeps (ldata) {
   const textItems = ldata.textItems
   ldata.data.forEach(d => {
-    _.merge(deeps, extractDeep(d, textItems))
+    resolveDeep(d, textItems)
   })
-  return deeps
+  // console.log('FOUND LOOK: ', deeps)
 }
-function extractDeep (d, textItems, parent = null) {
-  var deeps = {}
+function resolveDeep (d, textItems, parent = null) {
   if (parent) {
-    parent.deep = {}
+    // parent.deep = {}
     if (/^@deep/.test(d.name)) {
       let itemText = textItems[d.t]
       let deep = jsyaml.load(itemText.replace('@language yaml', ''))
       if (deep && parent) {
-        // console.log('FOUND LOOK: ', look)
         parent.deep = deep
-        deeps[parent.id] = deep
+        // console.log('FOUND LOOK: ', parent)
       }
     }
   }
   d.children.forEach(child => {
-    _.merge(deeps, extractDeep(child, textItems, d))
+    resolveDeep(child, textItems, d)
+    if (d.deep && !child.deep) {
+      child.deep = {look: {theme: d.deep.look.theme}}
+      // console.log('ADD LOOK: ', child)
+    }
   })
   if (d.children.length && /^@deep/.test(d.children[0].name)) {
     d.children.shift()
   }
-  return deeps
 }
 
 /**
@@ -788,14 +788,14 @@ function setData (context, ldata, filename, route) {
   context.commit('RESET') // content item has not been drawn
   context.commit('INIT_DATA') // loaded the leo data
   let cover = extractCover(ldata) // cover page, pull out any nodes with @cover directive
-  let deeps = extractDeeps(ldata)
   const text = ldata.textItems
+  resolveDeeps(ldata)
+
   context.commit('LEO', {
     data: ldata.data,
     text,
     filename: filename,
-    cover: cover,
-    deeps: deeps
+    cover: cover
   })
   loadDataSets(context, ldata)
   loadDataTables(context, ldata)
@@ -1284,6 +1284,7 @@ export default new Vuex.Store({
     },
     darkmode: true,
     spacemenu: false,
+    leojson: {},
     leotext: {},
     leodata: {},
     filename: '',
@@ -1366,15 +1367,16 @@ export default new Vuex.Store({
     LEO (state, o) {
       state.leodata = o.data
       state.leotext = o.text
+      state.leojson = o.json || {}
       const c = loadIndex(o.data, o.text)
       state.idx = c.idx
       state.idxDocs = c.docs
       state.cover = o.cover
-      state.deeps = o.deeps
       state.filename = o.filename
       state.space = o.space || window.location.hostname
       window.lconfig.leodata = o.data
       window.lconfig.leotext = o.text
+      window.lconfig.leojson = o.json
     },
     CONNECTED (state, o) {
       state.connected = o.state
@@ -1414,12 +1416,12 @@ export default new Vuex.Store({
       state.currentItemContent = null
       state.iframeHTML = o.iframeHTML
     },
-    VIEW_TYPE (state, o) {
-      state.viewType = o.type
-    },
     CURRENT_ITEM_CONTENT (state, o) {
       state.iframeHTML = null
       state.currentItemContent = o.text
+    },
+    VIEW_TYPE (state, o) {
+      state.viewType = o.type
     },
     CURRENT_PAGE (state, o) {
       const id = o.id
@@ -1540,17 +1542,23 @@ export default new Vuex.Store({
     getDeepLookForNode (state) {
       return (item) => {
         if (!item) return -1
-        let deep = state.deeps[item.id]
-        if (!deep) return -1
+        // let deep = state.deeps[item.id]
+        var model = JSON.search(state.leodata, '//*[id="' + item.id + '"]')
+        if (!model) return -1
+        if (model.length) model = model[0]
+
+        if (!model.deep) return -1
+        var deep = model.deep
         if (deep && deep.look && deep.look.theme) {
           return deep
         }
         let pid = item.id
         while (pid >= 0) {
-          const parent = JSON.search(state.leodata, '//*[id="' + pid + '"]/parent::*')
+          var parent = JSON.search(state.leodata, '//*[id="' + pid + '"]/parent::*')
           if (parent && parent[0]) {
-            pid = parent[0].id
-            var pdeep = state.deeps[pid]
+            parent = parent[0]
+            pid = parent.id
+            var pdeep = parent.deep // state.deeps[pid]
             if (pdeep && pdeep.look && pdeep.look.theme) {
               deep.look.theme = pdeep.look.theme
               return deep

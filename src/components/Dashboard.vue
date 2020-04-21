@@ -298,6 +298,7 @@ export default {
               this.$refs.logo.hide()
               setTimeout(() => {
                 this.loader.hide()
+                this.loading = false
                 vm.$store.state.leftPaneWidth = parseInt(window.lconfig.leftPaneWidth) + '%'
               }, 2000)
             }, 2000)

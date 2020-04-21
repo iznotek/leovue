@@ -369,8 +369,7 @@ export default {
       return id + '_zspot_' + sid
     },
     distance: function (itemdata, index) {
-      let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
-      index = this.hasTheme(itemdata) ? index - 1 : index
+      let length = itemdata.children.length
       let factor = parseInt(this.$store.state.leftPaneWidth)
       factor = 50 - factor
       factor = factor < 0 ? 0 : factor * 2
@@ -378,8 +377,7 @@ export default {
       return 125 - factor * amount / 3
     },
     angle: function (itemdata, index) {
-      let length = this.hasTheme(itemdata) ? itemdata.children.length - 1 : itemdata.children.length
-      index = this.hasTheme(itemdata) ? index - 1 : index
+      let length = itemdata.children.length
       let amount = (length > 7 ? 360.0 : length > 5 ? 230.0 : 180.0) / length
       return -100 + amount * index - this.tweenangle
     },
@@ -399,8 +397,8 @@ export default {
         }
         var color = 'blue'
         var gdeep = this.$store.state.deep
-        var pdeep = parentdata ? this.$store.state.deeps[parentdata.id] : null
-        var deep = this.$store.state.deeps[itemdata.id]
+        var pdeep = parentdata ? parentdata.deep : null
+        var deep = itemdata.deep
         // console.log(itemdata, deep.look.theme)
         index = index > 0 ? index - 1 : index
         if (deep && deep.look && deep.look.theme) {
@@ -433,7 +431,7 @@ export default {
     },
     spotimage: function (itemdata) {
       if (itemdata) {
-        var deep = this.$store.state.deeps[itemdata.id]
+        var deep = itemdata.deep
         if (deep && deep.look.spot) {
           return deep.look.spot
         } else {

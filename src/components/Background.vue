@@ -149,6 +149,17 @@ export default {
         setTimeout(this.check, 500)
       }
     },
+    getBack (model) {
+      var backs = []
+      if (model.deep && model.deep.look && model.deep.look.dash) {
+        backs.push(model.deep.look.dash)
+      }
+      // console.log(model)
+      model.children.forEach((child) => {
+        backs = backs.concat(this.getBack(child))
+      })
+      return backs
+    },
     // changeAmbient (bg) {
     //   this.background = backgrounds[bg]
     // },
@@ -204,16 +215,18 @@ export default {
     // setInterval(this.check, 500)
   },
   watch: {
-    '$store.state.deeps': {
+    '$store.state.space': {
       handler: function (val, oldVal) {
         var backs = [window.lconfig.dashboardImage]
         if (val) {
-          Object.keys(val).forEach(key => {
-            let deep = val[key]
-            if (deep.look.dash && backs.indexOf(deep.look.dash) === -1) {
-              backs.push(deep.look.dash)
-            }
-          })
+          if (this.$store.state.leodata && this.$store.state.leodata.length) {
+            this.$store.state.leodata.forEach((child) => {
+              if (child.vtitle.includes(val)) {
+                backs = backs.concat(this.getBack(child))
+              }
+            })
+            backs = [...new Set(backs)] // remove duplicate
+          }
         }
         // console.log(backs)
         this.fluxImages = backs
