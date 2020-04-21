@@ -36,7 +36,7 @@
                               :data="item.json || editor.initData"
                               @save="onEditorSave"
                               @ready="onEditorReady"
-                              @change="onEditorChange"
+                              @change="onEditorSave"
                             />
                             <!-- <tiptap v-if="edit" :item="item"/> -->
                             <component v-else :is="dynComponent(item)" v-bind="$props"/> 
@@ -69,7 +69,7 @@
                               :data="item.json || editor.initData"
                               @save="onEditorSave"
                               @ready="onEditorReady"
-                              @change="onEditorChange"
+                              @change="onEditorSave"
                             />
                     <component v-else :is="dynComponent(item)" v-bind="$props"/> 
                   </div>
@@ -114,7 +114,7 @@
                               :data="item.json || editor.initData"
                               @save="onEditorSave"
                               @ready="onEditorReady"
-                              @change="onEditorChange"
+                              @change="onEditorSave"
                             />
                             <!-- <tiptap v-if="edit" :item="item"/> -->
                             <component v-else :is="dynComponent(item)" v-bind="$props"/> 
@@ -147,7 +147,7 @@
                               :data="item.json || editor.initData"
                               @save="onEditorSave"
                               @ready="onEditorReady"
-                              @change="onEditorChange"
+                              @change="onEditorSave"
                             />
                     <component v-else :is="dynComponent(item)" v-bind="$props"/> 
                   </div>
@@ -299,21 +299,16 @@ export default {
   },
   methods: {
     onEditorSave (data, html) {
-      // console.log(JSON.stringify(response))
-      // this.editor.savedData = data;
-      // console.log(html)
-      this.current.content = '<div>' + html + '</div>'
-      this.current.json = data
+      save(data, html)
     },
     onEditorReady () {
       // console.log('ready')
     },
-    onEditorChange (data, html) {
-      // console.log('changed')
-      // console.log(data)
-      // console.log(html)
-      this.current.content = '<div>' + html + '</div>'
+    save (json, html) {
       this.current.json = data
+      this.current.content = '<div>' + html + '</div>'
+      this.$store.state.leojson[this.current.item.t] = data
+      this.$store.state.leotext[this.current.item.t] = '<div>' + html + '</div>'
     },
     onScroll () {
       // bail if this isn't a paged item
@@ -450,6 +445,9 @@ export default {
           } else {
             return
           }
+
+          // add json editable if available
+          item.json = this.$store.state.leojson[item.item.t] || {}
 
           this.current = this.fade.items[index]
           if (this.fade.next) {
@@ -602,7 +600,7 @@ export default {
     },
     '$store.state.currentItemContent': {
       handler: function (val, oldVal) {
-        if (!val) return
+        if (val === undefined) return
         this.new.content = val
         this.new.pane = this.$store.state.contentPane
         this.setNext(Object.assign({}, this.new))
@@ -612,7 +610,7 @@ export default {
     },
     '$store.state.iframeHTML': {
       handler: function (val, oldVal) {
-        if (!val) return
+        if (val === undefined) return
         this.new.iframe = val
         this.new.pane = this.$store.state.contentPane
         this.setNext(Object.assign({}, this.new))
