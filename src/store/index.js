@@ -1373,10 +1373,23 @@ export default new Vuex.Store({
       state.idxDocs = c.docs
       state.cover = o.cover
       state.filename = o.filename
-      state.space = o.space || window.location.hostname
+
       window.lconfig.leodata = o.data
       window.lconfig.leotext = o.text
       window.lconfig.leojson = o.json
+
+      var space = o.space || window.location.hostname
+      var id = 'notfound'
+      state.leodata.forEach((data) => {
+        if (data.vtitle.includes(space)) {
+          id = data.id
+        }
+      })
+      if (id === 'notfound') {
+        id = '1'
+        space = state.leodata[0].vtitle.replace('@space')
+      }
+      state.space = {id: id, name: space}
     },
     CONNECTED (state, o) {
       state.connected = o.state
@@ -1445,7 +1458,9 @@ export default new Vuex.Store({
       state.deep = o
     },
     CURRENT_SPACE (state, o) {
-      state.space = o
+      if (state.space.id !== o.id && state.space.name !== o.name) {
+        state.space = o
+      }
     },
     CURRENT_ITEM (state, o) {
       const id = o.id
@@ -1522,7 +1537,7 @@ export default new Vuex.Store({
       state.currentItemPath = paths.join(' / ')
       state.currentItemPathMapIds = ids.reverse()
 
-      // console.log('CURRENT_ITEM: ', id)
+      // console.log('CURRENT_ITEM: ', item)
       router.push({name: routeName, params: { id }}, () => {})
       // state.initialized = false
     },
@@ -1751,9 +1766,9 @@ export default new Vuex.Store({
         }
 
         if (/^@space /.test(item.name)) {
-          context.commit('CURRENT_SPACE', item.vtitle) // content item has not been drawn
+          context.commit('CURRENT_SPACE', {id: id, name: item.vtitle}) // content item has not been drawn
         } else if (!context.state.space) {
-          context.commit('CURRENT_SPACE', window.location.hostname)
+          context.commit('CURRENT_SPACE', {id: id, name: window.location.hostname})
         }
 
         // look for theme and

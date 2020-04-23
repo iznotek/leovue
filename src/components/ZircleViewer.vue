@@ -35,7 +35,7 @@
     el: true,
     v: null
   }
-  let zcanvas
+  // let zcanvas
   export default {
     name: 'zircleviewer',
     components: {
@@ -66,9 +66,6 @@
         debug: false
       })
 
-      zcanvas = document.getElementById('zcanvas')
-      zcanvas.style.backgroundColor = 'rgba(0, 0, 0, 0.0)'
-
       this.$zircle.setView('zview')
       this.viewname = this.$zircle.getCurrentViewName()
 
@@ -92,7 +89,8 @@
         target: target,
         current: '',
         leftTrigger: 70,
-        type: 'circle'
+        type: 'circle',
+        zenable: false
       }
     },
     events: {
@@ -120,15 +118,17 @@
         let current = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
         if (current !== this.current) {
           var id = this.$store.state.zircle[current]
-          // console.log(id, current, this.$store.state.zircle)
+          // console.log(id, current, this.$store.state.zircle, this.$store.state.space)
           var run = false
           if (id > 0) {
             // console.log('zircleupdate: ', id)
             run = true
             // setTimeout(() => this.$store.dispatch('setCurrentItem', {id}), 2000)
             this.$store.dispatch('setCurrentItem', {id})
-          } else {
-            this.$store.commit('ZIRCLE_VIEW', {view: current, id: this.$store.state.currentItem.id})
+          } else if (this.$store.state.space) {
+            id = this.$store.state.space.id
+            this.$store.dispatch('setCurrentItem', {id})
+            // this.$store.commit('ZIRCLE_VIEW', {view: current, id: this.$store.state.currentItem.id})
             // console.log('zircleupdate: ', 'cover')
             // if (window.lconfig.coverPage === false) {
             //   id = 1
@@ -138,9 +138,9 @@
             // }
             // else swipe content pane ?!
           }
-          if (this.$store.state.currentItem.id === id) {
-            this.current = current
-          }
+          // if (this.$store.state.currentItem.id === id) {
+          this.current = current
+          // }
 
           if (run === true) {
             setTimeout(() => {
@@ -209,8 +209,53 @@
       '$store.state.space': {
         handler: function (val, oldVal) {
           if (val) {
+            console.log('Switching to space: ' + val.name)
+            this.$store.dispatch('setCurrentItem', val)
             // console.log({view: this.viewname, id: this.$store.state.currentItem.id || 1})
-            this.$store.commit('ZIRCLE_VIEW', {view: this.viewname, id: this.$store.state.currentItem.id})
+            // this.zenable = false
+
+            // this.$zircle.goBack()
+            // this.$zircle.goBack()
+            // this.$zircle.goBack()
+
+            // setTimeout(() => {
+            //   this.zenable = true
+            //   var id = -1
+            //   if (this.$store.state.leodata && this.$store.state.leodata.length) {
+            //     this.$store.state.leodata.forEach((data) => {
+            //       if (data.vtitle.includes(val.name)) {
+            //         id = data.id
+            //         this.$store.dispatch('setCurrentItem', {id})
+            //       }
+            //     })
+            //   }
+            // if (id === -1) {
+            //   id = this.$store.state.leodata[0].id
+            //   this.$store.dispatch('setCurrentItem', {id})
+            // }
+            // this.graph = agraph
+            // if (!agraph) {
+            //   this.graph = this.$store.state.leodata[0]
+            //   console.log('Fallback at id: ', this.graph.id)
+            // } else {
+            //   console.log('Found at id: ', this.graph.id)
+            // }
+            // console.log(this.graph)
+
+            // only at startup
+            // console.log(this.graph.id, this.$store.state.currentItem.id)
+            // if (this.$store.state.currentItem.id <= 0) {
+            // var id = this.graph.id
+            // this.$store.dispatch('setCurrentItem', {id})
+            // }
+
+            // setTimeout(() => {
+            //   console.log('zview')
+            //   this.$zircle.setView('zview')
+            //   this.viewname = this.$zircle.getCurrentViewName()
+            //   this.$store.commit('ZIRCLE_VIEW', {view: this.viewname, id: this.$store.state.currentItem.id})
+            // }, 100)
+            // }, 100)
             // this.initialize()
             // this.$zircle.setView('zview')
           }
@@ -309,13 +354,14 @@
   margin: 0
   height: 100%
   width: 100%
+
+.z-canvas
+  transition: background-color 0ms
+  background-color: rgba(0, 0, 0, 0.0)
 </style>
 
 <style lang="css">
 
-.zcanvas {
-    transition: all 1s ease-in-out;
-}
 .title {
     margin-left: 5%;
     position: absolute;
@@ -335,6 +381,10 @@
 
 
 <style>
+
+.zcanvas {
+    transition: all 2s ease;
+}
 
 .asteroids {
     pointer-events: none !important;

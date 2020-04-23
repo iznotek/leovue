@@ -31,17 +31,17 @@
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 1px;  border-color:white' size=xxs :distance="132" :angle="-82" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width:3px;   border-color:white' size=xs :distance="190" :angle="-160" />
       </section>
-      <section v-if="$store.state.ready" slot="extension">
+      <section v-if="$store.state.ready && space" slot="extension">
         <z-spot
-          v-for="(amodel, index) in data"
+          v-for="(amodel, index) in space.children"
           v-if="isVisible(amodel)"
           :ref="ref(amodel.id)"
           button
           size="l"
           class="meteor"
           :style="style(amodel, index)"
-          :distance="distance(data, index)"
-          :angle="angle(data, index)" 
+          :distance="distance(space.children, index)"
+          :angle="angle(space.children, index)" 
           @click.native="toggle(amodel.id, amodel)"
           :to-view="{ name: 'item0', params: {depth: 1, model: amodel, key: amodel.id, textItems: text, targetEl: target, top: false}}"
           :key="index">
@@ -133,9 +133,6 @@ export default {
     },
     space () {
       return this.graph
-    },
-    data () {
-      return this.graph ? this.graph.children : null
     },
     text () {
       return this.$store.state.leotext
@@ -322,31 +319,33 @@ export default {
     '$store.state.space': {
       handler: function (val, oldVal) {
         if (val) {
-          console.log('Look for space: ' + val)
+          // console.log('Look for space: ' + val, this)
           let agraph = null
           if (this.$store.state.leodata && this.$store.state.leodata.length) {
             this.$store.state.leodata.forEach((data) => {
-              if (data.vtitle.includes(val)) {
+              if (data.vtitle.includes(val.name)) {
                 agraph = data
               }
             })
           } else {
-            console.log('load a graph first !!')
+            // console.log('load a graph first !!')
           }
-          this.graph = agraph
+
           if (!agraph) {
             this.graph = this.$store.state.leodata[0]
             console.log('Fallback at id: ', this.graph.id)
           } else {
-            console.log('Found at id: ', this.graph.id)
+            this.graph = agraph
+            // console.log('Found at id: ', this.graph.id)
           }
           // console.log(this.graph)
 
           // only at startup
-          if (this.$store.state.currentItem.id <= 0) {
-            var id = this.graph.id
-            this.$store.dispatch('setCurrentItem', {id})
-          }
+          // console.log(this.graph.id, this.$store.state.currentItem.id)
+          // if (this.$store.state.currentItem.id <= 0) {
+          //   var id = this.graph.id
+          //   this.$store.dispatch('setCurrentItem', {id})
+          // }
         }
       },
       deep: true,
@@ -357,8 +356,9 @@ export default {
       var toid = to.path.split('/')[2]
 
       if (this.$store.state.currentItem.id === toid) return
+      if (!this.graph) return
 
-      var childs = this.data.map(child => child.id)
+      var childs = this.graph.children.map(child => child.id)
       if (!childs.includes(toid)) return
 
       // console.log('v item: ', fromid, toid)

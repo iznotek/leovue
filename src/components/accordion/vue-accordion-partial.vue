@@ -1,6 +1,6 @@
 <template>
 	<li :style="liStyles">
-		<a @click="click(item.id)" :style="aStyles">
+		<a @click="click(item)" :style="aStyles">
 			<h2 v-text="item.title" :style="h2Styles"></h2>
 			<p v-text="item.text" :style="pStyles"></p>
 		</a>
@@ -17,8 +17,9 @@ export default {
     }
   },
   methods: {
-    click (id) {
-      this.$store.dispatch('setCurrentItem', {id})
+    click (item) {
+      this.$store.commit('CURRENT_SPACE', {id: item.id, name: item.title})
+      // this.$store.dispatch('setCurrentItem', item)
     }
   },
   computed: {

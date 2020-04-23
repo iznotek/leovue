@@ -60,6 +60,7 @@ export default {
       required: 0,
       index: 0,
       length: 0,
+      currentImg: null,
       use: {
         map: true,
         player: false,
@@ -68,9 +69,10 @@ export default {
       },
       flux: {
         options: {
-          allowToSkipTransition: false,
+          autoplay: false,
           allowFullscreen: true,
-          autoplay: false
+          allowToSkipTransition: false,
+          lazyLoadAfter: 2
         },
         images: [],
         transitions: [ 'fade' ]
@@ -143,8 +145,12 @@ export default {
         } else { // if (required.index !== this.required) {
           // console.log('mov', required.index)
           // console.log('mov', this.required, this.$refs.slider.image2Index, this.$refs.slider.image1Index, this.$refs.slider.Images.current.index)
-          this.$refs.slider.show(required.index, 'fade') // this.requiredTransition)
-          this.required = required.index
+          if (required.index < this.$refs.slider.Images.imgs.length) { // this.requiredTransition)
+            this.$refs.slider.show(required.index, 'fade')
+            this.required = required.index
+          } else {
+            this.fluxImages = [].concat(this.fluxImages) // at startup the watch space is not enough ?
+          }
         }
         setTimeout(this.check, 500)
       }
@@ -217,19 +223,26 @@ export default {
   watch: {
     '$store.state.space': {
       handler: function (val, oldVal) {
-        var backs = [window.lconfig.dashboardImage]
+        this.fluxImages = []
+        var backs = []
+        if (this.currentImg) {
+          backs.push(this.currentImg)
+        }
         if (val) {
           if (this.$store.state.leodata && this.$store.state.leodata.length) {
             this.$store.state.leodata.forEach((child) => {
-              if (child.vtitle.includes(val)) {
+              if (child.vtitle.includes(val.name)) {
                 backs = backs.concat(this.getBack(child))
               }
             })
             backs = [...new Set(backs)] // remove duplicate
           }
         }
-        // console.log(backs)
+        if (!backs.length) {
+          backs.push(window.lconfig.dashboardImage)
+        }
         this.fluxImages = backs
+        // console.log(this.fluxImages)
       },
       deep: true,
       immediate: true
@@ -248,6 +261,7 @@ export default {
 
               // this.$refs.slider.show(this.required, 'fade')
               // console.log(deep.look.dash, index)
+              this.currentImg = deep.look.dash
               setTimeout(this.check, 500)
             }
           }
