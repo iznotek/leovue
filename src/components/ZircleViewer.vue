@@ -90,7 +90,8 @@
         current: '',
         leftTrigger: 70,
         type: 'circle',
-        zenable: false
+        zenable: false,
+        check: false
       }
     },
     events: {
@@ -116,6 +117,8 @@
       checkViewChanged () {
         let vm = this
         let current = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
+
+        if (!this.check) return
         if (current !== this.current) {
           var id = this.$store.state.zircle[current]
           // console.log(id, current, this.$store.state.zircle, this.$store.state.space)
@@ -214,50 +217,21 @@
             // console.log({view: this.viewname, id: this.$store.state.currentItem.id || 1})
             // this.zenable = false
 
-            // this.$zircle.goBack()
-            // this.$zircle.goBack()
-            // this.$zircle.goBack()
+            let vm = this
+            if (vm.$zircle.getPreviousViewName() !== '') {
+              this.check = false
+              vm.$zircle.goBack()
 
-            // setTimeout(() => {
-            //   this.zenable = true
-            //   var id = -1
-            //   if (this.$store.state.leodata && this.$store.state.leodata.length) {
-            //     this.$store.state.leodata.forEach((data) => {
-            //       if (data.vtitle.includes(val.name)) {
-            //         id = data.id
-            //         this.$store.dispatch('setCurrentItem', {id})
-            //       }
-            //     })
-            //   }
-            // if (id === -1) {
-            //   id = this.$store.state.leodata[0].id
-            //   this.$store.dispatch('setCurrentItem', {id})
-            // }
-            // this.graph = agraph
-            // if (!agraph) {
-            //   this.graph = this.$store.state.leodata[0]
-            //   console.log('Fallback at id: ', this.graph.id)
-            // } else {
-            //   console.log('Found at id: ', this.graph.id)
-            // }
-            // console.log(this.graph)
-
-            // only at startup
-            // console.log(this.graph.id, this.$store.state.currentItem.id)
-            // if (this.$store.state.currentItem.id <= 0) {
-            // var id = this.graph.id
-            // this.$store.dispatch('setCurrentItem', {id})
-            // }
-
-            // setTimeout(() => {
-            //   console.log('zview')
-            //   this.$zircle.setView('zview')
-            //   this.viewname = this.$zircle.getCurrentViewName()
-            //   this.$store.commit('ZIRCLE_VIEW', {view: this.viewname, id: this.$store.state.currentItem.id})
-            // }, 100)
-            // }, 100)
-            // this.initialize()
-            // this.$zircle.setView('zview')
+              let intId = setInterval(() => {
+                if (vm.$zircle.getPreviousViewName() !== '') {
+                  vm.$zircle.goBack()
+                } else {
+                  clearInterval(intId)
+                  this.check = true
+                  // this.$store.dispatch('setCurrentItem', val)
+                }
+              }, 250)
+            }
           }
         },
         deep: true,
