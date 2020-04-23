@@ -3,6 +3,9 @@
   <div >
     <div class="zircleviewer">
       <div style="position: absolute; width: 100%; height: 100%;">
+        <div class="atextra" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
+          <textra :data='spaceNames' :timer="2" filter="left-right" />
+        </div>
         <fade-transition v-show='showcircle'>
           <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
           </z-canvas>
@@ -27,6 +30,7 @@
   import {TweenLite, Power2} from 'gsap/TweenMax'
   import TreeView from './TreeView'
   import {FadeTransition} from 'vue2-transitions'
+  const util = require('../util.js')
 
   let mov = {
     angle: -7
@@ -91,7 +95,9 @@
         leftTrigger: 70,
         type: 'circle',
         zenable: false,
-        check: false
+        check: false,
+        spaceNames: ['Welcome'],
+        color: '#fff'
       }
     },
     events: {
@@ -213,6 +219,7 @@
         handler: function (val, oldVal) {
           if (val) {
             console.log('Switching to space: ' + val.name)
+            this.spaceNames = [val.name]
             this.$store.dispatch('setCurrentItem', val)
             // console.log({view: this.viewname, id: this.$store.state.currentItem.id || 1})
             // this.zenable = false
@@ -284,6 +291,7 @@
             var deep = this.$store.getters.getDeepLookForNode(val)
             if (deep && deep.look) {
               if (deep.look.theme) {
+                this.color = util.rgbaFromTheme(deep.look.theme, 0.3)
                 // this.$zircle.config({style: {theme: theme.background.theme}})
               }
               if (deep.look.mode) {
@@ -335,6 +343,19 @@
 </style>
 
 <style lang="css">
+.textra .mainTextra {
+  min-height: 200px;
+}
+
+.atextra {
+  position: absolute;
+  display: inline;
+  font-size: 75px;
+  transition: all 0.5s; 
+  top: 23px;
+  left: 60px;
+  width: 100%;
+}
 
 .title {
     margin-left: 5%;

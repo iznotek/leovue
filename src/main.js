@@ -87,6 +87,7 @@ import 'vue-good-links/dist/vue-good-links.css'
 import VueAnime from 'vue-animejs'
 import VueRouterMultiView from 'vue-router-multi-view'
 import vmodal from 'vue-js-modal'
+import Textra from './content-components/Textra'
 
 // import Editor from 'vue-editor-js'
 // import { ElementTiptapPlugin } from 'element-tiptap'
@@ -156,6 +157,7 @@ Vue.use(vBlur)
 //   // iconType: 'iconfont'
 // })
 
+Vue.component('textra', Textra)
 Vue.component('star-rating', StarRating)
 Vue.component('lv-timeline', LVTimeline)
 Vue.component('word-cloud', WordCloud)
