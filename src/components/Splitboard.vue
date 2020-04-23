@@ -150,11 +150,13 @@
             this.showLeftButton = false
             this.showRightButton = true
             this.mode = 'left'
+            setTimeout(() => { this.sizes.left = 0 }, 100)
           } else {
             this.maximize(0)
             this.showLeftButton = true
             this.showRightButton = false
             this.mode = 'right'
+            setTimeout(() => { this.sizes.left = 100 }, 100)
           }
         } else if (this.mode === 'left') {
           if (direction === 'right') {
@@ -196,9 +198,9 @@
     },
     mounted: function () {
       setInterval(() => {
-        if (this.$store.state.spacemenu && (this.$refs.splitpanes.panes[0].size === 0)) {
+        if (this.$store.state.spacemenu && (this.$refs.splitpanes.panes[0].size === 0 || this.mode === 'left')) {
           this.$store.commit('SPACEMENU', false)
-        } else if (!this.$store.state.spacemenu && (this.$refs.splitpanes.panes[0].size !== 0)) {
+        } else if (!this.$store.state.spacemenu && this.mode !== 'left' && (this.$refs.splitpanes.panes[0].size !== 0)) {
           this.$store.commit('SPACEMENU', true)
         }
       }, 100)
