@@ -3,8 +3,11 @@
   <div >
     <div class="zircleviewer">
       <div style="position: absolute; width: 100%; height: 100%;">
-        <div class="atextra" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
+        <div class="space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
           <textra :data='spaceNames' :timer="2" filter="left-right" />
+        </div>
+        <div class="description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
+          <textra :data='spaceDescs' :timer="2" filter="right-left" />
         </div>
         <fade-transition v-show='showcircle'>
           <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
@@ -59,6 +62,20 @@
       settings: Settings // ,
       // intro: ZIntro
     },
+    data: function () {
+      return {
+        viewname: '',
+        target: target,
+        current: '',
+        leftTrigger: 70,
+        type: 'circle',
+        zenable: false,
+        check: false,
+        spaceNames: ['Welcome'],
+        spaceDescs: ['... it should be fun !!!'],
+        color: '#fff'
+      }
+    },
     mounted () {
       this.$zircle.config({
         mode: 'full',
@@ -87,19 +104,6 @@
       this.$store.state.tween.play()
     },
     updated () {},
-    data: function () {
-      return {
-        viewname: '',
-        target: target,
-        current: '',
-        leftTrigger: 70,
-        type: 'circle',
-        zenable: false,
-        check: false,
-        spaceNames: ['Welcome'],
-        color: '#fff'
-      }
-    },
     events: {
       show (action) {
         if (action) {
@@ -220,6 +224,14 @@
           if (val) {
             console.log('Switching to space: ' + val.name)
             this.spaceNames = [val.name]
+
+            var deep = this.$store.getters.getDeepLookForNode(val)
+            if (deep && deep.look && deep.look.space) {
+              this.spaceDescs = [deep.look.space]
+            } else {
+              this.spaceDescs = ['']
+            }
+
             this.$store.dispatch('setCurrentItem', val)
             // console.log({view: this.viewname, id: this.$store.state.currentItem.id || 1})
             // this.zenable = false
@@ -342,35 +354,31 @@
   background-color: rgba(0, 0, 0, 0.0)
 </style>
 
-<style lang="css">
+<style>
 .textra .mainTextra {
   min-height: 200px;
 }
+</style>
 
-.atextra {
+<style scoped>
+.space {
   position: absolute;
   display: inline;
   font-size: 75px;
   transition: all 0.5s; 
-  top: 23px;
+  top: 0px;
   left: 60px;
   width: 100%;
 }
 
-.title {
-    margin-left: 5%;
-    position: absolute;
-    width: 90%;
-    color: #454545;
-    font-weight: 700;
-    font-size: 32px;
-    z-index: 9999;
-    opacity: 1;
-    line-height: 1.02em;
-    pointer-events: none !important;
-}
-.title.home {
-    text-align: center;
+.description {
+  position: absolute;
+  display: inline;
+  font-size: 25px;
+  transition: all 0.5s; 
+  top: 85px;
+  left: 100px;
+  width: 100%;
 }
 </style>
 

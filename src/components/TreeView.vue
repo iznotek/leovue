@@ -1,8 +1,8 @@
 
 <template>
   <div class="treeview">
-    <ul class="very-pane" :style="ulStyle">
-      <div v-for="(itemdata, index) in data">
+    <ul v-if="space" class="very-pane" :style="ulStyle">
+      <div v-for="(itemdata, index) in space.children">
         <item
           class="item"
           v-if="isVisible(itemdata)"
@@ -28,11 +28,13 @@
     },
     data: function () {
       return {
+        graph: null,
         target: target
       }
     },
     methods: {
       isVisible: function (itemdata) {
+        if (!itemdata) { return false }
         if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
         return true
       },
@@ -43,6 +45,9 @@
       }
     },
     computed: {
+      space () {
+        return this.graph
+      },
       ulStyle () {
         const p = window.lconfig.leftPanePadding || '0'
         // const c = window.lconfig.leftPaneBackground || '#fff'
@@ -59,8 +64,44 @@
       text () {
         return this.$store.state.leotext
       }
-    }
+    },
+    watch: {
+      '$store.state.space': {
+        handler: function (val, oldVal) {
+          if (val) {
+            // console.log('Look for space: ' + val, this)
+            let agraph = null
+            if (this.$store.state.leodata && this.$store.state.leodata.length) {
+              this.$store.state.leodata.forEach((data) => {
+                if (data.vtitle.includes(val.name)) {
+                  agraph = data
+                }
+              })
+            } else {
+              // console.log('load a graph first !!')
+            }
 
+            if (!agraph) {
+              this.graph = this.$store.state.leodata[0]
+              console.log('Fallback at id: ', this.graph.id)
+            } else {
+              this.graph = agraph
+              // console.log('Found at id: ', this.graph.id)
+            }
+            // console.log(this.graph)
+
+            // only at startup
+            // console.log(this.graph.id, this.$store.state.currentItem.id)
+            // if (this.$store.state.currentItem.id <= 0) {
+            //   var id = this.graph.id
+            //   this.$store.dispatch('setCurrentItem', {id})
+            // }
+          }
+        },
+        deep: true,
+        immediate: true
+      }
+    }
   }
 </script>
 <br/>
@@ -68,7 +109,7 @@
 <style lang="sass">
 .treeview
   margin: 0
-  padding-top: 33px;
+  padding-top: 120px
   margin-left: 100px
   height: 100%
   width: 100%

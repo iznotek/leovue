@@ -34,6 +34,17 @@
           :angle="-60">
             <img :src="require(`@/assets/logo.png`)" width="95"/>
         </z-spot> -->
+
+        <z-spot v-if="$store.state.connected"
+          button 
+          @click.native="$modal.show('jsoneditor')" 
+          class="meteor" 
+          :style="style(model)"
+          size=s
+          :distance="100" 
+          :angle="180">
+          <icon class="icon" name="cog"></icon>
+        </z-spot> 
         
         <z-spot
           v-for="(amodel, index) in data.children"

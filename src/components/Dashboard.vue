@@ -4,6 +4,7 @@
     
     <!-- <modelviewer/> -->
     <settings/>
+    <json-editor/>
 
     <chatmenu v-if="connected && config.comments"/>
     <typemenu v-if="ready"/>
@@ -66,7 +67,9 @@ import TreeView from './TreeView'
 import D3View from './D3View'
 import Logo from './Logo'
 
+// modals
 import Settings from './Settings'
+import JsonEditor from './editor/JsonEditor'
 
 // import ModelViewer from './modelviewer/Viewer'
 import ParticleEffectButton from 'vue-particle-effect-buttons'
@@ -90,7 +93,8 @@ export default {
     spinner: OrbitSpinner,
     spacemenu: SpaceMenu,
     logo: Logo,
-    Settings
+    Settings,
+    JsonEditor
     // modelviewer: ModelViewer
   },
   data () {

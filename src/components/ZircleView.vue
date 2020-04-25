@@ -30,6 +30,26 @@
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 1px;  border-color:white' size=xxs :distance="132" :angle="210" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 1px;  border-color:white' size=xxs :distance="132" :angle="-82" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width:3px;   border-color:white' size=xs :distance="190" :angle="-160" />
+
+        <z-spot 
+          button 
+          @click.native="load()" 
+          class="comete" 
+          style='background-color: var(--shade-color);border-width:3px;  border-color:white' 
+          size=xxl 
+          :distance="0" 
+          :angle="0">
+        </z-spot> 
+        <z-spot v-if="$store.state.connected"
+          button 
+          @click.native="$modal.show('jsoneditor')" 
+          class="meteor" 
+          :style="style(space)"
+          size=s
+          :distance="100" 
+          :angle="180">
+          <icon class="icon" name="cog"></icon>
+        </z-spot> 
       </section>
       <section v-if="$store.state.ready && space" slot="extension">
         <z-spot
@@ -204,6 +224,9 @@ export default {
         style += 'background-color: ' + color + ';'
       }
       return style
+    },
+    load: function () {
+      this.toggle(this.space)
     },
     toggle: function (id, data) {
       // console.log('toggle')
