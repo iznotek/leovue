@@ -70,7 +70,7 @@
         leftTrigger: 70,
         type: 'circle',
         zenable: false,
-        check: false,
+        check: true,
         spaceNames: ['Welcome'],
         spaceDescs: ['... it should be fun !!!'],
         color: '#fff'

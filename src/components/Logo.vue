@@ -1,6 +1,6 @@
 <template>
   <div>
-    <fade-transition :duration="2000" :delay="1000" v-show="show">
+    <fade-transition :duration="1000" :delay="500" v-show="show">
       <div id="logo-around" class="logo-around">
           <orbit-spinner class="logo-spinner"
             style="position: absolute; left: -5px; top: -5px"

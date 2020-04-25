@@ -601,6 +601,8 @@ export default {
     '$store.state.currentItemContent': {
       handler: function (val, oldVal) {
         if (val === undefined) return
+        if (this.$store.state.contentPane === 'site') return
+
         this.new.content = val
         this.new.pane = this.$store.state.contentPane
         this.setNext(Object.assign({}, this.new))
@@ -611,6 +613,8 @@ export default {
     '$store.state.iframeHTML': {
       handler: function (val, oldVal) {
         if (val === undefined) return
+        if (this.$store.state.contentPane !== 'site') return
+
         this.new.iframe = val
         this.new.pane = this.$store.state.contentPane
         this.setNext(Object.assign({}, this.new))
