@@ -30,7 +30,7 @@
   import ZView from './ZircleView'
   // import ZIntro from './ZircleIntro'
   import 'zircle/dist/zircle.css'
-  import {TweenLite, Power2} from 'gsap/TweenMax'
+  import {TweenLite, Power2} from 'gsap'
   import TreeView from './TreeView'
   import {FadeTransition} from 'vue2-transitions'
   const util = require('../util.js')

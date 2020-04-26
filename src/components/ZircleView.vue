@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import {TweenLite, Power2} from 'gsap/TweenMax' // Elastic, Back,
+import {TweenLite, Power2} from 'gsap' // Elastic, Back,
 import _ from 'lodash'
 const util = require('../util.js')
 

@@ -102,7 +102,7 @@
 <script>
 import Velocity from 'velocity-animate'
 import _ from 'lodash'
-import {TweenLite, Power2} from 'gsap/TweenMax' // Elastic, Back,
+import {TweenLite, Power2} from 'gsap' // Elastic, Back,
 
 const util = require('../util.js')
 
