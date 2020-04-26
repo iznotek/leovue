@@ -308,12 +308,12 @@ export default {
     this.tween = TweenLite.to(this.mov, 1, {
       angle: 0,
       ease: Power2.easeOut,
-      repeat: -1
+      repeat: 0
     })
     this.tween2 = TweenLite.to(this.mov2, 1, {
       angle: -7,
       ease: Power2.easeOut,
-      repeat: -1
+      repeat: 0
     })
 
     setInterval(this.checkViewChanged, 200)

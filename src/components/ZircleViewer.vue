@@ -30,18 +30,11 @@
   import ZView from './ZircleView'
   // import ZIntro from './ZircleIntro'
   import 'zircle/dist/zircle.css'
-  import {TweenLite, Power2} from 'gsap'
+
   import TreeView from './TreeView'
   import {FadeTransition} from 'vue2-transitions'
   const util = require('../util.js')
 
-  let mov = {
-    angle: -7
-  }
-  let target = {
-    el: true,
-    v: null
-  }
   // let zcanvas
   export default {
     name: 'zircleviewer',
@@ -65,7 +58,6 @@
     data: function () {
       return {
         viewname: '',
-        target: target,
         current: '',
         leftTrigger: 70,
         type: 'circle',
@@ -93,15 +85,6 @@
       setTimeout(() => {
         setInterval(this.checkViewChanged, 500)
       }, 1300)
-
-      let vm = this
-      this.$store.state.tween = TweenLite.to(mov, 2, {angle: 0,
-        ease: Power2.easeInOut,
-        repeat: -1,
-        onUpdate: function () {
-          vm.$store.commit('TWEEN_ANGLE', {a: mov.angle})
-        }})
-      this.$store.state.tween.play()
     },
     updated () {},
     events: {
@@ -125,45 +108,22 @@
         }, 1300)
       },
       checkViewChanged () {
-        let vm = this
         let current = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
 
         if (!this.check) return
         if (current !== this.current) {
           var id = this.$store.state.zircle[current]
           // console.log(id, current, this.$store.state.zircle, this.$store.state.space)
-          var run = false
           if (id > 0) {
             // console.log('zircleupdate: ', id)
-            run = true
-            // setTimeout(() => this.$store.dispatch('setCurrentItem', {id}), 2000)
             this.$store.dispatch('setCurrentItem', {id})
           } else if (this.$store.state.space) {
             id = this.$store.state.space.id
             this.$store.dispatch('setCurrentItem', {id})
-            // this.$store.commit('ZIRCLE_VIEW', {view: current, id: this.$store.state.currentItem.id})
-            // console.log('zircleupdate: ', 'cover')
-            // if (window.lconfig.coverPage === false) {
-            //   id = 1
-            //   run = true
-            //   this.$store.dispatch('setCurrentItem', {id})
-            //   // setTimeout(() => this.$store.dispatch('setCurrentItem', {id}), 2000)
-            // }
-            // else swipe content pane ?!
           }
           // if (this.$store.state.currentItem.id === id) {
           this.current = current
           // }
-
-          if (run === true) {
-            setTimeout(() => {
-              if (vm.$store.state.tween.reversed()) {
-                vm.$store.state.tween.play()
-              } else {
-                vm.$store.state.tween.reverse()
-              }
-            }, 500)
-          }
         }
       },
       getTop (index) {

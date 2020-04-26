@@ -1327,7 +1327,6 @@ export default new Vuex.Store({
     selecting: false, // e.g. in search dialog using arrow keys
     subpath: '',
     angle: 0,
-    tween: null,
     deep: {},
     space: null,
     zircle: {}
@@ -1338,9 +1337,6 @@ export default new Vuex.Store({
     },
     SPACEMENU (state, o) {
       state.spacemenu = o
-    },
-    TWEEN_ANGLE (state, o) {
-      state.angle = o.a
     },
     ADDDATASET (state, o) {
       state.dataSets[o.k] = o.v
