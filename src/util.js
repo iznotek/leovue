@@ -366,6 +366,85 @@ function getObjectByKeyFromTree (d, k, v) {
   }
 }
 
+/**
+ * Is url relative
+ * @param url {string}
+ * @returns {boolean} - if is relative
+ * TODO: move to util
+ */
+function isRelative (url) {
+  let ok = true
+  if (/^[xh]ttp/.test(url)) { // xhttp is to indicate xframe header should be ignored
+    return false
+  }
+  if (/^\//.test(url)) {
+  //  return false
+  }
+  if (window.lconfig.filename) {
+    return false
+  }
+  return ok
+}
+
+/**
+ * clean up title for display, get url
+ * @param title {String} This is an md format link, unless dataType is passed in
+ * @param dataType {String} e.g. 'rgarticle', host will be in lconfig.dataSources, not extracted from title
+ * @returns { url, label }
+ */
+function getUrlFromTitle (title, dataType) {
+  let url = ''
+  let label = ''
+  title = title.replace(/^@[a-zA-Z-]*? /, '')
+  let dataParams = null
+  const re = /^\[(.*?)\]\((.*?)\)$/
+  const match = re.exec(title)
+  if (dataType) {
+    dataType = dataType.replace('-', '')
+    dataParams = window.lconfig.dataSources[dataType]
+    if (!dataParams) {
+      console.log('No match for dataType:', dataType)
+      return { url, label }
+    }
+    url = dataParams.host + title
+    if (match) {
+      label = match[1]
+      url = dataParams.host + match[2]
+    } else {
+      label = title.replace(/_/g, ' ').replace(/^\d+/, '') // remove leading numbers
+    }
+    return { url, label }
+  }
+  if (!match) { return { url, label } }
+  url = match[2]
+  label = match[1]
+  if (!url) { return null }
+  if (isRelative(url)) {
+    // url = 'static/' + url
+  }
+  // absolute urls require no further processing
+  if (/^[xh]ttp/.test(url)) { // xttp will result in http call via proxy
+    return {url, label}
+  }
+  // add doc file host if docfile is not on current host
+  // const hostname = window.location.hostname
+  let cname = window.lconfig.filename
+  // const cnameUrl = new URL(cname)
+  // const leoFileHostname = cnameUrl.host
+  if (cname.indexOf('/') < 0) {
+    cname = ''
+  }
+  if (cname && (cname.indexOf('http') > -1)) {
+    let u = window.lconfig.filename
+    u = util.chop(u, '#')
+    u = util.chop(u, '?')
+    u = util.chop(u, '/')
+    url = u + '/' + url
+  }
+
+  return {url, label}
+}
+
 // parseQueryString(window.location.href)
 
 module.exports = {
@@ -382,6 +461,8 @@ module.exports = {
   getObjectByKeyFromTree,
   sendGTag,
   chop,
-  toTitleCase
+  toTitleCase,
+  getUrlFromTitle,
+  isRelative
 }
 

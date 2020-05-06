@@ -3,8 +3,8 @@
    <div id="dashboard" v-bind:style="dashboardStyle"> 
     
     <!-- <modelviewer/> -->
-    <settings/>
-    <json-editor/>
+    <modalsettings/>
+    <modaldeepeditor/>
 
     <chatmenu v-if="connected && config.comments"/>
     <typemenu v-if="ready"/>
@@ -68,8 +68,8 @@ import D3View from './D3View'
 import Logo from './Logo'
 
 // modals
-import Settings from './Settings'
-import JsonEditor from './editor/JsonEditor'
+import Settings from './modals/Settings'
+import DeepEditor from './modals/DeepEditor'
 
 // import ModelViewer from './modelviewer/Viewer'
 import ParticleEffectButton from 'vue-particle-effect-buttons'
@@ -93,8 +93,8 @@ export default {
     spinner: OrbitSpinner,
     spacemenu: SpaceMenu,
     logo: Logo,
-    Settings,
-    JsonEditor
+    modalsettings: Settings,
+    modaldeepeditor: DeepEditor
     // modelviewer: ModelViewer
   },
   data () {

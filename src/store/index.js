@@ -94,25 +94,6 @@ function getRoots (acc, p, startIndex) {
   return getRoots(acc, p, i + 1)
   // TODO: move to util
 }
-/**
- * Is url relative
- * @param url {string}
- * @returns {boolean} - if is relative
- * TODO: move to util
- */
-function isRelative (url) {
-  let ok = true
-  if (/^[xh]ttp/.test(url)) { // xhttp is to indicate xframe header should be ignored
-    return false
-  }
-  if (/^\//.test(url)) {
-  //  return false
-  }
-  if (window.lconfig.filename) {
-    return false
-  }
-  return ok
-}
 
 // load subtree - separate leo file loaded into node
 function loadLeoNode (context, item) {
@@ -120,7 +101,7 @@ function loadLeoNode (context, item) {
   const p = new Promise((resolve, reject) => {
     const title = item.name
     const id = item.id
-    let {url, label} = getUrlFromTitle(title)
+    let {url, label} = util.getUrlFromTitle(title)
     if (!url) { return }
     // this will fetch the leo file and convert to JSON with
     // the id prepended to the id in the fetched data
@@ -146,66 +127,8 @@ function loadLeoNode (context, item) {
   return p
 }
 
-/**
- * clean up title for display, get url
- * @param title {String} This is an md format link, unless dataType is passed in
- * @param dataType {String} e.g. 'rgarticle', host will be in lconfig.dataSources, not extracted from title
- * @returns { url, label }
- */
-function getUrlFromTitle (title, dataType) {
-  let url = ''
-  let label = ''
-  title = title.replace(/^@[a-zA-Z-]*? /, '')
-  let dataParams = null
-  const re = /^\[(.*?)\]\((.*?)\)$/
-  const match = re.exec(title)
-  if (dataType) {
-    dataType = dataType.replace('-', '')
-    dataParams = window.lconfig.dataSources[dataType]
-    if (!dataParams) {
-      console.log('No match for dataType:', dataType)
-      return { url, label }
-    }
-    url = dataParams.host + title
-    if (match) {
-      label = match[1]
-      url = dataParams.host + match[2]
-    } else {
-      label = title.replace(/_/g, ' ').replace(/^\d+/, '') // remove leading numbers
-    }
-    return { url, label }
-  }
-  if (!match) { return { url, label } }
-  url = match[2]
-  label = match[1]
-  if (!url) { return null }
-  if (isRelative(url)) {
-    // url = 'static/' + url
-  }
-  // absolute urls require no further processing
-  if (/^[xh]ttp/.test(url)) { // xttp will result in http call via proxy
-    return {url, label}
-  }
-  // add doc file host if docfile is not on current host
-  // const hostname = window.location.hostname
-  let cname = window.lconfig.filename
-  // const cnameUrl = new URL(cname)
-  // const leoFileHostname = cnameUrl.host
-  if (cname.indexOf('/') < 0) {
-    cname = ''
-  }
-  if (cname && (cname.indexOf('http') > -1)) {
-    let u = window.lconfig.filename
-    u = util.chop(u, '#')
-    u = util.chop(u, '?')
-    u = util.chop(u, '/')
-    url = u + '/' + url
-  }
-
-  return {url, label}
-}
 function showPdf (context, title, id) {
-  let {url, label} = getUrlFromTitle(title) // eslint-disable-line
+  let {url, label} = util.getUrlFromTitle(title) // eslint-disable-line
   if (!url) { return }
   const ext = util.getFileExtension(url)
   // const base = url.substring(0, url.lastIndexOf('/'))
@@ -419,7 +342,7 @@ function showPageOutline (context, item, id, subpath) {
     id = item.id
   }
   return new Promise((resolve, reject) => {
-    let {url, label} = getUrlFromTitle(item.name) // eslint-disable-line
+    let {url, label} = util.getUrlFromTitle(item.name) // eslint-disable-line
     if (!url) { return }
     let site = url
     const t = parserURI(url)
@@ -645,7 +568,7 @@ function showD3Board (context, title, id) {
   context.commit('CONTENT_PANE', { type: 'board' })
 }
 function showSite (context, title, id) {
-  let {url, label} = getUrlFromTitle(title) // eslint-disable-line
+  let {url, label} = util.getUrlFromTitle(title) // eslint-disable-line
   if (!url) { return }
   const ext = util.getFileExtension(url)
   const base = url.substring(0, url.lastIndexOf('/'))
@@ -680,7 +603,7 @@ function showSite (context, title, id) {
 }
 
 function setSiteItem (context, title, id) {
-  let {url, label} = getUrlFromTitle(title) // eslint-disable-line
+  let {url, label} = util.getUrlFromTitle(title) // eslint-disable-line
   if (!url) { return }
   const ext = util.getFileExtension(url)
   const base = url.substring(0, url.lastIndexOf('/'))
@@ -908,7 +831,7 @@ function getLocalMDPaths (data, arr) {
     return arr
   }
   data.name = data.name || ''
-  const {url, label} = getUrlFromTitle(data.name)
+  const {url, label} = util.getUrlFromTitle(data.name)
   if (/\.md$/.test(url) && !/http/.test(url)) {
     const id = data.id
     const item = data
@@ -1034,7 +957,7 @@ function loadPresentation (id, pages) {
 function loadSubtrees (context, trees, data, topId, subpath) {
   if (!trees.length) { return Promise.resolve() }
   let item = JSON.search(data, '//*[id="' + trees[0] + '"]')[0]
-  let {url, label} = getUrlFromTitle(item.name)
+  let {url, label} = util.getUrlFromTitle(item.name)
   if (url.match(/\.json$/)) {
     let itemText = context.state.leotext[item.t].replace(/^@.*?\n/, '')
     let params = jsyaml.load(itemText) || {}
@@ -1804,12 +1727,12 @@ export default new Vuex.Store({
           }
         }
         if (/^@pdf/.test(item.name)) {
-          let {url, label} = getUrlFromTitle(item.name) // eslint-disable-line
+          let {url, label} = util.getUrlFromTitle(item.name) // eslint-disable-line
           if (!url) { return }
           return showPdf(context, item.name, id)
         }
         if (/^@rss/.test(item.name)) {
-          let {url, label} = getUrlFromTitle(item.name) // eslint-disable-line
+          let {url, label} = util.getUrlFromTitle(item.name) // eslint-disable-line
           if (!url) { return }
           return showFormattedData(context, id, url, 'rss', 'xml')
         }
@@ -1862,7 +1785,7 @@ export default new Vuex.Store({
           const match = re.exec(item.name)
           let dataType = match[1]
           let dataSubType = match[2]
-          let {url, label} = getUrlFromTitle(item.name, dataSubType) // eslint-disable-line
+          let {url, label} = util.getUrlFromTitle(item.name, dataSubType) // eslint-disable-line
           item.name = `@dataSet set${id} ${label}`// label
           if (!url) { return }
           itemText = itemText.replace(/^@.*?\n/, '') // remove language directive if exist
@@ -1907,7 +1830,7 @@ export default new Vuex.Store({
           item.children = _.orderBy(children, o => o.sname, sortDirection) // eslint-disable-line
         }
         if (/^@book/.test(item.name)) {
-          let {url, label} = getUrlFromTitle(item.name) // eslint-disable-line
+          let {url, label} = util.getUrlFromTitle(item.name) // eslint-disable-line
           url = url.replace('static/', '')
           if (!url) { return }
           itemText = itemText.replace(/^@.*?\n/, '')

@@ -374,7 +374,7 @@
   .arrow-left {
     position: absolute;
     transform: rotate(180deg);
-    margin-top: 0px; 
+    margin-top: -7px; 
     margin-left: -57px;
   }
   .arrow-right {

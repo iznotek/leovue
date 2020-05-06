@@ -10,7 +10,7 @@
       <section slot="media">
         <div style="height: 75px" />
         <div :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >
-          <a style="font-size: 35px">
+          <a style="font-size: 35px; color: #eee; text-decoration: none;">
             {{ model.vtitle }} 
           </a>
         </div>
@@ -35,7 +35,7 @@
             <img :src="require(`@/assets/logo.png`)" width="95"/>
         </z-spot> -->
 
-        <z-spot v-if="$store.state.connected"
+        <z-spot v-if="$store.state.connected && $store.state.currentItem.id === model.id"
           button 
           @click.native="$modal.show('jsoneditor')" 
           class="meteor" 
@@ -63,7 +63,7 @@
             <div style="height: 100px" />
             <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
               <!-- <span>{{ amodel.vtitle }}</span> -->
-              <a style="font-size: 25px">
+              <a style="font-size: 25px; color: #eee; text-decoration: none;">
                 {{ amodel.vtitle }} 
               </a>
             </div>
@@ -443,7 +443,7 @@ export default {
     spotimage: function (itemdata) {
       if (itemdata) {
         var deep = itemdata.deep
-        if (deep && deep.look.spot) {
+        if (deep && deep.look && deep.look.spot) {
           return deep.look.spot
         } else {
           return require(`@/assets/spot.png`)
@@ -495,6 +495,13 @@ export default {
       }
       this.$store.dispatch('setCurrentItem', {id})
       this.myContent = this.$store.state.contentItems[this.model.id]
+    }
+  },
+  events: {
+    deepUpdate (deep) {
+      if (deep) {
+        this.model.deep = deep
+      }
     }
   },
   watch: {

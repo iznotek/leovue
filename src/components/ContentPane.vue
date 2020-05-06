@@ -5,6 +5,9 @@
       <edit-menu :state="edit" style="float: right; margin-top: -35px; margin-right: -50px;" />
     </div> 
 
+    <!-- <div v-if="connected && !edit">
+      <editorjson :state="edit"  />
+    </div> -->
 
     <div class="behind" :class="$store.state.darkmode ? 'dark' : 'light'">
     <div style="position: absolute; width: 100%; height: 100%;">
@@ -179,6 +182,7 @@ const util = require('../util.js')
 import { ContentLoader } from 'vue-content-loader'
 // import TipTap from './editor/TipTap'
 import EditorJs from './editor/EditorJs'
+import JsonEditor from './editor/JsonEditor'
 import EditMenu from './EditMenu'
 
 const transitions = ['fade-transition', 
@@ -186,11 +190,6 @@ const transitions = ['fade-transition',
   'collapse-transition', 
   'scale-transition',
   'slide-y-up-transition', 'slide-y-down-transition', 'slide-x-left-transition', 'slide-x-right-transition']
-
-// import { VueperSlides, VueperSlide } from 'vueperslides'
-// import 'vueperslides/dist/vueperslides.css'
-// import Login from './Login'
-// import Cover from './Cover'
 
 // functions for dealing with x-frame headers
 // TODO move these
@@ -266,9 +265,8 @@ export default {
   components: {
     EditMenu,
     ContentLoader,
-    // login: Login,
-    // cover: Cover,
-    editorjs: EditorJs
+    editorjs: EditorJs,
+    editorjson: JsonEditor
   },
   data () {
     return {

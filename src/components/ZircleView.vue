@@ -40,7 +40,7 @@
           :distance="0" 
           :angle="0">
         </z-spot> 
-        <z-spot v-if="$store.state.connected"
+        <z-spot v-if="$store.state.connected && space && $store.state.currentItem.id === space.id"
           button 
           @click.native="$modal.show('jsoneditor')" 
           class="meteor" 
@@ -65,7 +65,7 @@
           @click.native="toggle(amodel.id, amodel)"
           :to-view="{ name: 'item0', params: {depth: 1, model: amodel, key: amodel.id, textItems: text, targetEl: target, top: false}}"
           :key="index">
-            <a style="font-size: 25px">
+            <a style="font-size: 25px; color: #eee; text-decoration: none;">
                 {{ amodel.vtitle }} 
             </a>
             <section slot="image" style="height: 100%; width: 100%;"> <!-- v-html="spot(amodel, 50)"> -->
@@ -125,6 +125,7 @@ export default {
   },
   data: function () {
     return {
+      edeep: null,
       graph: null,
       reset: true,
       openFlag: false,
@@ -191,7 +192,7 @@ export default {
     spotimage: function (itemdata) {
       if (itemdata) {
         var deep = itemdata.deep
-        if (deep && deep.look.spot) {
+        if (deep && deep.look && deep.look.spot) {
           return deep.look.spot
         } else {
           return require(`@/assets/spot.png`)
@@ -338,6 +339,13 @@ export default {
   //     immediate: true
   //   }
   // }
+  events: {
+    deepUpdate (deep) {
+      if (deep) {
+        this.space.deep = deep
+      }
+    }
+  },
   watch: {
     '$store.state.space': {
       handler: function (val, oldVal) {

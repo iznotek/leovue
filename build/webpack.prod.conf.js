@@ -53,10 +53,19 @@ var webpackConfig = merge(baseWebpackConfig, {
     // }),
     new TerserPlugin({
       test: /\.js($|\?)/i,
-      sourceMap: true,
+      sourceMap: false,
+      cache: true,
+      parallel: true,
+      exclude: /\/node_modules/,
       terserOptions: {
         ecma: 6,
       },
+      // chunkFilter: (chunk) => {
+      //   if (chunk.name === 'vendor') {
+      //     return false;
+      //   }
+      //   return true;
+      // }
     }),
     // extract css into its own file
     new ExtractTextPlugin({

@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "deep",
+  "description": "",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "name",
+      "attrs": {
+        "placeholder": "a name ready syntaxe...",
+        "title": "a name ready syntaxe..."
+      }
+    },
+    "link": {
+      "type": "string",
+      "title": "link",
+      "attrs": {
+        "placeholder": "a linked file or url...",
+        "title": "a linked file or url..."
+      }
+    },
+    "deep": {
+      "title": "deep",
+      "description": "",
+      "type": "object",
+      "properties": {
+        "look": {
+          "title": "look",
+          "description": "",
+          "type": "object",
+          "properties": {
+            "space": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 80,
+              "title": "space",
+              "attrs": {
+                "placeholder": "type the space description...",
+                "title": "Please enter your space description"
+              }
+            },
+            "dash": {
+              "title": "dash",
+              "format": "uri"
+            },
+            "spot": {
+              "title": "spot",
+              "format": "uri"
+            },
+            "mode": {
+              "type": "string",
+              "title": "mode",
+              "enum": ["dark", "light"],
+              "attrs": {
+                "placeholder": "Select your theme mode",
+                "title": "Please select your theme mode"
+              }
+            },
+            "theme": {
+              "type": "string",
+              "title": "theme",
+              "default": "#409EFF",
+              "attrs": {
+                "type": "color"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}
