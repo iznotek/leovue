@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
-import Splitboard from '@/components/Splitboard'
+// import Dashboard from '@/components/Dashboard'
+// import Splitboard from '@/components/Splitboard'
 // import TreeViewer from '@/components/TreeViewer'
 // import D3Viewer from '@/components/D3Viewer'
 // import DbViewer from '@/components/DbViewer'
@@ -15,6 +15,9 @@ import Splitboard from '@/components/Splitboard'
 // Router.prototype.push = function push (location) {
 //  return originalPush.call(this, location).catch(err => err)
 // }
+
+const Dashboard = () => import(/* webpackChunkName: "dashboard" */ '@/components/Dashboard')
+const Splitboard = () => import(/* webpackChunkName: "splitboard" */ '@/components/Splitboard')
 
 Vue.use(Router)
 
@@ -104,12 +107,17 @@ export default new Router({
     */
 
     {
+      path: '/',
+      component: Dashboard
+    },
+    {
       path: '/iznow/:id',
       component: Dashboard,
       children: [{
         name: 'ONode',
         path: '',
         component: Splitboard
+        // component: () => lazyLoadView(import(/* webpackChunkName: "Splitboard" */'@/components/Splitboard'))
       }]
     },
 
@@ -123,3 +131,44 @@ export default new Router({
     }
   ]
 })
+
+// Lazy-loads view components, but with better UX. A loading view
+// will be used if the component takes a while to load, falling
+// back to a timeout view in case the page fails to load. You can
+// use this component to lazy-load a route with:
+//
+// component: () => lazyLoadView(import('@views/my-view'))
+//
+// NOTE: Components loaded with this strategy DO NOT have access
+// to in-component guards, such as beforeRouteEnter,
+// beforeRouteUpdate, and beforeRouteLeave. You must either use
+// route-level guards instead or lazy-load the component directly:
+//
+// component: () => import('@views/my-view')
+//
+
+// function lazyLoadView (AsyncView) {
+//   const AsyncHandler = () => ({
+//     component: AsyncView,
+//     // A component to use while the component is loading.
+//     loading: import('@components/base/BaseLoading'),
+//     // A fallback component in case the timeout is exceeded
+//     // when loading the component.
+//     error: import('@components/base/BaseTimeout'),
+//     // Delay before showing the loading component.
+//     // Default: 200 (milliseconds).
+//     delay: 70,
+//     // Time before giving up trying to load the component.
+//     // Default: Infinity (milliseconds).
+//     timeout: 15000
+//   })
+
+//   return Promise.resolve({
+//     functional: true,
+//     render (h, { data, children }) {
+//       // Transparently pass any props or children
+//       // to the view component.
+//       return h(AsyncHandler, data, children)
+//     }
+//   })
+// }

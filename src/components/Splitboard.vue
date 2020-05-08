@@ -1,5 +1,12 @@
 <template>
   <div>
+    <!-- <modelviewer/> -->
+    <!-- <modalsettings/>
+    <modaldeepeditor/> -->
+    <type-menu v-if="ready"/>
+    <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
+    <!-- <chatmenu v-if="connected && config.comments"/>
+    <chat v-if="config.chats && connected"/> -->
 
    <splitpanes 
       ref="splitpanes"
@@ -7,7 +14,7 @@
       @pane-maximize="maximized($event)"
       @resize="resize($event)" 
       @resized="resize($event)" 
-      style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; padding-top: 33px; transition: 0s; width: 100%"
+      style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; padding-top: 40px; transition: 0s; width: 100%"
       >
       <pane v-if="left" :size="sizes.left" :class="$store.state.darkmode ? 'dark' : 'light'">
         <zircle-viewer style="z-index: 6002;"></zircle-viewer> 
@@ -15,7 +22,7 @@
       <pane v-if="ready && center" :size="sizes.center">
         <content-pane style="z-index: 6002;"></content-pane> 
       </pane>
-      <pane v-if="connected && right && (comments || meeting)" :size="sizes.right">
+      <!-- <pane v-if="connected && right && (comments || meeting)" :size="sizes.right">
         <splitpanes horizontal>
           <pane v-if="comments" size="70">
             <comments style="z-index: 6003;"></comments>  
@@ -24,7 +31,7 @@
             <meeting style="z-index: 6004;" ></meeting>
           </pane>
         </splitpanes>
-      </pane>
+      </pane> -->
     </splitpanes>
 
     <div v-if="ready" class="noselect" style="position:fixed; top: 40px; margin-left: -5px; z-index: 6005;" :style="{left: leftBall}">
@@ -51,11 +58,19 @@
   import BallMenu from './BallMenu'
   import { Splitpanes, Pane } from 'splitpanes'
   import 'splitpanes/dist/splitpanes.css'
-  import Comments from './Comments.vue'
-  import Meeting from './meeting/Meeting.vue'
   import ContentPane from './ContentPane'
   import ZircleViewer from './ZircleViewer'
   import MiddleMenu from './MiddleMenu'
+  // import Comments from './Comments.vue'
+  // import Meeting from './meeting/Meeting.vue'
+
+  import SpaceMenu from './SpaceMenu'
+  import TypeMenu from './TypeMenu'
+  // import Chat from './chat/Chat'
+  // import ChatMenu from './ChatMenu'
+  // modals
+  // import Settings from './modals/Settings'
+  // import DeepEditor from './modals/DeepEditor'
 
   const util = require('../util.js')
 
@@ -68,11 +83,13 @@
       BallMenu,
       MiddleMenu,
       ContentPane,
-      Comments,
       Splitpanes,
       Pane,
       ZircleViewer,
-      Meeting
+      SpaceMenu,
+      TypeMenu
+      // Comments,
+      // Meeting
     },
     data: function () {
       return {
@@ -194,6 +211,9 @@
         //   background-color: yellow;
         // }
         // return 'color: ' + this.color + ';'
+      },
+      config () {
+        return window.lconfig
       }
     },
     mounted: function () {
@@ -374,7 +394,7 @@
   .arrow-left {
     position: absolute;
     transform: rotate(180deg);
-    margin-top: -7px; 
+    margin-top: 0px; 
     margin-left: -57px;
   }
   .arrow-right {

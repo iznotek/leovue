@@ -1,16 +1,6 @@
 <template>
   <div  class="dashboard">
    <div id="dashboard" v-bind:style="dashboardStyle"> 
-    
-    <!-- <modelviewer/> -->
-    <modalsettings/>
-    <modaldeepeditor/>
-
-    <chatmenu v-if="connected && config.comments"/>
-    <typemenu v-if="ready"/>
-    <spacemenu v-if="ready && this.$store.state.spacemenu && !config.static"/>
-
-    <chat v-if="config.chats && connected"/>
 
     <background/>
     <appheader/>
@@ -57,25 +47,11 @@
 
 <script>
 import AppHeader from './Header'
-import Chat from './chat/Chat'
-import CenterMenu from './CenterMenu'
-import SpaceMenu from './SpaceMenu'
-import TypeMenu from './TypeMenu'
-import ChatMenu from './ChatMenu'
 import Background from './Background'
-import TreeView from './TreeView'
-import D3View from './D3View'
 import Logo from './Logo'
 
-// modals
-import Settings from './modals/Settings'
-import DeepEditor from './modals/DeepEditor'
-
 // import ModelViewer from './modelviewer/Viewer'
-import ParticleEffectButton from 'vue-particle-effect-buttons'
-import {OrbitSpinner} from 'epic-spinners' // OrbitSpinner
-// import _ from 'lodash'
-
+// import ParticleEffectButton from 'vue-particle-effect-buttons'
 const util = require('../util.js')
 
 export default {
@@ -83,19 +59,13 @@ export default {
   components: {
     background: Background,
     appheader: AppHeader,
-    typemenu: TypeMenu,
-    chatmenu: ChatMenu,
-    centermenu: CenterMenu,
-    chat: Chat,
-    treeview: TreeView,
-    d3view: D3View,
-    pbutton: ParticleEffectButton,
-    spinner: OrbitSpinner,
-    spacemenu: SpaceMenu,
-    logo: Logo,
-    modalsettings: Settings,
-    modaldeepeditor: DeepEditor
+    logo: Logo // ,
+    // chatmenu: ChatMenu,
+    // chat: Chat,
+    // modalsettings: Settings,
+    // modaldeepeditor: DeepEditor
     // modelviewer: ModelViewer
+    // pbutton: ParticleEffectButton,
   },
   data () {
     return {
@@ -297,6 +267,9 @@ export default {
           if (this.loading) {
             let vm = this
             vm.$store.state.ready = true
+            if (!this.$route.params.id) {
+              this.$router.push({ name: 'ONode', params: { id: val.id } }, () => {})
+            }
             setTimeout(() => {
               this.loader.opacity = 0
               this.$refs.logo.hide()
@@ -394,9 +367,9 @@ li {
 } 
 
 #main {
-  height: calc(100vh - 33px);
+  height: calc(100vh - 40px);
   width: 100%;
-  top: 33px;
+  top: 40px;
   position: fixed;
   z-index: 2;
 }
