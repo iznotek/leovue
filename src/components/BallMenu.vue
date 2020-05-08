@@ -56,7 +56,7 @@
 
 <script>
 import { RadialMenu, RadialMenuItem } from './button/radial'
-import { SpringSpinner, OrbitSpinner } from 'epic-spinners'
+import OrbitSpinner from './spinner/orbit'
 // const BloomingMenu = require('blooming-menu')
 const util = require('../util.js')
 
@@ -65,7 +65,6 @@ export default {
   components: {
     RadialMenu,
     RadialMenuItem,
-    SpringSpinner,
     OrbitSpinner
   },
   data () {
@@ -97,12 +96,12 @@ export default {
     },
     handleClick (item) {
       this.lastClicked = item
-      if (item === 'here') {
+      if (item === 'here' && this.$bs) {
         if (!this.$bs.isUserSignedIn()) {
           this.$bs.redirectToSignIn()
         }
       }
-      if (item === 'save') {
+      if (item === 'save' && this.$bs) {
         this.$bs.save({
           data: this.$store.state.leodata,
           text: this.$store.state.leotext,

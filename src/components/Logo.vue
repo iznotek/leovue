@@ -63,7 +63,7 @@
 </style>
 
 <script>
-import { OrbitSpinner } from 'epic-spinners'
+import OrbitSpinner from './spinner/orbit'
 
 export default {
   name: 'app',

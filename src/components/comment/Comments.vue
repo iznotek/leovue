@@ -125,7 +125,7 @@
 <script>
   import Wrapper from './Comment.vue'
   import Sign from './Sign.vue'
-  import { OrbitSpinner } from 'epic-spinners'
+  import OrbitSpinner from '../spinner/orbit'
   import axios from 'axios'
   const util = require('../../util.js')
 
