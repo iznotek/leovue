@@ -23,9 +23,9 @@
         <div v-if="ready" @click="$store.commit('DARKMODE', !$store.state.darkmode)" class="icon icon-button">
           <icon class="icon" :name="$store.state.darkmode ? 'moon' : 'regular/moon'" flip="horizontal"></icon>
         </div>          
-        <div v-if="ready" @click="$modal.show('settings')" class="icon icon-button">
+        <!-- <div v-if="ready" @click="$modal.show('settings')" class="icon icon-button">
           <icon class="icon" name="cog"></icon>
-        </div> 
+        </div>  -->
         <!-- <div v-if="connected" class="button-shim"></div> -->
         <div class="space"></div>
         <div v-if="ready" @click="goBack"
@@ -329,13 +329,13 @@
   background-color: rgba(0,0,0,0.5) 
   font-weight: normal
   padding: 2px
-  padding-top: 6px
+  padding-top: 10px
   padding-left: 6px
   color: #333
   //border-bottom: 1px solid #333
   //box-shadow: 0 1px 1px 0 rgba(116, 129, 141, 0.1)
   box-shadow: 0px 10px 30px rgba(0,0,0,0.85)
-  height: 33px
+  height: 40px
 .search
   float: left
   margin-right: 10px
@@ -381,6 +381,7 @@
 .doc-title
   // font-weight: bold
   margin-left: 20px
+  margin-top: -3px
   color: #dddddd
   text-align: center
 .menu-footer

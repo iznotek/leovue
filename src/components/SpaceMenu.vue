@@ -1,5 +1,5 @@
 <template>
-  <div style='position: absolute; margin-top: 33px; height: 100%; z-index: 6999;'>
+  <div style='position: absolute; margin-top: 0px; height: 100%; z-index: 6999;'>
       <vue-accordion :items="items" :styles="styles"></vue-accordion>
   </div>
 </template>

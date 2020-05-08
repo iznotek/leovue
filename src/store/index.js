@@ -740,6 +740,7 @@ function setData (context, ldata, filename, route) {
   }
   // TODO: refactor use of id vs route.path
   let id = route.params.id
+  if (!id) return
   // check if path is a literate path, translate to number (look up matching node name)
   const pathObj = translatePath(id, ldata.data)
   id = pathObj.npath
@@ -782,7 +783,7 @@ function setData (context, ldata, filename, route) {
     context.commit('OPEN_ITEMS', {openItemIds})
     const ids = openItemIds
     context.dispatch('setContentItems', {ids})
-    context.dispatch('setCurrentItem', {id})
+    // context.dispatch('setCurrentItem', {id})
   })
   loadLocalMD(context, ldata)
 }
@@ -1308,6 +1309,7 @@ export default new Vuex.Store({
         id = '1'
         space = state.leodata[0].vtitle.replace('@space')
       }
+      // console.log('CURRENT_SPACE: ', space)
       state.space = {id: id, name: space}
     },
     CONNECTED (state, o) {
@@ -1456,7 +1458,7 @@ export default new Vuex.Store({
       state.currentItemPath = paths.join(' / ')
       state.currentItemPathMapIds = ids.reverse()
 
-      // console.log('CURRENT_ITEM: ', item)
+      console.log('CURRENT_ITEM: ', item.id)
       router.push({name: routeName, params: { id }}, () => {})
       // state.initialized = false
     },

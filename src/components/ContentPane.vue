@@ -10,10 +10,12 @@
     </div> -->
 
     <div class="behind" :class="$store.state.darkmode ? 'dark' : 'light'">
-    <div style="position: absolute; width: 100%; height: 100%;">
+    <div >
       <component :is="fade.transition"  :duration="fade.duration" :delay="fade.delay" v-show='fade.next'>
       <div>
-        <div v-for="(item,index) in itemOdd" :key="index" :style="{zIndex: item.item.id === current.item.id ? 6004 : 6000}">
+        <div v-for="(item,index) in itemOdd" :key="index" 
+          style="position: absolute; width: 100%; height: 100%;"
+          :style="{zIndex: item.item.id === current.item.id ? 6004 : 6000}">
           
           <div v-if="textContent(item)">
                   <div id="lhandle"
@@ -88,10 +90,12 @@
       </component>
       </div>
     
-      <div style="position: absolute; width: 100%; height: 100%;">
+      <div >
       <component :is="fade.transition" :duration="fade.duration" :delay="fade.delay" v-show='!fade.next'>
       <div>
-        <div v-for="(item,index) in itemEven" :key="index" :style="{zIndex: item.item.id === current.item.id ? 6004 : 6000}">
+        <div v-for="(item,index) in itemEven" :key="index" 
+          style="position: absolute; width: 100%; height: 100%;"
+          :style="{zIndex: item.item.id === current.item.id ? 6004 : 6000}">
           
           <div v-if="textContent(item)">
                   <div id="lhandle"
