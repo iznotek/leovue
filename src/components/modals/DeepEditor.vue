@@ -10,6 +10,7 @@
     :reset="true"
     width="40%"
     height="auto"
+    style="z-index: 10000;"
     @before-open="beforeOpen"
     @before-close="beforeClose"
   >

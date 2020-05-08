@@ -654,9 +654,9 @@
     "@types/node" "*"
 
 "@types/cheerio@^0.22.13":
-  version "0.22.17"
-  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.17.tgz#e54f71c3135f71ebc16c8dc62edad533872c9e72"
-  integrity sha512-izlm+hbqWN9csuB9GSMfCnAyd3/57XZi3rfz1B0C4QBGVMp+9xQ7+9KYnep+ySfUrCWql4lGzkLf0XmprXcz9g==
+  version "0.22.18"
+  resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.18.tgz#19018dceae691509901e339d63edf1e935978fe6"
+  integrity sha512-Fq7R3fINAPSdUEhOyjG4iVxgHrOnqDJbY0/BUuiN0pvD/rfmZWekVZnv+vcs8TtpA2XF50uv50LaE4EnpEL/Hw==
   dependencies:
     "@types/node" "*"
 
@@ -717,9 +717,9 @@
   integrity sha512-DQ2hl/Jl3g33KuAUOcMrcAOtsbzb+y/ufakzAdeK9z/H/xsvkpbETZZbPNMIiQuk24f5ZRMCcZIViAwyFIiKmg==
 
 "@types/node@^12.7.12":
-  version "12.12.35"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.35.tgz#1e61b226c14380f4384f70cfe49a65c2c553ad2b"
-  integrity sha512-ASYsaKecA7TUsDrqIGPNk3JeEox0z/0XR/WsJJ8BIX/9+SkMSImQXKWfU/yBrSyc7ZSE/NPqLu36Nur0miCFfQ==
+  version "12.12.38"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.38.tgz#58841a382f231ad005dbb935c36d44aa1118a26b"
+  integrity sha512-75eLjX0pFuTcUXnnWmALMzzkYorjND0ezNEycaKesbUBg9eGZp4GHPuDmkRc4mQQvIpe29zrzATNRA6hkYqwmA==
 
 "@types/q@^1.5.1":
   version "1.5.2"
@@ -12576,10 +12576,15 @@ tryer@^1.0.1:
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
   integrity sha512-c3zayb8/kWWpycWYg87P71E1S1ZL6b6IJxfb5fvsUgsf0S2MVGaDhDXXjDMpdCpfWXqptc+4mXwmiy1ypXqRAA==
 
-tslib@1.11.1, tslib@^1.10.0, tslib@^1.9.3:
+tslib@1.11.1, tslib@^1.9.3:
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
+
+tslib@^1.10.0:
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.2.tgz#9c79d83272c9a7aaf166f73915c9667ecdde3cc9"
+  integrity sha512-tTSkux6IGPnUGUd1XAZHcpu85MOkIl5zX49pO+jfsie3eP0B6pyhOlLXm3cAC6T7s+euSDDUUV+Acop5WmtkVg==
 
 tsml@1.0.1:
   version "1.0.1"
@@ -13252,10 +13257,10 @@ vue-events@^3.1.0:
   resolved "https://registry.yarnpkg.com/vue-events/-/vue-events-3.1.0.tgz#8e23121c345b4ff32ee054f9795995f3e344b27d"
   integrity sha512-JoE6ZlIEFdpj/vE7oW6T1T3Vz2h0Zxc4XEyz92L2tiRVc1TZ0u/nY1s6ZrnpHKoVxeEU0ouAp/FMxTKI3JBpvA==
 
-vue-flux@^6.0.4:
-  version "6.0.4"
-  resolved "https://registry.yarnpkg.com/vue-flux/-/vue-flux-6.0.4.tgz#780c1e62d0410aad4395f0b7a545b123613f840a"
-  integrity sha512-bDDKfPV/p9ZHYHJ3dq2hQvu4aTKaooG/3Bues7nuqgjQaFee3ZX5Ba3ZPRp59huaeTi+6gEBybNB6HMxzomUqw==
+vue-flux@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/vue-flux/-/vue-flux-6.1.1.tgz#e42d94e1728a9ec333602828bf8f5ad8e956d667"
+  integrity sha512-B/JWY3hgREe2ZP1U6B3le2r/M0QLd0ipJP3nQV5q0Tr5oRcHlGeCmK6Ydh2BPwiONoLDKZtPw89DYIdgFPbTEA==
 
 vue-fullscreen@^2.1.6:
   version "2.1.6"

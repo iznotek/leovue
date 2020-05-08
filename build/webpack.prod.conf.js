@@ -58,14 +58,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       parallel: true,
       exclude: /\/node_modules/,
       terserOptions: {
-        ecma: 6,
-      },
-      // chunkFilter: (chunk) => {
-      //   if (chunk.name === 'vendor') {
-      //     return false;
-      //   }
-      //   return true;
-      // }
+        ecma: 8,
+      }
     }),
     // extract css into its own file
     new ExtractTextPlugin({

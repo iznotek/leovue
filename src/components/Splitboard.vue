@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- <modelviewer/> -->
-    <!-- <modalsettings/>
-    <modaldeepeditor/> -->
+    <!-- <modalsettings/> -->
+    <deep-editor/> 
     <type-menu v-if="ready"/>
     <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
     <!-- <chatmenu v-if="connected && config.comments"/>
@@ -70,7 +70,7 @@
   // import ChatMenu from './ChatMenu'
   // modals
   // import Settings from './modals/Settings'
-  // import DeepEditor from './modals/DeepEditor'
+  import DeepEditor from './modals/DeepEditor'
 
   const util = require('../util.js')
 
@@ -87,7 +87,8 @@
       Pane,
       ZircleViewer,
       SpaceMenu,
-      TypeMenu
+      TypeMenu,
+      DeepEditor
       // Comments,
       // Meeting
     },
