@@ -14,7 +14,6 @@
 
 <script>
   import Cover from './components/Cover'
-  import axios from 'axios'
   
   export default {
     name: 'app',
@@ -88,14 +87,16 @@
         }
       },
       linkCheck (url) {
-        axios.get(url)
-          .then((response) => {
-            this.loadDefault(url)
-          })
-          .catch((error) => {
-            console.log(error)
-            this.loadDefault()
-          })
+        var vm = this
+        var xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+          if (this.readyState === this.DONE) {
+            vm.loadDefault(url)
+          } else {
+            vm.loadDefault()
+          }
+        }
+        xhr.open('HEAD', url)
       },
       loadDefault (url = null) {
         let filename = '/static/docs'
