@@ -113,52 +113,52 @@
       }
     },
     mounted () {
-      // var host = window.location.hostname
-      // if (host) {
-      //   this.linkCheck(window.location.origin + '/static/domains/' + host + '.leo')
+      var host = window.location.hostname
+      if (host) {
+        this.linkCheck(window.location.origin + '/static/domains/' + host + '.leo')
+      }
+
+      // if (!window.lconfig.static) {
+      //   // const { userData, user, session } = this.$bs.lookForUserData()
+      //   const { user, session } = this.$bs.lookForUserData()
+      //   if (session.isUserSignedIn()) {
+      //     // console.log(userData)
+      //     this.$store.state.connected = true
+      //     this.$store.state.user = {name: user.username.replace('.blockstack', ''), pw: ''}
+      //   } else {
+      //     this.$store.state.user = {name: 'guest', pw: ''}
+      //   }
       // }
 
-      if (!window.lconfig.static) {
-        // const { userData, user, session } = this.$bs.lookForUserData()
-        const { user, session } = this.$bs.lookForUserData()
-        if (session.isUserSignedIn()) {
-          // console.log(userData)
-          this.$store.state.connected = true
-          this.$store.state.user = {name: user.username.replace('.blockstack', ''), pw: ''}
-        } else {
-          this.$store.state.user = {name: 'guest', pw: ''}
-        }
-      }
+      // try {
+      //   this.$bs.getProfile(window.lconfig.admin).then(async (data) => {
+      //     let appUrl = window.location.origin
+      //     // console.log(data)
+      //     const bucketUrl = data && data.apps && data.apps[window.lconfig.appUrl]
+      //     // If the user already used the app we try to get the public list
+      //     if (bucketUrl && !appUrl.includes('localhost')) {
+      //       const [dataGraph] = await Promise.all([
+      //         this.$bs.fetchGraph(bucketUrl)
+      //       ])
+      //       // console.log(dataGraph)
+      //       if (dataGraph.statusCode === 200) {
+      //         this.$store.dispatch('loadGraph', dataGraph.file)
+      //       } else {
+      //         this.loadDefault()
+      //       }
+      //     } else {
+      //       console.log('Blockstack app ', appUrl, ' is not reachable for account ', window.lconfig.admin,
+      //         'You should connect at least one time as admin to get any published graph from your bucket !!!')
 
-      try {
-        this.$bs.getProfile(window.lconfig.admin).then(async (data) => {
-          let appUrl = window.location.origin
-          // console.log(data)
-          const bucketUrl = data && data.apps && data.apps[window.lconfig.appUrl]
-          // If the user already used the app we try to get the public list
-          if (bucketUrl && !appUrl.includes('localhost')) {
-            const [dataGraph] = await Promise.all([
-              this.$bs.fetchGraph(bucketUrl)
-            ])
-            // console.log(dataGraph)
-            if (dataGraph.statusCode === 200) {
-              this.$store.dispatch('loadGraph', dataGraph.file)
-            } else {
-              this.loadDefault()
-            }
-          } else {
-            console.log('Blockstack app ', appUrl, ' is not reachable for account ', window.lconfig.admin,
-              'You should connect at least one time as admin to get any published graph from your bucket !!!')
+      //       this.loadDefault()
+      //     }
+      //   })
+      // } catch (error) {
+      //   console.log('An error occured while querying profile for ', window.lconfig.admin,
+      //     'Create the id or check your connection !!!')
 
-            this.loadDefault()
-          }
-        })
-      } catch (error) {
-        console.log('An error occured while querying profile for ', window.lconfig.admin,
-          'Create the id or check your connection !!!')
-
-        this.loadDefault()
-      }
+      //   this.loadDefault()
+      // }
     }
   }
 </script>
