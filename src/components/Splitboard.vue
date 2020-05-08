@@ -155,9 +155,13 @@
           if (data.length > 2) this.sizes.right = data[2].size
           if (data.length > 1) this.sizes.center = data[1].size
           if (data.length > 0) this.sizes.left = data[0].size
-          // if (!isNaN(data[0].size)) {
-          //   this.$store.state.leftPaneWidth = data[0].size + '%'
-          // }
+
+          setTimeout(() => {
+            // if (!isNaN(data[0].size)) {
+            this.$store.state.leftPaneWidth = this.sizes.left + '%'
+            // }
+          }, 100)
+
           // console.log(data)
         }
       },
@@ -276,10 +280,10 @@
       '$store.state.leftPaneWidth': {
         handler: function (val, oldVal) {
           if (val !== oldVal) {
-            val = parseInt(val)
+            val = parseFloat(val)
 
-            var size = parseInt(val) + 1
-            this.restore([size, (100 - size)])
+            var size = parseFloat(val)
+            this.restore([size, (100.0 - size)])
 
             if (val === 0) {
               this.showRightButton = true
