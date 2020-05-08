@@ -1,5 +1,9 @@
 <template>
-    <z-view size="xxl" class="meteor" :style="style(space)">
+    <z-view 
+      size="xxl" 
+      class="meteor" 
+      :style="style(space)">
+
       <section slot="image"> 
        <!-- <kinesis-container>
         <kinesis-element :strength="10" :type="'depth'"> <!--<div v-anime="{ rotate: '360', easing: 'linear', backgroundColor: 'transparent', duration: 200000, loop: true }">  -->
@@ -14,7 +18,19 @@
         </kinesis-container> -->
       </section>
 
+      <section slot="media" v-if="hasmedia(space)"> 
+        <fade-transition :duration="2000" :delay="2000" v-show='mediaFade'>
+          <div style="margin-top: 12px;"> 
+            <youtube :video-id="media(space)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0 }"></youtube>
+          </div>
+        </fade-transition>
+      </section>
+
       <section slot="extension">
+        <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'}">
+          <textra :data="description" :timer="1" filter="bottom-top" />
+        </div>
+
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 3px;  border-color:white ' size=s :distance="150" :angle="-65" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 3px;  border-color:white ' size=s :distance="160" :angle="-130" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 3px;  border-color:white ' size=s :distance="150" :angle="140" />
@@ -32,6 +48,7 @@
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width:3px;   border-color:white' size=xs :distance="190" :angle="-160" />
 
         <z-spot 
+          v-if="!mediaFade"
           button 
           @click.native="load()" 
           class="comete" 
@@ -134,6 +151,7 @@ export default {
       closearrow: false,
       myContent: '',
       currentView: '',
+      mediaFade: false,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -146,6 +164,12 @@ export default {
     }
   },
   computed: {
+    description: function () {
+      if (this.space && this.space.deep && this.space.deep.look && this.space.deep.look.desc) {
+        return [this.space.deep.look.desc]
+      }
+      return ['']
+    },
     item () {
       return this.$store.state.zitem
     },
@@ -181,6 +205,14 @@ export default {
     }
   },
   methods: {
+    onMediaReady: function (event) {
+      // event.target.setVolume(100);
+      event.target.playVideo()
+      this.mediaFade = true
+    },
+    onMediaEnded: function (event) {
+      this.mediaFade = false
+    },
     isVisible: function (itemdata) {
       if (itemdata.id === 1) { return false }
       if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
@@ -188,6 +220,24 @@ export default {
     },
     opacity: function (itemdata, alpha = 1) {
       return alpha // (itemdata.id === this.$store.state.currentItem.id) ? alpha : alpha
+    },
+    hasmedia: function (itemdata) {
+      if (itemdata) {
+        var deep = itemdata.deep
+        if (deep && deep.look && deep.look.media) {
+          return true
+        }
+      }
+      return false
+    },
+    media: function (itemdata) {
+      if (itemdata) {
+        var deep = itemdata.deep
+        if (deep && deep.look && deep.look.media) {
+          return deep.look.media
+        }
+      }
+      return ''
     },
     spotimage: function (itemdata) {
       if (itemdata) {

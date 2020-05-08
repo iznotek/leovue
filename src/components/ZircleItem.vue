@@ -1,5 +1,9 @@
 <template>
-    <z-view v-if="model" size="xxl" class="meteor" :style="style(model)">
+    <z-view 
+      v-if="model" 
+      size="xxl" 
+      class="meteor" 
+      :style="style(model)">
 
       <section slot="image"> 
         <div class="transition" :style="style(model)"> 
@@ -8,8 +12,14 @@
       </section>
 
       <section slot="media">
-        <div style="height: 75px" />
-        <div :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >
+        <fade-transition v-if="hasmedia(model)" :duration="2000" :delay="2000" v-show='mediaFade'>
+          <div style="margin-top: 12px;"> 
+            <youtube :video-id="media(model)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0, color: 'white' }"></youtube>
+          </div>
+        </fade-transition>
+
+        <div v-if="!hasmedia(model)" style="height: 75px" />
+        <div v-if="!hasmedia(model)" :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >
           <a style="font-size: 35px; color: #eee; text-decoration: none;">
             {{ model.vtitle }} 
           </a>
@@ -17,7 +27,11 @@
       </section>
 
       <section slot="extension">
+        <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'}">
+          <textra :data="description" :timer="1" filter="bottom-top" />
+        </div>
         <z-spot 
+          v-if="!mediaFade"
           button 
           @click.native="load()" 
           class="comete" 
@@ -129,6 +143,7 @@ export default {
       myContent: '',
       depth: -1,
       currentView: '',
+      mediaFade: false,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -194,6 +209,12 @@ export default {
     // id: function () {
     //   return this.prefix + (this.model !== undefined && this.model.hasOwnProperty('id')) ? this.model.id : 'undefined'
     // },
+    description: function () {
+      if (this.model && this.model.deep && this.model.deep.look && this.model.deep.look.desc) {
+        return [this.model.deep.look.desc]
+      }
+      return ['']
+    },
     target: function () {
       return this.targetEl
     },
@@ -335,6 +356,32 @@ export default {
     }
   },
   methods: {
+    onMediaReady: function (event) {
+      // event.target.setVolume(100);
+      event.target.playVideo()
+      this.mediaFade = true
+    },
+    onMediaEnded: function (event) {
+      this.mediaFade = false
+    },
+    hasmedia: function (itemdata) {
+      if (itemdata) {
+        var deep = itemdata.deep
+        if (deep && deep.look && deep.look.media) {
+          return true
+        }
+      }
+      return false
+    },
+    media: function (itemdata) {
+      if (itemdata) {
+        var deep = itemdata.deep
+        if (deep && deep.look && deep.look.media) {
+          return deep.look.media
+        }
+      }
+      return ''
+    },
     checkViewChanged () {
       let vm = this
       let currentView = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
@@ -560,7 +607,7 @@ export default {
 <style>
 .current-label-background {
   transition: all 2s ease;
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0,0,0,0.3);
   background-size: cover;
   opacity: 1.0;
   width: 1000px;

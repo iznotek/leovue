@@ -3,12 +3,13 @@
   <div >
     <div class="zircleviewer">
       <div style="position: absolute; width: 100%; height: 100%;">
-        <div class="space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
+        <div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}">
           <textra :data='spaceNames' :timer="2" filter="left-right" />
         </div>
-        <div class="description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
+        <div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}">
           <textra :data='spaceDescs' :timer="2" filter="right-left" />
         </div>
+
         <fade-transition v-show='showcircle'>
           <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
           </z-canvas>
@@ -33,7 +34,7 @@
 
   import TreeView from './TreeView'
   import {FadeTransition} from 'vue2-transitions'
-  const util = require('../util.js')
+  // const util = require('../util.js')
 
   // let zcanvas
   export default {
@@ -260,17 +261,32 @@
       '$store.state.currentItem': {
         handler: function (val, oldVal) {
           if (val) {
-            var deep = this.$store.getters.getDeepLookForNode(val)
-            if (deep && deep.look) {
-              if (deep.look.theme) {
-                this.color = util.rgbaFromTheme(deep.look.theme, 0.3)
-                // this.$zircle.config({style: {theme: theme.background.theme}})
-              }
-              if (deep.look.mode) {
-                // this.$zircle.config({style: {mode: theme.background.mode}})
-              }
-              this.$store.commit('CURRENT_DEEP', deep)
-            }
+            // var model = JSON.search(this.$store.state.leodata, '//*[id="' + val.id + '"]')
+            // if (!model) return
+            // if (model.length) model = model[0]
+
+            // if (this.$store.state.space && val.id !== this.$store.state.space.id) {
+            //   this.nodeNames = [model.vtitle]
+            // } else {
+            //   this.nodeNames = ['']
+            // }
+            // if (model && model.deep && model.deep.look && model.deep.look.desc) {
+            //   this.nodeDescs = [model.deep.look.desc]
+            // } else {
+            //   this.nodeDescs = ['']
+            // }
+            // var deep = this.$store.getters.getDeepLookForNode(val)
+            // if (deep && deep.look) {
+            //   if (deep.look.theme) {
+            //     this.color = util.rgbaFromTheme(deep.look.theme, 0.3)
+            //     // this.$zircle.config({style: {theme: theme.background.theme}})
+            //   }
+            //   if (deep.look.mode) {
+            //     // this.$zircle.config({style: {mode: theme.background.mode}})
+            //   }
+            //   // this.$store.commit('CURRENT_DEEP', deep)
+            //   this.nodeNames = [deep.look.space]
+            // }
             // this.$store.state.currentItemPathMapIds.length
             // var name = 'item' + this.$store.state.currentItemPathMapIds.length
             // if (name !== this.$zircle.getCurrentViewName()) {
@@ -278,20 +294,20 @@
             //   this.$zircle.toView(name)
             // }
 
-            let current = this.$zircle.getCurrentViewName()
-            if (current && this.$store.state.zircle) {
-              var id = this.$store.state.zircle[current]
-              // console.log(current, ' ', val.id)
-              if (id !== val.id) {
-                // let model = JSON.search(this.$store.state.leodata, '//*[id="' + val.id + '"]')[0]
-                // console.log(model)
-                // this.$zircle.toView({
-                //   to: 'item7', // string. Required,
-                //   params: {depth: 7, model: model, key: model.id, textItems: this.$store.state.leotext, targetEl: true, top: false} // Optional
-                // })
-                // this.$zircle.setView('zstart')
-              }
-            }
+            // let current = this.$zircle.getCurrentViewName()
+            // if (current && this.$store.state.zircle) {
+            //   var id = this.$store.state.zircle[current]
+            //   // console.log(current, ' ', val.id)
+            //   if (id !== val.id) {
+            //     // let model = JSON.search(this.$store.state.leodata, '//*[id="' + val.id + '"]')[0]
+            //     // console.log(model)
+            //     // this.$zircle.toView({
+            //     //   to: 'item7', // string. Required,
+            //     //   params: {depth: 7, model: model, key: model.id, textItems: this.$store.state.leotext, targetEl: true, top: false} // Optional
+            //     // })
+            //     // this.$zircle.setView('zstart')
+            //   }
+            // }
           }
         },
         deep: true,
@@ -312,6 +328,7 @@
 .z-canvas
   transition: background-color 0ms
   background-color: rgba(0, 0, 0, 0.0)
+  
 </style>
 
 <style>
@@ -320,25 +337,39 @@
 }
 </style>
 
-<style scoped>
-.space {
+<style>
+.adjust {
   position: absolute;
   display: inline;
-  font-size: 75px;
   transition: all 0.5s; 
+}
+
+.space {
   top: 0px;
   left: 60px;
   width: 100%;
+  font-size: 75px;
+}
+
+.spacedesc {
+  top: 90px;
+  left: 100px;
+  width: 100%;
+  font-size: 25px;
+}
+
+.title {
+  top: 70%;
+  left: 20%;
+  width: 100%;
+  font-size: 45px;
 }
 
 .description {
-  position: absolute;
-  display: inline;
-  font-size: 25px;
-  transition: all 0.5s; 
-  top: 85px;
-  left: 100px;
+  padding-top: 600px;
+  left: 0%;
   width: 100%;
+  font-size: 25px;
 }
 </style>
 
