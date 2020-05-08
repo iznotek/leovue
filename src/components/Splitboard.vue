@@ -2,7 +2,7 @@
   <div>
     <!-- <modelviewer/> -->
     <!-- <modalsettings/> -->
-    <deep-editor/> 
+    <deep-editor v-if="connected"/> 
     <type-menu v-if="ready"/>
     <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
     <!-- <chatmenu v-if="connected && config.comments"/>
