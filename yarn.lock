@@ -12978,6 +12978,13 @@ v-tooltip@^2.0.1, v-tooltip@^2.0.3:
     popper.js "^1.16.0"
     vue-resize "^0.4.5"
 
+v-video-embed@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/v-video-embed/-/v-video-embed-1.0.5.tgz#2bfc5384a48ac0172e80c3d83e570edf070a170b"
+  integrity sha512-gQUnMu90+514crMD6sjLLqESyZvu/zRpJAqxdlIMpb63zzKP9N8hrINZjN29H49O7gMBDYXTLURtkv2+13vKdA==
+  dependencies:
+    vue "^2.6.10"
+
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
@@ -13031,7 +13038,7 @@ verror@1.10.0:
     videojs-vtt.js "0.12.6"
     xhr "2.4.0"
 
-"video.js@^6 || ^7", "video.js@^6.8.0 || ^7.0.0":
+"video.js@^5.6.0 || ^6.2.8 || ^7.0.2", "video.js@^6 || ^7", "video.js@^6.8.0 || ^7.0.0":
   version "7.7.5"
   resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.7.5.tgz#7b066c4eb56fdf4980d3be09491ce520ffe8ed75"
   integrity sha512-+HSp2KNZmGzkmTecXyaXxEGi3F41WAm43PqNp3hWq5wYUQOHwcRu5YhhCz+5q0fDV+SlnFMSSLl/I6QLMlYv/g==
@@ -13118,6 +13125,13 @@ videojs-vtt.js@^0.15.2:
   integrity sha512-kEo4hNMvu+6KhPvVYPKwESruwhHC3oFis133LwhXHO9U7nRnx0RiJYMiqbgwjgazDEXHR6t8oGJiHM6wq5XlAw==
   dependencies:
     global "^4.3.1"
+
+videojs-youtube@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/videojs-youtube/-/videojs-youtube-2.6.1.tgz#3f7cce15229509ea6d54582e28793df530254860"
+  integrity sha512-qvwrkgXixbX8xzdkBa7o5r9KUITRISAy4bbyrpBgub3m0mhwz6WLXDIwJZ6/w4Z/JijWjLQqlg8W1jYhCEgHZw==
+  dependencies:
+    video.js "^5.6.0 || ^6.2.8 || ^7.0.2"
 
 vm-browserify@^1.0.1:
   version "1.1.2"

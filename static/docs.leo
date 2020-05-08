@@ -4839,7 +4839,9 @@ look:
 
 look: 
   space: an amazing peace... of guy
+  desc: Tombé du ciel... pour se planter sur terre
   dash: /static/images/back.jpg
+  media: S7SLep244ss
   spot: https://media.fromthegrapevine.com/assets/images/2017/8/earth-planet-0802.jpg.480x0_q71_crop-scale.jpg
   theme: marron
   mode: dark</t>
@@ -4847,6 +4849,7 @@ look:
 
 look: 
   dash: http://www.pptbackgrounds.org/uploads/blue-blurry-bubbles-powerpoint-backgrounds.jpg
+  media: _xKCwzgI68s
   spot: https://media.fromthegrapevine.com/assets/images/2019/3/מערת_מלחם_המערה_הארוכה_ביותר_בעולם._צילום_אנטון_ציקישב_Anton_Chikishev__1.JPG.824x0_q71_crop-scale.jpg
   theme: blue
   mode: dark</t>
@@ -4898,7 +4901,7 @@ look:
 <t tx="ifs.20190426133529.1">@language yaml
 
 look: 
-  space: Une identité pas comme les autres
+  desc: Une identité pas comme les autres
   transition: transitionBlocks2
   dash: https://images4.alphacoders.com/106/thumb-1920-106826.jpg
   spot: https://cache.desktopnexus.com/thumbseg/971/971542-bigthumbnail.jpg
@@ -5372,7 +5375,9 @@ function transform (xml, xslString, transformer, serializer) {
 }
 
 function loadDoc (filename) {
-  console.log('loading file:', filename, window.lconfig, 'test')
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('loading file:', filename, window.lconfig)
+  }
 
   var p = new Promise((resolve, reject) =&gt; {
     axios.get(filename)
