@@ -51,7 +51,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 	.vue-accordion li {
 		-webkit-box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
 		-moz-box-shadow: 10px 10px 36px 0px rgba(0,0,0,0.75);
@@ -64,8 +64,8 @@ export default {
 		position: relative;
 		background-repeat: no-repeat;
 		background-position: center center;
-		transition: all 500ms ease;
-		width: 0%;
+		transition: all 300ms ease-out;
+		width: 0px;
 		height: 13%;
     }
 
@@ -78,7 +78,8 @@ export default {
 		box-sizing: border-box;
 		color: #fff;
 		text-decoration: none;
-		transition: all 200ms ease;
+		transition: all 200ms ease-in;
+    transition-delay: 150ms;
 		width: 100%;
 		height: 50%;
     }
@@ -110,13 +111,15 @@ export default {
 		font-size: 13.5px;
     }
 
-	.vue-accordion a { opacity: 0.0 }
+	  .vue-accordion a { opacity: 0.0; }
+
+    .vue-accordion ul li a { height: 100%; }
 
     .vue-accordion ul:hover li { height: 13%; width: 80%; }
 
     .vue-accordion ul:hover li:hover { height: 20%; width: 400%; }
 
-    .vue-accordion ul:hover li:hover a { background: rgba(0, 0, 0, 0.85); opacity: 1.0; }
+    .vue-accordion ul:hover li:hover a { opacity: 0.85; height: 50%; }
 
     .vue-accordion ul:hover li:hover a * {
 		opacity: 1;
