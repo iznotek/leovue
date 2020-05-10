@@ -27,10 +27,14 @@
 
   import 'video.js/dist/video-js.css'
   import { videoPlayer } from 'vue-video-player'
+  import 'videojs-youtube'
 
   export default {
     components: {
       videoPlayer
+    },
+    props: {
+      src: String
     },
     data () {
       return {
@@ -47,7 +51,7 @@
           // height: window.document.height,
           // playbackRates: [0.7, 1.0, 1.5, 2.0],
           sources: [{
-            type: 'video/mp4',
+            type: 'video/youtube',
             src: 'http://vjs.zencdn.net/v/oceans.mp4'
           }] // ,
           // poster: '/static/images/bubble.png'
@@ -55,6 +59,7 @@
       }
     },
     mounted () {
+      this.sources.src = this.src
       // console.log('this is current player instance object', this.player)
     },
     computed: {

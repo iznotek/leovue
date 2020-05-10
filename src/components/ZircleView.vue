@@ -21,6 +21,7 @@
       <section slot="media" v-if="mediaready"> 
         <fade-transition :duration="2000" :delay="2000" v-show='mediaFade'>
           <div style="margin-top: 12px;"> 
+            <!-- <video-player :src="media(space)" @ready="onMediaReady" @ended="onMediaEnded"></video-player> -->
             <youtube :video-id="media(space)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0 }"></youtube>
           </div>
         </fade-transition>
@@ -128,11 +129,15 @@
 
 <script>
 import {TweenLite, Power2} from 'gsap' // Elastic, Back,
+// import VideoPlayer from './VideoPlayer' // Elastic, Back,
 import _ from 'lodash'
 const util = require('../util.js')
 
 export default {
   name: 'zview',
+  // components: {
+  //   VideoPlayer
+  // },
   props: {
     model: Object,
     textItems: Object,
