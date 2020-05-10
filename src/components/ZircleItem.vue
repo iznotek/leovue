@@ -61,13 +61,13 @@
         </z-spot> 
         <z-spot v-if="mediaready"
           button 
-          @click.native="mediaReady = true" 
+          @click.native="mediaswitch" 
           class="meteor" 
           :style="style(model)"
           size=s
           :distance="100" 
           :angle="150">
-          <icon class="icon" name="play"></icon>
+          <icon class="icon" :name="!mediaFade ? 'play' : 'stop'"></icon>
         </z-spot> 
         
         <z-spot
@@ -153,6 +153,7 @@ export default {
       myContent: '',
       depth: -1,
       currentView: '',
+      mediaPlayer: null,
       mediaFade: false,
       mediaReady: false,
       tween: undefined,
@@ -372,7 +373,8 @@ export default {
   methods: {
     onMediaReady: function (event) {
       // event.target.setVolume(100);
-      event.target.playVideo()
+      this.mediaPlayer = event.target
+      this.mediaPlayer.playVideo()
       this.mediaFade = true
     },
     onMediaEnded: function (event) {
@@ -395,6 +397,16 @@ export default {
         }
       }
       return ''
+    },
+    mediaswitch: function () {
+      this.mediaFade = !this.mediaFade
+      if (this.mediaPlayer) {
+        if (this.mediaFade) {
+          this.mediaPlayer.playVideo()
+        } else {
+          this.mediaPlayer.pauseVideo()
+        }
+      }
     },
     checkViewChanged () {
       let vm = this

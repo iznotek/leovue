@@ -29,6 +29,7 @@ import 'vue-awesome/icons/video'
 import 'vue-awesome/icons/pen-nib'
 import 'vue-awesome/icons/cog'
 import 'vue-awesome/icons/play'
+import 'vue-awesome/icons/stop'
 
 import ForkMeOnGithub from 'fork-me-on-github-vue'
 // import BootstrapVue from 'bootstrap-vue'

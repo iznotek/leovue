@@ -70,13 +70,13 @@
         </z-spot> 
         <z-spot v-if="mediaready"
           button 
-          @click.native="mediaReady = true" 
+          @click.native="mediaswitch" 
           class="meteor" 
           :style="style(space)"
           size=s
           :distance="100" 
           :angle="150">
-          <icon class="icon" name="play"></icon>
+          <icon class="icon" :name="!mediaFade ? 'play' : 'stop'"></icon>
         </z-spot> 
       </section>
       <section v-if="$store.state.ready && space" slot="extension">
@@ -166,6 +166,7 @@ export default {
       closearrow: false,
       myContent: '',
       currentView: '',
+      mediaPlayer: null,
       mediaFade: false,
       mediaReady: false,
       tween: undefined,
@@ -257,6 +258,16 @@ export default {
         }
       }
       return ''
+    },
+    mediaswitch: function () {
+      this.mediaFade = !this.mediaFade
+      if (this.mediaPlayer) {
+        if (this.mediaFade) {
+          this.mediaPlayer.playVideo()
+        } else {
+          this.mediaPlayer.pauseVideo()
+        }
+      }
     },
     spotimage: function (itemdata) {
       if (itemdata) {
