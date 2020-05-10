@@ -94,11 +94,12 @@ import Element from 'element-ui'
 import './assets/element.scss'
 import locale from 'element-ui/lib/locale/lang/en'
 
+import { ElementTiptapPlugin } from 'element-tiptap'
+import 'element-tiptap/lib/index.css'
+
 // import Editor from 'vue-editor-js'
-// import { ElementTiptapPlugin } from 'element-tiptap'
 // import ElementUI from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
-// import 'element-tiptap/lib/index.css'
 
 import { blockstack, bs } from './services/blockstack'
 import { charts } from './content-components/Charts'
@@ -117,9 +118,9 @@ Vue.prototype.$bs = bs
 
 // Vue.use(Editor)
 // Vue.use(ElementUI)
-// Vue.use(ElementTiptapPlugin)
 
 Vue.use(Element, { locale })
+Vue.use(ElementTiptapPlugin)
 Vue.use(vmodal, { dynamic: true })
 
 Vue.use(Transitions)

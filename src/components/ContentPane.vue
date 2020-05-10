@@ -33,7 +33,7 @@
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
                           <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
-                             <editorjs  v-if="edit && item.item.id === current.item.id"
+                            <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'1'"
@@ -43,9 +43,11 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
-                            <component v-else :is="dynComponent(item)" v-bind="$props"/>
-                            <!-- <tiptap v-if="edit" :item="item"/> 
-                            <component :is="dynComponent(item)" v-bind="$props"/> -->
+                            <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
+                            <tip-tap v-if="edit && item.item.id === current.item.id" 
+                              :item="item || editor.initData"
+                              @onChange="onEditorSave"/>
+                            <component v-else :is="dynComponent(item)" v-bind="$props"/> 
 
                           </div>
                         </div>
@@ -66,7 +68,7 @@
                     class="frame"
                     id="bpane">
                   <div style="width:100%">
-                     <editorjs  v-if="edit && item.item.id === current.item.id"
+                    <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'2'"
@@ -76,9 +78,11 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
+                    <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
+                    <tip-tap v-if="edit && item.item.id === current.item.id" 
+                      :item="item || editor.initData"
+                      @onChange="onEditorSave"/>
                     <component v-else :is="dynComponent(item)" v-bind="$props"/> 
-                     <!-- <tiptap v-if="edit" :item="item"/> 
-                    <component :is="dynComponent(item)" v-bind="$props"/> -->
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -115,7 +119,7 @@
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
                           <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
-                             <editorjs  v-if="edit && item.item.id === current.item.id"
+                             <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'1'"
@@ -125,9 +129,11 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
+                            <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
+                            <tip-tap v-if="edit && item.item.id === current.item.id" 
+                              :item="item || editor.initData"
+                              @onChange="onEditorSave"/>
                             <component v-else :is="dynComponent(item)" v-bind="$props"/> 
-                             <!-- <tiptap v-if="edit" :item="item"/> 
-                            <component :is="dynComponent(item)" v-bind="$props"/> -->
                           </div>
                         </div>
                         </div>
@@ -148,7 +154,7 @@
                     id="bpane">
                   <div style="width:100%">
                     
-                    <editorjs  v-if="edit && item.item.id === current.item.id"
+                    <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'2'"
@@ -158,9 +164,11 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
-                    <component v-else :is="dynComponent(item)" v-bind="$props"/>
-                    <!-- <tiptap v-if="edit" :item="item"/>
-                    <component :is="dynComponent(item)" v-bind="$props"/> -->
+                    <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
+                    <tip-tap v-if="edit && item.item.id === current.item.id" 
+                      :item="item || editor.initData"
+                      @onChange="onEditorSave"/>
+                    <component v-else :is="dynComponent(item)" v-bind="$props"/> 
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -188,9 +196,8 @@ import _ from 'lodash'
 const util = require('../util.js')
 
 import { ContentLoader } from 'vue-content-loader'
-// import TipTap from './editor/TipTap'
-import EditorJs from './editor/EditorJs'
-// import JsonEditor from './editor/JsonEditor'
+import TipTap from './editor/TipTap'
+// import EditorJs from './editor/EditorJs'
 import EditMenu from './EditMenu'
 
 const transitions = ['fade-transition', 
@@ -273,7 +280,8 @@ export default {
   components: {
     ContentLoader,
     EditMenu,
-    editorjs: EditorJs // ,
+    TipTap
+    // editorjs: EditorJs // ,
     // editorjson: JsonEditor
   },
   data () {
@@ -305,15 +313,15 @@ export default {
   },
   methods: {
     onEditorSave (data, html) {
-      save(data, html)
+      this.save(data, html)
     },
     onEditorReady () {
       // console.log('ready')
     },
     save (json, html) {
-      this.current.json = data
+      this.current.json = json
       this.current.content = '<div>' + html + '</div>'
-      this.$store.state.leojson[this.current.item.t] = data
+      this.$store.state.leojson[this.current.item.t] = json
       this.$store.state.leotext[this.current.item.t] = '<div>' + html + '</div>'
     },
     onScroll () {

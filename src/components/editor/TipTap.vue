@@ -12,6 +12,7 @@
 </template>
 
 <style lang=scss>
+
 .el-tiptap-editor {
   $root: &;
   > #{$root}__content {
@@ -25,10 +26,13 @@
     width: 38px;
     background-color: rgba(0,0,0,0.0);
     border: 0px;
-    margin-left: -60px;
-    margin-top: 80px;
+    margin-left: -70px;
+    margin-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
+  }
+  > #{$root}__menu-bar:before {
+    height: 0;
   }
 }
 </style>
@@ -65,7 +69,7 @@
 </style>
 
 <script>
-import { firebaseDb } from '../../services/firebase'
+// import { firebaseDb } from '../../services/firebase'
 import {
   Doc,
   Text,
@@ -224,32 +228,36 @@ export default {
       console.log('🔥drop')
     },
     onUpdateEvent (output, options) {
-      const { getHTML } = options // getJSON
+      const { getHTML, getJSON } = options // getJSON
       var result = getHTML()
-      if (this.item && this.item.content) {
+      if (this.item) {
         if (!result.startsWith('<div')) {
           result = '<div>' + result + '</div>'
         }
         result = result.replace('<image', '<img')
         result = result.replace('</image', '</img')
         result = result.replace('data-text-align', 'text-align')
-        this.item.content = result
+        // this.item.content = result
 
-        const path = '/nodes/' + this.item.t
-        firebaseDb.ref(path).set(this.item)
+        // const path = '/nodes/' + this.item.t
+        // firebaseDb.ref(path).set(this.item)
 
-        if (!this.loopback) {
-          firebaseDb.ref(path).on('value', (snapshot) => {
-            var data = {}
-            if (snapshot.val()) {
-              data = snapshot.val()
-            }
-            this.litem = data
-            this.content = this.litem.content
-            // console.log(data)
-          })
-          this.loopback = true
-        }
+        // if (!this.loopback) {
+        //   firebaseDb.ref(path).on('value', (snapshot) => {
+        //     var data = {}
+        //     if (snapshot.val()) {
+        //       data = snapshot.val()
+        //     }
+        //     this.litem = data
+        //     this.content = this.litem.content
+        //     // console.log(data)
+        //   })
+        //   this.loopback = true
+        // }
+
+        this.output.json = getJSON()
+        this.output.html = result
+        this.$emit('onChange', this.output.json, this.output.html)
       }
       // console.log('🔥update: ', output)
       // this.output.json = getJSON()
