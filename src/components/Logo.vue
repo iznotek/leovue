@@ -40,18 +40,18 @@
   .logo-logo {
     position: absolute;
     margin-top: 35px; 
-    margin-left: 8px; 
+    margin-left: 10px; 
   }
   .logo-spinner {
     position: absolute;
     margin-top: 37px; 
-    margin-left: 13px; 
+    margin-left: 15px; 
   }
   .logo-arrowleft {
     position: absolute;
     transform: rotate(180deg);
-    margin-top: 0px; 
-    margin-left: -52px;
+    margin-top: -4px; 
+    margin-left: -50px;
     opacity: 0.5;
   }
   .logo-arrowright {

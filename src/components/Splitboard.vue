@@ -2,7 +2,7 @@
   <div>
     <!-- <modelviewer/> -->
     <!-- <modalsettings/> -->
-    <deep-editor v-if="connected"/> 
+    <deep-editor/>
     <type-menu v-if="ready"/>
     <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
     <!-- <chatmenu v-if="connected && config.comments"/>
@@ -399,7 +399,7 @@
   .arrow-left {
     position: absolute;
     transform: rotate(180deg);
-    margin-top: 0px; 
+    margin-top: -6px; 
     margin-left: -57px;
   }
   .arrow-right {

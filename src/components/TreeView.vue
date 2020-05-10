@@ -2,7 +2,15 @@
 <template>
   <div class="treeview">
     <ul v-if="space" class="very-pane" :style="ulStyle">
-      <div v-for="(itemdata, index) in space.children">
+      <item
+          class="item"
+          v-if="isVisible(space)"
+          :model="space"
+          :top="true"
+          :textItems="text"
+          :targetEl="target.el">
+      </item>
+      <!-- <div v-for="(itemdata, index) in space.children">
         <item
           class="item"
           v-if="isVisible(itemdata)"
@@ -11,7 +19,7 @@
           :textItems="text"
           :targetEl="target.el">
         </item>
-      </div>
+      </div> -->
     </ul>
   </div>
 </template>

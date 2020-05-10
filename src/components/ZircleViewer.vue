@@ -346,14 +346,14 @@
 
 .space {
   top: 0px;
-  left: 60px;
+  left: 80px;
   width: 100%;
   font-size: 75px;
 }
 
 .spacedesc {
   top: 90px;
-  left: 100px;
+  left: 120px;
   width: 100%;
   font-size: 25px;
 }

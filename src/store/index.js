@@ -1314,6 +1314,7 @@ export default new Vuex.Store({
     },
     CONNECTED (state, o) {
       state.connected = o.state
+      state.user = o.user
     },
     LOADING (state, o) {
       state.loading = o.state

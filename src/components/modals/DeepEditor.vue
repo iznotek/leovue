@@ -23,6 +23,7 @@
     </div> -->
 
     <json-editor 
+      v-if="ready"
       ref="JsonEditor" 
       :schema="schema" 
       v-model="model">
@@ -50,6 +51,7 @@ export default {
     'item'
   ],
   data: () => ({
+    ready: false,
     schema: require('@/schema/deep'),
     default: { deep: { look: {} } },
     model: { deep: { look: {} } }
@@ -79,12 +81,14 @@ export default {
       amodel.deep = model.deep
       this.default = amodel
       this.model = amodel
+      this.ready = true
     },
     beforeClose (event) {
       var model = JSON.search(this.$store.state.leodata, '//*[id="' + this.$store.state.currentItem.id + '"]')
       if (!model) return
       if (model.length) model = model[0]
       // model.deep = this.model.deep
+      this.ready = false
     }
   },
   watch: {

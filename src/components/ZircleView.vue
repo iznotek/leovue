@@ -18,7 +18,7 @@
         </kinesis-container> -->
       </section>
 
-      <section slot="media" v-if="hasmedia(space)"> 
+      <section slot="media" v-if="mediaready"> 
         <fade-transition :duration="2000" :delay="2000" v-show='mediaFade'>
           <div style="margin-top: 12px;"> 
             <youtube :video-id="media(space)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0 }"></youtube>
@@ -66,6 +66,16 @@
           :distance="100" 
           :angle="180">
           <icon class="icon" name="cog"></icon>
+        </z-spot> 
+        <z-spot v-if="mediaready"
+          button 
+          @click.native="mediaReady = true" 
+          class="meteor" 
+          :style="style(space)"
+          size=s
+          :distance="100" 
+          :angle="150">
+          <icon class="icon" name="play"></icon>
         </z-spot> 
       </section>
       <section v-if="$store.state.ready && space" slot="extension">
@@ -152,6 +162,7 @@ export default {
       myContent: '',
       currentView: '',
       mediaFade: false,
+      mediaReady: false,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -202,6 +213,9 @@ export default {
     },
     connected () {
       return this.$store.state.connected
+    },
+    mediaready () {
+      return this.space && this.hasmedia(this.space) && this.$store.state.currentItem.id === this.space.id
     }
   },
   methods: {
@@ -397,6 +411,26 @@ export default {
     }
   },
   watch: {
+    '$store.state.currentItem': {
+      handler: function (val, oldVal) {
+        if (val) {
+          this.mediaFade = false
+          // if (this.space && val.id !== this.space.id) {
+          //   this.mediaReady = false
+          // } else {
+          //   setTimeout(() => {
+          //     if (this.$store.state.currentItem.id === this.space.id) {
+          //       this.mediaReady = this.hasmedia(this.space)
+          //     } else {
+          //       this.mediaReady = false
+          //     }
+          //   }, 1000)
+          // }
+        }
+      },
+      deep: true,
+      immediate: true
+    },
     '$store.state.space': {
       handler: function (val, oldVal) {
         if (val) {

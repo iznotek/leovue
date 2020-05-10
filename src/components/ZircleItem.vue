@@ -12,14 +12,14 @@
       </section>
 
       <section slot="media">
-        <fade-transition v-if="hasmedia(model)" :duration="2000" :delay="2000" v-show='mediaFade'>
+        <fade-transition v-if="mediaready" :duration="2000" :delay="2000" v-show='mediaFade'>
           <div style="margin-top: 12px;"> 
             <youtube :video-id="media(model)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0, color: 'white' }"></youtube>
           </div>
         </fade-transition>
 
-        <div v-if="!hasmedia(model)" style="height: 75px" />
-        <div v-if="!hasmedia(model)" :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >
+        <div v-if="!mediaready" style="height: 75px" />
+        <div v-if="!mediaready" :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >
           <a style="font-size: 35px; color: #eee; text-decoration: none;">
             {{ model.vtitle }} 
           </a>
@@ -58,6 +58,16 @@
           :distance="100" 
           :angle="180">
           <icon class="icon" name="cog"></icon>
+        </z-spot> 
+        <z-spot v-if="mediaready"
+          button 
+          @click.native="mediaReady = true" 
+          class="meteor" 
+          :style="style(model)"
+          size=s
+          :distance="100" 
+          :angle="150">
+          <icon class="icon" name="play"></icon>
         </z-spot> 
         
         <z-spot
@@ -144,6 +154,7 @@ export default {
       depth: -1,
       currentView: '',
       mediaFade: false,
+      mediaReady: false,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -353,6 +364,9 @@ export default {
     },
     zdepthinc: function () {
       return this.depth + 1
+    },
+    mediaready: function () {
+      return this.model && this.hasmedia(this.model) && this.$store.state.currentItem.id === this.model.id
     }
   },
   methods: {
@@ -552,6 +566,28 @@ export default {
     }
   },
   watch: {
+    '$store.state.currentItem': {
+      handler: function (val, oldVal) {
+        if (val) {
+          this.mediaFade = false
+          // this.mediaReady = false this.model && this.model.id === val.id && this.hasmedia(this.model)
+          // if (val.id !== this.model.id) {
+          //   this.mediaReady = false
+          // } else {
+          //   setTimeout(() => {
+          //     console.log(this.$store.state.currentItem, this.model)
+          //     if (val.id === this.model.id) {
+          //       this.mediaReady = this.hasmedia(this.model)
+          //     } else {
+          //       this.mediaReady = false
+          //     }
+          //   }, 1000)
+          // }
+        }
+      },
+      deep: true,
+      immediate: true
+    },
     '$route' (to, from) {
       var fromid = from.path.split('/')[2]
       var toid = to.path.split('/')[2]

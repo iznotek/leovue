@@ -91,9 +91,9 @@
         var xhr = new XMLHttpRequest()
         xhr.onreadystatechange = function () {
           if (this.readyState === this.DONE) {
-            vm.loadDefault(url)
+            vm.load(url)
           } else {
-            vm.loadDefault()
+            vm.load()
           }
         }
         xhr.open('HEAD', url)
@@ -111,6 +111,52 @@
           this.$store.dispatch('loadLeo', {filename, route: this.$route})
         }
         this.$store.dispatch('setMessages')
+      },
+      load (url = null) {
+        if (!window.lconfig.static) {
+          // const { userData, user, session } = this.$bs.lookForUserData()
+          const { user, session } = this.$bs.lookForUserData()
+          var auser
+
+          if (session.isUserSignedIn()) {
+            // console.log(userData)
+            auser = {name: user.username.replace('.blockstack', ''), pw: ''}
+            this.$store.commit('CONNECTED', {state: true, user: auser})
+          } else {
+            auser = {name: 'guest', pw: ''}
+            this.$store.commit('CONNECTED', {state: false, user: auser})
+          }
+        }
+
+        try {
+          this.$bs.getProfile(window.lconfig.admin).then(async (data) => {
+            let appUrl = window.location.origin
+            // console.log(data)
+            const bucketUrl = data && data.apps && data.apps[window.lconfig.appUrl]
+            // If the user already used the app we try to get the public list
+            if (bucketUrl && !appUrl.includes('localhost')) {
+              const [dataGraph] = await Promise.all([
+                this.$bs.fetchGraph(bucketUrl)
+              ])
+              // console.log(dataGraph)
+              if (dataGraph.statusCode === 200) {
+                this.$store.dispatch('loadGraph', dataGraph.file)
+              } else {
+                this.loadDefault(url)
+              }
+            } else {
+              console.log('Blockstack app ', appUrl, ' is not reachable for account ', window.lconfig.admin,
+                'You should connect at least one time as admin to get any published graph from your bucket !!!')
+
+              this.loadDefault(url)
+            }
+          })
+        } catch (error) {
+          console.log('An error occured while querying profile for ', window.lconfig.admin,
+            'Create the id or check your connection !!!')
+
+          this.loadDefault(url)
+        }
       }
     },
     mounted () {
@@ -118,48 +164,6 @@
       if (host) {
         this.linkCheck(window.location.origin + '/static/domains/' + host + '.leo')
       }
-
-      // if (!window.lconfig.static) {
-      //   // const { userData, user, session } = this.$bs.lookForUserData()
-      //   const { user, session } = this.$bs.lookForUserData()
-      //   if (session.isUserSignedIn()) {
-      //     // console.log(userData)
-      //     this.$store.state.connected = true
-      //     this.$store.state.user = {name: user.username.replace('.blockstack', ''), pw: ''}
-      //   } else {
-      //     this.$store.state.user = {name: 'guest', pw: ''}
-      //   }
-      // }
-
-      // try {
-      //   this.$bs.getProfile(window.lconfig.admin).then(async (data) => {
-      //     let appUrl = window.location.origin
-      //     // console.log(data)
-      //     const bucketUrl = data && data.apps && data.apps[window.lconfig.appUrl]
-      //     // If the user already used the app we try to get the public list
-      //     if (bucketUrl && !appUrl.includes('localhost')) {
-      //       const [dataGraph] = await Promise.all([
-      //         this.$bs.fetchGraph(bucketUrl)
-      //       ])
-      //       // console.log(dataGraph)
-      //       if (dataGraph.statusCode === 200) {
-      //         this.$store.dispatch('loadGraph', dataGraph.file)
-      //       } else {
-      //         this.loadDefault()
-      //       }
-      //     } else {
-      //       console.log('Blockstack app ', appUrl, ' is not reachable for account ', window.lconfig.admin,
-      //         'You should connect at least one time as admin to get any published graph from your bucket !!!')
-
-      //       this.loadDefault()
-      //     }
-      //   })
-      // } catch (error) {
-      //   console.log('An error occured while querying profile for ', window.lconfig.admin,
-      //     'Create the id or check your connection !!!')
-
-      //   this.loadDefault()
-      // }
     }
   }
 </script>

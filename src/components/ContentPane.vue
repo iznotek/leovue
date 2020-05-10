@@ -33,7 +33,7 @@
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
                           <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
-                            <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
+                             <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'1'"
@@ -43,9 +43,9 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
-                            <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
-                            <!-- <tiptap v-if="edit" :item="item"/> -->
-                            <component :is="dynComponent(item)" v-bind="$props"/> 
+                            <component v-else :is="dynComponent(item)" v-bind="$props"/>
+                            <!-- <tiptap v-if="edit" :item="item"/> 
+                            <component :is="dynComponent(item)" v-bind="$props"/> -->
 
                           </div>
                         </div>
@@ -66,8 +66,7 @@
                     class="frame"
                     id="bpane">
                   <div style="width:100%">
-                    <!-- <tiptap v-if="edit" :item="item"/> -->
-                    <!--  <editorjs  v-if="edit && item.item.id === current.item.id"
+                     <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'2'"
@@ -77,8 +76,9 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
-                    <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
-                    <component :is="dynComponent(item)" v-bind="$props"/> 
+                    <component v-else :is="dynComponent(item)" v-bind="$props"/> 
+                     <!-- <tiptap v-if="edit" :item="item"/> 
+                    <component :is="dynComponent(item)" v-bind="$props"/> -->
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -115,7 +115,7 @@
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
                           <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
-                            <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
+                             <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'1'"
@@ -125,9 +125,9 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
-                            <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
-                             <!-- <tiptap v-if="edit" :item="item"/> -->
-                            <component :is="dynComponent(item)" v-bind="$props"/>
+                            <component v-else :is="dynComponent(item)" v-bind="$props"/> 
+                             <!-- <tiptap v-if="edit" :item="item"/> 
+                            <component :is="dynComponent(item)" v-bind="$props"/> -->
                           </div>
                         </div>
                         </div>
@@ -147,8 +147,8 @@
                     class="frame"
                     id="bpane">
                   <div style="width:100%">
-                    <!-- <tiptap v-if="edit" :item="item"/> -->
-                    <!--  <editorjs  v-if="edit && item.item.id === current.item.id"
+                    
+                    <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'2'"
@@ -158,8 +158,9 @@
                               @ready="onEditorReady"
                               @change="onEditorSave"
                             />
-                    <component v-else :is="dynComponent(item)" v-bind="$props"/> -->
-                    <component :is="dynComponent(item)" v-bind="$props"/> 
+                    <component v-else :is="dynComponent(item)" v-bind="$props"/>
+                    <!-- <tiptap v-if="edit" :item="item"/>
+                    <component :is="dynComponent(item)" v-bind="$props"/> -->
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -188,9 +189,9 @@ const util = require('../util.js')
 
 import { ContentLoader } from 'vue-content-loader'
 // import TipTap from './editor/TipTap'
-// import EditorJs from './editor/EditorJs'
+import EditorJs from './editor/EditorJs'
 // import JsonEditor from './editor/JsonEditor'
-// import EditMenu from './EditMenu'
+import EditMenu from './EditMenu'
 
 const transitions = ['fade-transition', 
   'zoom-center-transition', 'zoom-x-transition', 'zoom-y-transition',
@@ -270,9 +271,9 @@ function loadPresentation(item, textItems, iframe) {
 export default {
   name: 'contentpane',
   components: {
-    ContentLoader //,
-    // EditMenu,
-    // editorjs: EditorJs,
+    ContentLoader,
+    EditMenu,
+    editorjs: EditorJs // ,
     // editorjson: JsonEditor
   },
   data () {

@@ -28,11 +28,12 @@ import 'vue-awesome/icons/comment'
 import 'vue-awesome/icons/video'
 import 'vue-awesome/icons/pen-nib'
 import 'vue-awesome/icons/cog'
+import 'vue-awesome/icons/play'
 
 import ForkMeOnGithub from 'fork-me-on-github-vue'
-import BootstrapVue from 'bootstrap-vue'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+// import BootstrapVue from 'bootstrap-vue'
+// import 'bootstrap/dist/css/bootstrap.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
 // import 'timeline-vuejs/dist/timeline-vuejs.css'
 
 // content components
@@ -88,11 +89,10 @@ import VueAnime from 'vue-animejs'
 import VueRouterMultiView from 'vue-router-multi-view'
 // import Embed from 'v-video-embed'
 
-// import vmodal from 'vue-js-modal'
-
-// import Element from 'element-ui'
-// import './assets/element.scss'
-// import locale from 'element-ui/lib/locale/lang/en'
+import vmodal from 'vue-js-modal'
+import Element from 'element-ui'
+import './assets/element.scss'
+import locale from 'element-ui/lib/locale/lang/en'
 
 // import Editor from 'vue-editor-js'
 // import { ElementTiptapPlugin } from 'element-tiptap'
@@ -100,15 +100,15 @@ import VueRouterMultiView from 'vue-router-multi-view'
 // import 'element-ui/lib/theme-chalk/index.css'
 // import 'element-tiptap/lib/index.css'
 
-// import { blockstack, bs } from './services/blockstack'
-// import { charts } from './content-components/Charts'
+import { blockstack, bs } from './services/blockstack'
+import { charts } from './content-components/Charts'
 import Textra from './content-components/Textra'
 
 const Defiant = require('./lib/defiant') // eslint-disable-line
 
-// charts(Vue)
-// Vue.prototype.$blockstack = blockstack
-// Vue.prototype.$bs = bs
+charts(Vue)
+Vue.prototype.$blockstack = blockstack
+Vue.prototype.$bs = bs
 
 // Enable progressive web app support (with offline-plugin)
 // if (process.env.NODE_ENV === 'production') {
@@ -119,8 +119,8 @@ const Defiant = require('./lib/defiant') // eslint-disable-line
 // Vue.use(ElementUI)
 // Vue.use(ElementTiptapPlugin)
 
-// Vue.use(Element, { locale })
-// Vue.use(vmodal, { dynamic: true })
+Vue.use(Element, { locale })
+Vue.use(vmodal, { dynamic: true })
 
 Vue.use(Transitions)
 Vue.use(VueRouterMultiView)
@@ -142,7 +142,7 @@ Vue.use(VTooltip)
 Vue.use(Fullscreen)
 Vue.use(VueYouTubeEmbed)
 Vue.use(ForkMeOnGithub)
-Vue.use(BootstrapVue)
+// Vue.use(BootstrapVue)
 Vue.use(Zircle)
 Vue.use(VueResize)
 Vue.use(VueLazyImageLoading)
