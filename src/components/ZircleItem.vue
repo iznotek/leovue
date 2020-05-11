@@ -27,7 +27,7 @@
       </section>
 
       <section slot="extension">
-        <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'}">
+        <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
           <textra :data="description" :timer="1" filter="bottom-top" />
         </div>
         <z-spot 
@@ -653,43 +653,5 @@ export default {
 
 
 <style>
-.current-label-background {
-  transition: all 2s ease;
-  background-color: rgba(0,0,0,0.3);
-  background-size: cover;
-  opacity: 1.0;
-  width: 1000px;
-  
-}
 
-.current-label-bottom {
-  margin-top: 25%;
-  height: 150px;
-}
-
-.current-label-bottom-hide {
-  margin-top: 35%;
-  height: 150px;
-  //opacity: 0.2;
-}
-
-.current-label-bottom2 {
-  margin-top: 0%;
-  height: 100px;
-}
-
-.current-label-bottom2-hide {
-  margin-top: 5%;
-  height: 100px;
-  //opacity: 0.2;
-}
-
-.current-label-hide {
-  //opacity: 0.2;
-}
-
-.transition {
-  transition: all 2s ease;
-  -webkit-transition: all 2s ease;
-}
 </style>

@@ -4,7 +4,7 @@
       class="meteor" 
       :style="style(space)">
 
-      <section slot="image"> 
+      <section slot="image" v-if="space"> 
        <!-- <kinesis-container>
         <kinesis-element :strength="10" :type="'depth'"> <!--<div v-anime="{ rotate: '360', easing: 'linear', backgroundColor: 'transparent', duration: 200000, loop: true }">  -->
      
@@ -18,8 +18,8 @@
         </kinesis-container> -->
       </section>
 
-      <section slot="media" v-if="mediaready"> 
-        <fade-transition :duration="2000" :delay="2000" v-show='mediaFade'>
+      <section slot="media" > 
+        <fade-transition v-if="mediaready" :duration="2000" :delay="2000" v-show='mediaFade'>
           <div style="margin-top: 12px;"> 
             <!-- <video-player :src="media(space)" @ready="onMediaReady" @ended="onMediaEnded"></video-player> -->
             <youtube :video-id="media(space)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0 }"></youtube>
@@ -28,7 +28,7 @@
       </section>
 
       <section slot="extension">
-        <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'}">
+        <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
           <textra :data="description" :timer="1" filter="bottom-top" />
         </div>
 
@@ -93,9 +93,16 @@
           @click.native="toggle(amodel.id, amodel)"
           :to-view="{ name: 'item0', params: {depth: 1, model: amodel, key: amodel.id, textItems: text, targetEl: target, top: false}}"
           :key="index">
-            <a style="font-size: 25px; color: #eee; text-decoration: none;">
+              <div style="height: 100px" />
+              <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
+                <!-- <span>{{ amodel.vtitle }}</span> -->
+                <a style="font-size: 25px; color: #eee; text-decoration: none;">
+                  {{ amodel.vtitle }} 
+                </a>
+              </div>
+           <!-- <a style="font-size: 25px; color: #eee; text-decoration: none;">
                 {{ amodel.vtitle }} 
-            </a>
+            </a> -->
             <section slot="image" style="height: 100%; width: 100%;"> <!-- v-html="spot(amodel, 50)"> -->
               <div style="height: 100%; width: 100%;" :style="style(amodel, index)"> 
                 <img class="zcentered" :style="{'opacity': opacity(amodel,0.5)}" :src="spotimage(amodel)" height="100%"> 
@@ -268,6 +275,12 @@ export default {
           this.mediaPlayer.pauseVideo()
         }
       }
+    },
+    current: function (itemdata) {
+      if (itemdata) {
+        return itemdata.id === this.$store.state.currentItem.id
+      }
+      return false
     },
     spotimage: function (itemdata) {
       if (itemdata) {
@@ -451,6 +464,7 @@ export default {
       handler: function (val, oldVal) {
         if (val) {
           // console.log('Look for space: ' + val, this)
+          this.graph = null
           let agraph = null
           if (this.$store.state.leodata && this.$store.state.leodata.length) {
             this.$store.state.leodata.forEach((data) => {
@@ -462,13 +476,15 @@ export default {
             // console.log('load a graph first !!')
           }
 
-          if (!agraph) {
-            this.graph = this.$store.state.leodata[0]
-            console.log('Fallback at id: ', this.graph.id)
-          } else {
-            this.graph = agraph
-            // console.log('Found at id: ', this.graph.id)
-          }
+          setTimeout(() => {
+            if (!agraph) {
+              this.graph = this.$store.state.leodata[0]
+              console.log('Fallback at id: ', this.graph.id)
+            } else {
+              this.graph = agraph
+              // console.log('Found at id: ', this.graph.id)
+            }
+          }, 10)
           // console.log(this.graph)
 
           // only at startup

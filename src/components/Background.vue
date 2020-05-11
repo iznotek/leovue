@@ -135,7 +135,9 @@ export default {
       if (this.$refs.slider !== undefined && this.requiredList.length) {
         // console.log(this.requiredList)
         var required = this.requiredList[0]
-        if (this.$refs.slider.Images && this.$refs.slider.Images.current && this.$refs.slider.Images.current.index === required.index) {
+        if (this.$refs.slider.Images &&
+          this.$refs.slider.Images.current &&
+          this.$refs.slider.Images.current.index === required.index) {
           // console.log('check', required.index)
           this.index = required.index
           this.requiredList.shift()
@@ -146,6 +148,7 @@ export default {
           // console.log('mov', required.index)
           // console.log('mov', this.required, this.$refs.slider.image2Index, this.$refs.slider.image1Index, this.$refs.slider.Images.current.index)
           if (required.index < this.$refs.slider.Images.imgs.length) { // this.requiredTransition)
+            //  var index = this.$refs.slider.Images.imgs.indexOf(required.name)
             this.$refs.slider.show(required.index, 'fade')
             this.required = required.index
           } else {
@@ -257,7 +260,7 @@ export default {
             var index = this.fluxImages.indexOf(deep.look.dash)
             if (index > -1) {
               // console.log(this.requiredList)
-              this.requiredList.push({index: index, transition: transition})
+              this.requiredList.push({index: index, name: deep.look.dash, transition: transition})
 
               // this.$refs.slider.show(this.required, 'fade')
               // console.log(deep.look.dash, index)

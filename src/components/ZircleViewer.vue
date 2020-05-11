@@ -3,11 +3,11 @@
   <div >
     <div class="zircleviewer">
       <div style="position: absolute; width: 100%; height: 100%;">
-        <div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}">
-          <textra :data='spaceNames' :timer="2" filter="left-right" />
+        <div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.25)'}">
+          <textra :data='spaceNames' :timer="1" filter="left-right" />
         </div>
-        <div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)'}">
-          <textra :data='spaceDescs' :timer="2" filter="right-left" />
+        <div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.25)'}">
+          <textra :data='spaceDescs' :timer="1" filter="right-left" />
         </div>
 
         <fade-transition v-show='showcircle'>
@@ -358,18 +358,51 @@
   font-size: 25px;
 }
 
-.title {
-  top: 70%;
-  left: 20%;
-  width: 100%;
-  font-size: 45px;
-}
-
 .description {
   padding-top: 600px;
   left: 0%;
   width: 100%;
   font-size: 25px;
+}
+
+.current-label-background {
+  transition: all 2s ease;
+  background-color: rgba(0,0,0,0.3);
+  background-size: cover;
+  opacity: 1.0;
+  width: 1000px;
+  
+}
+
+.current-label-bottom {
+  margin-top: 25%;
+  height: 150px;
+}
+
+.current-label-bottom-hide {
+  margin-top: 35%;
+  height: 150px;
+  //opacity: 0.2;
+}
+
+.current-label-bottom2 {
+  margin-top: 0%;
+  height: 100px;
+}
+
+.current-label-bottom2-hide {
+  margin-top: 5%;
+  height: 100px;
+  //opacity: 0.2;
+}
+
+.current-label-hide {
+  //opacity: 0.2;
+}
+
+.transition {
+  transition: all 2s ease;
+  -webkit-transition: all 2s ease;
 }
 </style>
 

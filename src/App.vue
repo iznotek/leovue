@@ -14,6 +14,7 @@
 
 <script>
   import Cover from './components/Cover'
+  import axios from 'axios'
   
   export default {
     name: 'app',
@@ -88,15 +89,26 @@
       },
       linkCheck (url) {
         var vm = this
-        var xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = function () {
-          if (this.readyState === this.DONE) {
+        // var xhr = new XMLHttpRequest()
+        // xhr.onreadystatechange = function () {
+        //   if (this.readyState === this.HEADERS_RECEIVED) {
+        //     var status = this.status
+        //     if (status === 0 || (status >= 200 && status < 400)) {
+        //       vm.load(url)
+        //     } else {
+        //       vm.load()
+        //     }
+        //   }
+        // }
+        // console.log(url)
+        // xhr.open('HEAD', url, true)
+        axios.head(url)
+          .then((response) => {
             vm.load(url)
-          } else {
+          })
+          .catch(function () {
             vm.load()
-          }
-        }
-        xhr.open('HEAD', url)
+          })
       },
       loadDefault (url = null) {
         let filename = '/static/docs'
@@ -113,10 +125,18 @@
         this.$store.dispatch('setMessages')
       },
       load (url = null) {
+        // console.log(url)
+        var auser
+        if (url) { // window.location.origin.includes(':8080')) {
+          auser = {name: 'guest', pw: ''}
+          this.$store.commit('CONNECTED', {state: false, user: auser})
+          this.loadDefault(url)
+          return
+        }
+
         if (!window.lconfig.static) {
           // const { userData, user, session } = this.$bs.lookForUserData()
           const { user, session } = this.$bs.lookForUserData()
-          var auser
 
           if (session.isUserSignedIn()) {
             // console.log(userData)
@@ -131,7 +151,7 @@
         try {
           this.$bs.getProfile(window.lconfig.admin).then(async (data) => {
             let appUrl = window.location.origin
-            // console.log(data)
+
             const bucketUrl = data && data.apps && data.apps[window.lconfig.appUrl]
             // If the user already used the app we try to get the public list
             if (bucketUrl && !appUrl.includes('localhost')) {
