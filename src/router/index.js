@@ -108,7 +108,8 @@ export default new Router({
 
     {
       path: '/',
-      component: Dashboard
+      redirect: '/' + baseMode + startPage
+      // component: Dashboard
     },
     {
       path: '/iznow/:id',

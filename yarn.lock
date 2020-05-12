@@ -4646,6 +4646,13 @@ duplexify@^3.4.2, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
+eagle.js@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/eagle.js/-/eagle.js-0.6.1.tgz#a4fb366f1248f315f30fe93ebbea31662ac7e44e"
+  integrity sha512-edEclMnmz4LssGZRK2JRQ3y4jemZTtIZQ0tOvvteJR5xEybfxtR09M+Xz1DcmVN/QYO0tJx/e0sGf83/TsXfWQ==
+  dependencies:
+    lodash.throttle "^4.1.1"
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -8205,6 +8212,11 @@ lodash.tail@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.tail/-/lodash.tail-4.1.1.tgz#d2333a36d9e7717c8ad2f7cacafec7c32b444664"
   integrity sha1-0jM6NtnncXyK0vfKyv7HwytERmQ=
+
+lodash.throttle@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
+  integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
 lodash.uniq@^4.5.0:
   version "4.5.0"

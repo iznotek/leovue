@@ -110,6 +110,25 @@ function parseQueryString (config, url) {
   }
   return urlParams
 }
+
+function parseColor(color) {
+  var x = document.createElement('div');
+  document.body.appendChild(x);
+  var color, rgba;
+  var red = 0, green = 0, blue = 0, alpha = 0;
+  try {
+    x.style = 'color: ' + color + '!important';
+    color = window.getComputedStyle(x).color
+    rgba = color.match(/rgba?\((.*)\)/)[1].split(',').map(Number);
+    red = rgba[0];
+    green = rgba[1];
+    blue = rgba[2];
+    alpha = '3' in rgba ? rgba[3] : 1;
+  } catch (e) {
+  }
+  x.parentNode.removeChild(x);
+  return {'r': red, 'g': green, 'b': blue, 'a': alpha};
+}
 /**
  * return formatted text, e.g. markdown or html
  * @param text {string}
@@ -171,7 +190,7 @@ function rgbaObjectFromTheme(name, alpha = 1.0, add = 0) {
     case 'white':    val.r = 255, val.g = 255, val.b = 255; break 
     case 'violet':    val.r = 150, val.g = 50, val.b = 255; break 
     case 'marron':    val.r = 140, val.g = 70, val.b = 0; break
-    default:         return name
+    default:         val = parseColor(name); val.a = alpha; break
   }
   val.r += add
   val.g += add

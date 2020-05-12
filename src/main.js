@@ -30,6 +30,8 @@ import 'vue-awesome/icons/pen-nib'
 import 'vue-awesome/icons/cog'
 import 'vue-awesome/icons/play'
 import 'vue-awesome/icons/stop'
+import 'vue-awesome/icons/volume-up'
+import 'vue-awesome/icons/volume-mute'
 
 import ForkMeOnGithub from 'fork-me-on-github-vue'
 // import BootstrapVue from 'bootstrap-vue'
@@ -106,6 +108,10 @@ import { blockstack, bs } from './services/blockstack'
 import { charts } from './content-components/Charts'
 import Textra from './content-components/Textra'
 
+import Eagle, { Options } from 'eagle.js'
+// import 'eagle.js/dist/themes/refuel-dark/refuel-dark.css'
+import hljs from 'highlight.js'
+
 const Defiant = require('./lib/defiant') // eslint-disable-line
 
 charts(Vue)
@@ -116,10 +122,10 @@ Vue.prototype.$bs = bs
 // if (process.env.NODE_ENV === 'production') {
 //   require('./pwa')
 // }
-
 // Vue.use(Editor)
 // Vue.use(ElementUI)
 
+Vue.use(Eagle)
 Vue.use(Element, { locale })
 Vue.use(ElementTiptapPlugin)
 Vue.use(vmodal, { dynamic: true })
@@ -201,6 +207,7 @@ util.parseQueryString(window.lconfig, window.location.href) // fill in global co
 Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
+Options.hljs = hljs
 
 let template = '<App/>'
 let el = '#app'

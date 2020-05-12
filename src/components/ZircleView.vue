@@ -75,8 +75,18 @@
           :style="style(space)"
           size=s
           :distance="100" 
-          :angle="150">
+          :angle="160">
           <icon class="icon" :name="!mediaFade ? 'play' : 'stop'"></icon>
+        </z-spot> 
+        <z-spot v-if="mediaready && mediaVolume > 0 && mediaFade"
+          button 
+          @click.native="mediaswitchaudio" 
+          class="meteor" 
+          :style="style(model)"
+          size=s
+          :distance="100" 
+          :angle="140">
+          <icon class="icon" :name="!mediaMute ? 'volume-up' : 'volume-mute'"></icon>
         </z-spot> 
       </section>
       <section v-if="$store.state.ready && space" slot="extension">
@@ -176,6 +186,8 @@ export default {
       mediaPlayer: null,
       mediaFade: false,
       mediaReady: false,
+      mediaVolume: 50,
+      mediaMute: true,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -232,14 +244,6 @@ export default {
     }
   },
   methods: {
-    onMediaReady: function (event) {
-      // event.target.setVolume(100);
-      event.target.playVideo()
-      this.mediaFade = true
-    },
-    onMediaEnded: function (event) {
-      this.mediaFade = false
-    },
     isVisible: function (itemdata) {
       if (itemdata.id === 1) { return false }
       if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
@@ -248,13 +252,25 @@ export default {
     opacity: function (itemdata, alpha = 1) {
       return alpha // (itemdata.id === this.$store.state.currentItem.id) ? alpha : alpha
     },
+    onMediaReady: function (event) {
+      this.mediaPlayer = event.target
+      this.mediaPlayer.setVolume(this.mediaMute ? 0 : this.mediaVolume)
+      this.mediaPlayer.playVideo()
+      this.mediaFade = true
+    },
+    onMediaEnded: function (event) {
+      this.mediaFade = false
+    },
     hasmedia: function (itemdata) {
       if (itemdata) {
         var deep = itemdata.deep
         if (deep && deep.look && deep.look.media) {
+          this.mediaVolume = deep.look.volume || 50
+          this.mediaMute = this.mediaVolume === 0
           return true
         }
       }
+      this.mediaMute = true
       return false
     },
     media: function (itemdata) {
@@ -274,6 +290,12 @@ export default {
         } else {
           this.mediaPlayer.pauseVideo()
         }
+      }
+    },
+    mediaswitchaudio: function () {
+      this.mediaMute = !this.mediaMute
+      if (this.mediaPlayer) {
+        this.mediaPlayer.setVolume(this.mediaMute ? 0 : this.mediaVolume)
       }
     },
     current: function (itemdata) {
@@ -378,23 +400,22 @@ export default {
       return -100 + amount * index - this.tweenangle
     },
     checkViewChanged () {
-      let vm = this
       let currentView = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
       if (currentView !== this.currentView) {
         this.currentView = currentView
-        var id = this.$store.state.zircle[currentView]
 
-        if (id === undefined) {
-          // console.log(this.model.id, '   ', id, '  ', this.movSwap)
-          setTimeout(() => {
-            this.movSwap = !this.movSwap
-            if (!this.movSwap) {
-              vm.tween2.seek(0)
-            } else {
-              vm.tween.seek(0)
-            }
-          }, 500)
-        }
+        // var id = this.$store.state.zircle[currentView]
+        // let vm = this
+        // if (id === undefined) {
+        //   setTimeout(() => {
+        //     this.movSwap = !this.movSwap
+        //     if (!this.movSwap) {
+        //       vm.tween2.seek(0)
+        //     } else {
+        //       vm.tween.seek(0)
+        //     }
+        //   }, 500)
+        // }
       }
     }
   },
@@ -505,6 +526,12 @@ export default {
       if (this.$store.state.currentItem.id === toid) return
       if (!this.graph) return
 
+      var spaces = this.$store.state.leodata.map(child => child.id)
+      if (spaces.includes(toid)) {
+        this.$store.dispatch('setCurrentItem', {id: toid})
+        return
+      }
+
       var childs = this.graph.children.map(child => child.id)
       if (!childs.includes(toid)) return
 
@@ -514,7 +541,7 @@ export default {
         const parentid = parent[0].id
         // console.log('v test: ', fromid, parent, parentid)
         if (fromid === parentid) {
-          let child = _.find(this.data, child => child.id === toid)
+          let child = _.find(this.graph.children, child => child.id === toid)
           // console.log('v goto', 'item0', child, this.$refs[this.ref(child.id)])
           this.$store.dispatch('setCurrentItem', {id: toid})
           const refs = this.$refs[this.ref(child.id)]

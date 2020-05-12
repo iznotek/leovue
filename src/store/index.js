@@ -63,6 +63,9 @@ function showText (context, text, id, nowrapper, params) {
   if (params && params.displayType === 'board') {
     context.commit('CONTENT_PANE', {type: 'board'})
     nowrapper = true
+  } else if (params && params.displayType === 'slide') {
+    context.commit('CONTENT_PANE', {type: 'slide'})
+    nowrapper = true
   } else {
     context.commit('CONTENT_PANE', {type: 'text'})
   }
@@ -1875,8 +1878,11 @@ export default new Vuex.Store({
           }
         } else {
           const params = {}
-          if (/^@board/.test(item.name)) {
+          if (/@board/.test(item.name)) {
             params.displayType = 'board'
+          }
+          if (/@slide/.test(item.name)) {
+            params.displayType = 'slide'
           }
           showText(context, context.state.leotext[item.t], id, null, params)
         }

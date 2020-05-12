@@ -85,6 +85,13 @@
                     <component v-else :is="dynComponent(item)" v-bind="$props"/> 
                   </div>
                 </div>
+                <div v-if="slideContent(item)"
+                    class="frame"
+                    id="bpane">
+                  <div style="width:100%">
+                    <slideshow :slides="[dynComponent(item).template]"/> 
+                  </div>
+                </div>
                 <div v-if="iframeContent(item)"
                     class="frame"
                     v-html="iframeHTML(item)"
@@ -171,6 +178,13 @@
                     <component v-else :is="dynComponent(item)" v-bind="$props"/> 
                   </div>
                 </div>
+                <div v-if="slideContent(item)"
+                    class="frame"
+                    id="bpane">
+                  <div style="width:100%">
+                    <slideshow :slides="[dynComponent(item).template]"/> 
+                  </div>
+                </div>
                 <div v-if="iframeContent(item)"
                     class="frame"
                     v-html="iframeHTML(item)"
@@ -190,10 +204,13 @@
 </template>
 
 <script>
-const hljs = require('highlight.js')
+
 import {presentation} from '../lib/presentation'
+import Slideshow from './Slideshow'
 import _ from 'lodash'
+
 const util = require('../util.js')
+const hljs = require('highlight.js')
 
 import { ContentLoader } from 'vue-content-loader'
 import TipTap from './editor/TipTap'
@@ -280,7 +297,8 @@ export default {
   components: {
     ContentLoader,
     EditMenu,
-    TipTap
+    TipTap,
+    Slideshow
     // editorjs: EditorJs // ,
     // editorjson: JsonEditor
   },
@@ -378,6 +396,13 @@ export default {
     },
     boardContent (item) {
       if (item && item.pane === 'board') {
+        return true
+      } else {
+        return false
+      }
+    },
+    slideContent (item) {
+      if (item && item.pane === 'slide') {
         return true
       } else {
         return false

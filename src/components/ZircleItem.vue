@@ -66,8 +66,18 @@
           :style="style(model)"
           size=s
           :distance="100" 
-          :angle="150">
+          :angle="160">
           <icon class="icon" :name="!mediaFade ? 'play' : 'stop'"></icon>
+        </z-spot> 
+        <z-spot v-if="mediaready && mediaVolume > 0 && mediaFade"
+          button 
+          @click.native="mediaswitchaudio" 
+          class="meteor" 
+          :style="style(model)"
+          size=s
+          :distance="100" 
+          :angle="140">
+          <icon class="icon" :name="!mediaMute ? 'volume-up' : 'volume-mute'"></icon>
         </z-spot> 
         
         <z-spot
@@ -156,6 +166,8 @@ export default {
       mediaPlayer: null,
       mediaFade: false,
       mediaReady: false,
+      mediaVolume: 50,
+      mediaMute: true,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -372,8 +384,8 @@ export default {
   },
   methods: {
     onMediaReady: function (event) {
-      // event.target.setVolume(100);
       this.mediaPlayer = event.target
+      this.mediaPlayer.setVolume(this.mediaMute ? 0 : this.mediaVolume)
       this.mediaPlayer.playVideo()
       this.mediaFade = true
     },
@@ -384,9 +396,12 @@ export default {
       if (itemdata) {
         var deep = itemdata.deep
         if (deep && deep.look && deep.look.media) {
+          this.mediaVolume = deep.look.volume || 50
+          this.mediaMute = this.mediaVolume === 0
           return true
         }
       }
+      this.mediaMute = true
       return false
     },
     media: function (itemdata) {
@@ -408,26 +423,31 @@ export default {
         }
       }
     },
+    mediaswitchaudio: function () {
+      this.mediaMute = !this.mediaMute
+      if (this.mediaPlayer) {
+        this.mediaPlayer.setVolume(this.mediaMute ? 0 : this.mediaVolume)
+      }
+    },
     checkViewChanged () {
-      let vm = this
       let currentView = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())
       if (currentView !== this.currentView) {
         this.currentView = currentView
-        var id = this.$store.state.zircle[currentView]
 
-        if (this.model !== undefined) {
-          if (id === this.model.id) {
-            // console.log(this.model.id, '   ', id, '  ', this.movSwap)
-            setTimeout(() => {
-              this.movSwap = !this.movSwap
-              if (!this.movSwap) {
-                vm.tween2.seek(0)
-              } else {
-                vm.tween.seek(0)
-              }
-            }, 500)
-          }
-        }
+        // var id = this.$store.state.zircle[currentView]
+        // let vm = this
+        // if (this.model !== undefined) {
+        //   if (id === this.model.id) {
+        //     setTimeout(() => {
+        //       this.movSwap = !this.movSwap
+        //       if (!this.movSwap) {
+        //         vm.tween2.seek(0)
+        //       } else {
+        //         vm.tween.seek(0)
+        //       }
+        //     }, 500)
+        //   }
+        // }
       }
     },
     isDataFolder: function (itemdata) {
