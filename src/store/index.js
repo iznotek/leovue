@@ -60,12 +60,13 @@ Vue.use(Vuex)
 const spinnerHTML = `<div class="spin-box"><div class="single10"></div></div>`
 
 function showText (context, text, id, nowrapper, params) {
+  var noformat = false
   if (params && params.displayType === 'board') {
     context.commit('CONTENT_PANE', {type: 'board'})
     nowrapper = true
   } else if (params && params.displayType === 'slide') {
     context.commit('CONTENT_PANE', {type: 'slide'})
-    nowrapper = true
+    noformat = true
   } else {
     context.commit('CONTENT_PANE', {type: 'text'})
   }
@@ -74,8 +75,10 @@ function showText (context, text, id, nowrapper, params) {
     context.commit('CURRENT_ITEM_CONTENT', { text })
     return
   }
-  text = util.formatText(text, nowrapper)
 
+  if (!noformat) {
+    text = util.formatText(text, nowrapper)
+  }
   // current (user selected) content item
   context.commit('CURRENT_ITEM_CONTENT', { text })
 
@@ -330,6 +333,24 @@ function showBook (context, item, url, params) {
       console.log(error)
     })
 }
+
+// /**
+//  *
+//  * @param context
+//  * @param item
+//  * @param url {string} ISBN number
+//  * @param params {json} Additional info from node content that will get added to template compile.
+//  */
+// function showSlide (context, item, text, id) {
+//   var params
+//   params.displayType = 'slide'
+//   text = text.replace(/^@.*?\n/, '')
+//   let params = jsyaml.load(text)
+//   if (_.isUndefined(params)) {
+//     params = {}
+//   }
+//   showText(context, item, url, params)
+// }
 
 /**
  * Create Leo outline from target url
@@ -666,7 +687,7 @@ function extractCover (ldata) {
 }
 
 /**
- * extract @look nodes section, can only be the first child
+ * extract @deep nodes section, can only be the first child
  * @param ldata
  * @returns {string}
  */
@@ -702,6 +723,32 @@ function resolveDeep (d, textItems, parent = null) {
 }
 
 /**
+ * extract @slide nodes section, can only be the first child
+ * @param ldata
+ * @returns {string}
+ */
+// function resolveSlides (ldata) {
+//   const textItems = ldata.textItems
+//   ldata.data.forEach(d => {
+//     resolveSlide(d, textItems)
+//   })
+//   // console.log('FOUND LOOK: ', deeps)
+// }
+// function resolveSlide (d, textItems) {
+//   if (/@slide /.test(d.name)) {
+//     let itemText = textItems[d.t]
+//     let slide = jsyaml.load(itemText.replace('@language yaml', ''))
+//     if (slide) {
+//       d.slide = slide
+//       console.log('FOUND SLIDE: ', slide)
+//     }
+//   }
+//   d.children.forEach(child => {
+//     resolveSlide(child, textItems)
+//   })
+// }
+
+/**
  * setData Set data loaded from the Leo file, get content for open items (from path)
  * (open items may need to loaded
  * from external sources, e.g. md files. Also process special nodes like @presentation and @page
@@ -716,6 +763,7 @@ function setData (context, ldata, filename, route) {
   let cover = extractCover(ldata) // cover page, pull out any nodes with @cover directive
   const text = ldata.textItems
   resolveDeeps(ldata)
+  // resolveSlides(ldata)
 
   context.commit('LEO', {
     data: ldata.data,

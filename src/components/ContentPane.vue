@@ -11,7 +11,7 @@
 
     <div class="behind" :class="$store.state.darkmode ? 'dark' : 'light'">
     <div >
-      <component :is="fade.transition"  :duration="fade.duration" :delay="fade.delay" v-show='fade.next'>
+      <component :is="fade.transition"  :duration="fade.duration" :delay="fade.next ? fade.delay : 0" v-show='fade.next'>
       <div>
         <div v-for="(item,index) in itemOdd" :key="index" 
           style="position: absolute; width: 100%; height: 100%;"
@@ -89,7 +89,7 @@
                     class="frame"
                     id="bpane">
                   <div style="width:100%">
-                    <slideshow :slides="[dynComponent(item).template]"/> 
+                    <slideshow :content="item.content"/> 
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -104,7 +104,7 @@
       </div>
     
       <div >
-      <component :is="fade.transition" :duration="fade.duration" :delay="fade.delay" v-show='!fade.next'>
+      <component :is="fade.transition" :duration="fade.duration" :delay="!fade.next ? fade.delay : 0" v-show='!fade.next'>
       <div>
         <div v-for="(item,index) in itemEven" :key="index" 
           style="position: absolute; width: 100%; height: 100%;"
@@ -182,7 +182,7 @@
                     class="frame"
                     id="bpane">
                   <div style="width:100%">
-                    <slideshow :slides="[dynComponent(item).template]"/> 
+                    <slideshow :content="item.content" /> 
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -320,7 +320,7 @@ export default {
       },
       fade: {
         duration: 1000,
-        delay: 100,
+        delay: 1000,
         next: false,
         items: [], 
         indexOdd: -1,

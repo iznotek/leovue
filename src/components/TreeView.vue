@@ -6,7 +6,7 @@
           class="item"
           v-if="isVisible(space)"
           :model="space"
-          :top="true"
+          :top="false"
           :textItems="text"
           :targetEl="target.el">
       </item>

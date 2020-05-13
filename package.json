@@ -33,7 +33,6 @@
     "d3": "^5.16.0",
     "dat.gui": "^0.7.7",
     "dataframe-js": "^1.4.3",
-    "eagle.js": "^0.6.1",
     "element-tiptap": "^1.20.0",
     "element-ui": "^2.13.1",
     "epic-spinners": "^1.1.0",
