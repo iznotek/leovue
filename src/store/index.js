@@ -1459,13 +1459,9 @@ export default new Vuex.Store({
         next = 0
       }
 
-      var obj = JSON.search(state.leodata, '//*[id="' + id + '"]')
-      if (obj && obj[0]) obj = obj[0]
-      // state.deep = obj.deep
-
       var item = {}
       item.id = id
-      // item.obj = obj
+      item.obj = o.obj || null
       item.prev = prev
       item.next = next
       // console.log(item)
@@ -1488,7 +1484,7 @@ export default new Vuex.Store({
       var ids = []
       if (id > 0) {
         ids.push(id)
-        paths.push(obj.vtitle)
+        paths.push(o.obj.vtitle)
       }
       var parentid = id
       // var parenttitle
@@ -1715,16 +1711,16 @@ export default new Vuex.Store({
       }
 
       let item = JSON.search(context.state.leodata, '//*[id="' + id + '"]')
-      let itemObj = {id}
-      if (o.historyIndex) {
-        itemObj = {id, historyIndex: o.historyIndex}
-      }
-
       if (item) {
         item = item[0]
         if (!item) {
           console.log('No item[0] for item:', item)
           return
+        }
+
+        let itemObj = {id, obj: item}
+        if (o.historyIndex) {
+          itemObj.historyIndex = o.historyIndex
         }
 
         context.commit('CURRENT_ITEM', itemObj)

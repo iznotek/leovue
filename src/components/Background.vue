@@ -61,6 +61,7 @@ export default {
       index: 0,
       length: 0,
       currentImg: null,
+      retry: 0,
       use: {
         map: true,
         player: false,
@@ -139,18 +140,24 @@ export default {
           this.$refs.slider.Images.current &&
           this.$refs.slider.Images.current.index === required.index) {
           // console.log('check', required.index)
+          this.retry = 0
           this.index = required.index
           this.requiredList.shift()
           if (this.requiredList.length) {
             this.requiredList = [this.requiredList.pop()] // keep the last only
           } else return
         } else { // if (required.index !== this.required) {
-          // console.log('mov', required.index)
+          // console.log('mov', required.index, this.$refs.slider.Images.current.index)
           // console.log('mov', this.required, this.$refs.slider.image2Index, this.$refs.slider.image1Index, this.$refs.slider.Images.current.index)
           if (required.index < this.$refs.slider.Images.imgs.length) { // this.requiredTransition)
             //  var index = this.$refs.slider.Images.imgs.indexOf(required.name)
             this.$refs.slider.show(required.index, 'fade')
             this.required = required.index
+            this.retry += 1
+            if (this.retry > 5) {
+              this.fluxImages = [].concat(this.fluxImages)
+              // console.log('retry')
+            }
           } else {
             this.fluxImages = [].concat(this.fluxImages) // at startup the watch space is not enough ?
           }
@@ -258,6 +265,7 @@ export default {
             var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
             var transition = isChrome ? 'fade' : deep.look.transition || 'fade'
             var index = this.fluxImages.indexOf(deep.look.dash)
+            // index = index > -1 ? index : 0
             if (index > -1) {
               // console.log(this.requiredList)
               this.requiredList.push({index: index, name: deep.look.dash, transition: transition})

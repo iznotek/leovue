@@ -9,7 +9,7 @@
       <editorjson :state="edit"  />
     </div> -->
 
-    <div class="behind" :class="$store.state.darkmode ? 'dark' : 'light'">
+    <div class="behind" :class="darkmode">
     <div >
       <component :is="fade.transition"  :duration="fade.duration" :delay="fade.next ? fade.delay : 0" v-show='fade.next'>
       <div>
@@ -469,7 +469,6 @@ export default {
     //   setTimeout(() => this.goToHistory(index), 500)
     // },
     setNext(item) {
-      // console.log(item)
       if (!item || (item && item.item && item.item.id <= 0)) return
       setTimeout(() => {
           this.edit = false
@@ -485,8 +484,10 @@ export default {
             return
           }
 
-          // add json editable if available
-          item.json = this.$store.state.leojson[item.item.t] || {}
+          // console.log(item)
+          // item.json = this.$store.state.leojson[item.item.t] || {}
+          var deep = item.item.obj.deep
+          item.mode = (deep && deep.look && deep.look.mode === 'normal') ? 'normal' : 'invert'
 
           this.current = this.fade.items[index]
           if (this.fade.next) {
@@ -503,6 +504,11 @@ export default {
     }
   },
   computed: {
+    darkmode () {
+      const dmode = this.$store.state.darkmode
+      const invert = this.current.mode === 'invert'
+      return dmode ? (!invert ? 'light' : 'dark') : (!invert ? 'dark' : 'light')
+    },
     itemOdd () {
       if (this.fade.indexOdd > -1)
         return [this.fade.items[this.fade.indexOdd]]

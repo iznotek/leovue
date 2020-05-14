@@ -1,6 +1,6 @@
 <template>
   <div ref="slideshow" class="slideshow" tabindex="1" @keyup.right.space="impressNextStep" @keyup.left="impressPrevStep">
-    <impress-viewport ref="impress" :steps="steps" :config="config"></impress-viewport>
+    <impress-viewport v-if="ready" ref="impress" :steps="steps" :config="config"></impress-viewport>
   </div>
 </template>
 
@@ -24,6 +24,7 @@ export default {
     load (content) {
       try {
         // console.log(content)
+        this.ready = false
         let slide = jsyaml.load(content.replace('@language yaml', ''))
         if (slide) {
           this.config = slide.config
@@ -40,20 +41,26 @@ export default {
               this.steps = this.slide(this.steps)
             }
           }
+
+          setTimeout(() => {
+            this.ready = true
+            this.$refs.slideshow.focus()
+          }, 100)
         }
       } catch (error) { console.log(error) }
     },
     dna (steps) {
       const rets = []
-      const radius = 1000
+      const radius = 1200
 
       let initDegree = 0
       const zStep = 80
-      const degreeStep = 70
+      const degreeStep = 45
 
       for (let i = 0; i < steps.length; i += 1) {
         rets.push({
-          rotateX: 45,
+          rotateX: 90,
+          rotateY: 180 - initDegree,
           x: Math.sin((initDegree * Math.PI) / 180) * radius,
           y: Math.cos((initDegree * Math.PI) / 180) * radius,
           z: i * zStep,
@@ -70,10 +77,10 @@ export default {
   },
 
   mounted () {
-    if (this.content) {
-      this.load(this.content)
-    }
-    this.$refs.slideshow.focus()
+    // if (this.content) {
+    //   this.load(this.content)
+    // }
+    // this.$refs.slideshow.focus()
   },
   watch: {
     'content': {
@@ -88,6 +95,7 @@ export default {
   },
   data () {
     return {
+      ready: false,
       config: {
         width: 800,
         height: 800,
