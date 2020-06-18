@@ -92,6 +92,13 @@ import VueAnime from 'vue-animejs'
 import VueRouterMultiView from 'vue-router-multi-view'
 // import Embed from 'v-video-embed'
 
+// import VueVideoPlayer from 'vue-video-player'
+// import 'video.js/dist/video-js.css'
+// import 'vue-video-player/src/custom-theme.css'
+// import './lib/videojs-youtube'
+// import 'videojs-youtube'
+// import 'videojs-contrib-hls/dist/videojs-contrib-hls'
+
 import vmodal from 'vue-js-modal'
 import Element from 'element-ui'
 import './assets/element.scss'
@@ -109,6 +116,7 @@ import { charts } from './content-components/Charts'
 import Textra from './content-components/Textra'
 import Impress from './content-components/Impress'
 
+import pkg from '../package.json'
 const Defiant = require('./lib/defiant') // eslint-disable-line
 
 charts(Vue)
@@ -122,6 +130,7 @@ Vue.prototype.$bs = bs
 // Vue.use(Editor)
 // Vue.use(ElementUI)
 
+// Vue.use(VueVideoPlayer)
 Vue.use(Impress)
 Vue.use(Element, { locale })
 Vue.use(ElementTiptapPlugin)
@@ -258,3 +267,5 @@ Vue.config.warnHandler = function (err) {
 }
 
 window.noop = () => {}
+
+console.log(`${pkg.name} v${pkg.version} is running`)

@@ -83,6 +83,7 @@ export default {
             let deep = item.deep
             // console.log(item)
             if (deep && deep.look) {
+              // deep.look.links.forEach(item => {
               var space = {
                 text: deep.look.space || '',
                 title: item.vtitle,

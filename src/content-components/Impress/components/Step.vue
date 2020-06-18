@@ -9,7 +9,7 @@
 import { translate, rotate, scale } from '../utils'
 
 export default {
-  props: ['step', 'index', 'active', 'present'],
+  props: ['step', 'index', 'active', 'present', 'astyle'],
 
   methods: {
     click () {
@@ -22,7 +22,8 @@ export default {
       const { step } = this
       const transform = `${translate(step.translate)}
         ${rotate(step.rotate)} ${scale(step.scale)}`
-      return { transform }
+      // console.log('transform: ' + transform + '; ' + this.astyle)
+      return Object.assign({ transform }, this.astyle)
     },
     content () {
       return this.step.content

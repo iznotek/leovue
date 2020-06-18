@@ -302,7 +302,8 @@ export default {
   bottom: 0;
   position: absolute;
   overflow: hidden;
-  background: linear-gradient(174deg, rgba(2,0,36,1) 0%, rgba(9,22,121,1) 35%, rgba(0,212,255,1) 100%);
+  background: black;
+  // background: linear-gradient(174deg, rgba(2,0,36,1) 0%, rgba(9,22,121,1) 35%, rgba(0,212,255,1) 100%);
   background-size: cover;
   object-fit: fill;
 }

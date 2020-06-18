@@ -19,7 +19,7 @@
       </section>
 
       <section slot="media" > 
-        <fade-transition v-if="mediaready" :duration="2000" :delay="2000" v-show='mediaFade'>
+        <fade-transition v-if="mediaready" :duration="1000" :delay="2000" v-show='mediaFade'>
           <div style="margin-top: 12px;"> 
             <!-- <video-player :src="media(space)" @ready="onMediaReady" @ended="onMediaEnded"></video-player> -->
             <youtube :video-id="media(space)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0 }"></youtube>
@@ -29,7 +29,7 @@
 
       <section slot="extension">
         <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
-          <textra :data="description" :timer="1" filter="bottom-top" />
+          <textra :data="description" :timer="2" filter="bottom-top" />
         </div>
 
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 3px;  border-color:white ' size=s :distance="150" :angle="-65" />
@@ -82,7 +82,7 @@
           button 
           @click.native="mediaswitchaudio" 
           class="meteor" 
-          :style="style(model)"
+          :style="style(space)"
           size=s
           :distance="100" 
           :angle="140">
@@ -95,20 +95,22 @@
           v-if="isVisible(amodel)"
           :ref="ref(amodel.id)"
           button
-          size="l"
+          :size="size(amodel, space.children.length, index)"
           class="meteor"
           :style="style(amodel, index)"
-          :distance="distance(space.children, index)"
-          :angle="angle(space.children, index)" 
+          :distance="distance(amodel, space.children.length, index)"
+          :angle="angle(amodel, space.children.length, index)" 
           @click.native="toggle(amodel.id, amodel)"
           :to-view="{ name: 'item0', params: {depth: 1, model: amodel, key: amodel.id, textItems: text, targetEl: target, top: false}}"
           :key="index">
               <div style="height: 100px" />
-              <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
+              <div :class="'current-label-background current-label-bottom2-hide'">
+              <!-- <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
+             
                 <!-- <span>{{ amodel.vtitle }}</span> -->
-                <a style="font-size: 25px; color: #eee; text-decoration: none;">
+                <div style="font-size: 15px; color: #eee; text-decoration: none;">
                   {{ amodel.vtitle }} 
-                </a>
+                </div>
               </div>
            <!-- <a style="font-size: 25px; color: #eee; text-decoration: none;">
                 {{ amodel.vtitle }} 
@@ -386,18 +388,25 @@ export default {
     ref: function (id) {
       return 'zspot_' + id
     },
-    distance: function (data, index) {
-      let length = data.length
+    distance: function (itemdata, length, index) {
+      let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
+      if (look.distance !== undefined) return look.distance
       let factor = parseInt(this.$store.state.leftPaneWidth)
       factor = 50 - factor
       factor = factor < 0 ? 0 : factor * 2
       let amount = 1 - 2 * Math.abs(((-length / 2.0) + index) * 2.0 / length)
       return 125 - factor * amount / 3
     },
-    angle: function (data, index) {
-      let length = data.length
-      let amount = (length > 7 ? 360.0 : 180.0) / length
+    angle: function (itemdata, length, index) {
+      let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
+      if (look.angle !== undefined) return look.angle
+      let amount = (length > 7 ? 360.0 : length > 5 ? 230.0 : 180.0) / length
       return -100 + amount * index - this.tweenangle
+    },
+    size: function (itemdata, length, index) {
+      let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
+      if (look.size !== undefined) return look.size
+      return 'l'
     },
     checkViewChanged () {
       let currentView = this.$zircle.getCurrentViewName() // this.$zircle.resolveComponent(this.$zircle.getComponentList(), this.$zircle.getCurrentViewName())

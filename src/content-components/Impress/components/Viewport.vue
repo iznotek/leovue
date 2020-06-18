@@ -2,7 +2,7 @@
   <div class="impress-viewport" ref="root" :style="initialRootStyle" :class="stepClass">
       <div v-if="!impressSupported">your browser does not support this component</div>
       <div class="impress-canvas" :style="canvasStyle" v-else="true">
-          <step v-for="(step, i) in stepsData" :key="i" :step="step" :index="i" :active="stepIndex === i"></step>
+          <step v-for="(step, i) in stepsData" :key="i" :step="step" :index="i" :astyle="astyle" :active="stepIndex === i"></step>
           <slot></slot>
       </div>
   </div>
@@ -24,12 +24,21 @@ export default {
     },
     config: {
       type: Object
+    },
+    astyle: {
+      type: Object
     }
   },
   components: {
     Step
   },
   methods: {
+    getIndex () {
+      return this.stepIndex
+    },
+    nbSteps () {
+      return this.steps.length
+    },
     nextStep () {
       const stepIndex = (this.stepIndex >= this.steps.length - 1)
         ? 0 : this.stepIndex + 1

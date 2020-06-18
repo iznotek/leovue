@@ -12,15 +12,16 @@
       </section>
 
       <section slot="media">
-        <fade-transition v-if="mediaready" :duration="2000" :delay="2000" v-show='mediaFade'>
+        <fade-transition v-if="mediaready" :duration="1000" :delay="2000" v-show='mediaFade'>
           <div style="margin-top: 12px;"> 
             <youtube :video-id="media(model)" player-width="780" player-height="500" @ready="onMediaReady" @ended="onMediaEnded" :player-vars="{ controls: 0, showinfo: 0, rel: 0, color: 'white' }"></youtube>
           </div>
         </fade-transition>
 
         <div v-if="!mediaready" style="height: 75px" />
-        <div v-if="!mediaready" :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" >
-          <a style="font-size: 35px; color: #eee; text-decoration: none;">
+        <!-- <div v-if="!mediaready" :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" > -->
+        <div v-if="!mediaready" :class="'current-label-background current-label-bottom'" >
+          <a style="font-size: 25px; color: #eee; text-decoration: none;">
             {{ model.vtitle }} 
           </a>
         </div>
@@ -85,21 +86,23 @@
           v-if="isVisible(amodel)"
           :ref="ref(data.id, amodel.id)"
           button
-          size="l"
+          :size="size(amodel, data.children.length, index)"
           class="meteor"
           :style="style(amodel, index)"
-          :distance="distance(data, index)"
-          :angle="angle(data, index)" 
+          :distance="distance(amodel, data.children.length, index)"
+          :angle="angle(amodel, data.children.length, index)" 
           @click.native="toggle(amodel)"
           :to-view="isDataFolder(amodel) ? { name: zitem, params: { depth: zdepthinc, model: amodel, key: amodel.id, textItems: textItems, targetEl: target, top: false}} : {}"
           :key="amodel.id">
       
             <div style="height: 100px" />
-            <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
-              <!-- <span>{{ amodel.vtitle }}</span> -->
-              <a style="font-size: 25px; color: #eee; text-decoration: none;">
+            <div :class="'current-label-background current-label-bottom2-hide'">
+              <!-- <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
+            
+              <span>{{ amodel.vtitle }}</span> -->
+              <div style="font-size: 15px; color: #eee; text-decoration: none;">
                 {{ amodel.vtitle }} 
-              </a>
+              </div>
             </div>
     
             <section slot="image" style="height: 100%; width: 100%;">
@@ -472,18 +475,25 @@ export default {
     ref: function (id, sid) {
       return id + '_zspot_' + sid
     },
-    distance: function (itemdata, index) {
-      let length = itemdata.children.length
+    distance: function (itemdata, length, index) {
+      let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
+      if (look.distance !== undefined) return look.distance
       let factor = parseInt(this.$store.state.leftPaneWidth)
       factor = 50 - factor
       factor = factor < 0 ? 0 : factor * 2
       let amount = 1 - 2 * Math.abs(((-length / 2.0) + index) * 2.0 / length)
       return 125 - factor * amount / 3
     },
-    angle: function (itemdata, index) {
-      let length = itemdata.children.length
+    angle: function (itemdata, length, index) {
+      let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
+      if (look.angle !== undefined) return look.angle
       let amount = (length > 7 ? 360.0 : length > 5 ? 230.0 : 180.0) / length
       return -100 + amount * index - this.tweenangle
+    },
+    size: function (itemdata, length, index) {
+      let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
+      if (look.size !== undefined) return look.size
+      return 'l'
     },
     current: function (itemdata) {
       if (itemdata) {

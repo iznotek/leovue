@@ -57,7 +57,7 @@ module.exports = {
       {
         test: /\.js$/,
         //exclude: /defiant/,
-        exclude: [/defiant/, /modelviewer/, /ambient/, /vue-beautiful-chat/],
+        exclude: [/defiant/],
         loader: 'babel-loader',
         include: [
           resolve('src'),

@@ -25,14 +25,15 @@
   // Similarly, you can also introduce the plugin resource pack you want to use within the component
   // import 'some-videojs-plugin'
 
-  import 'video.js/dist/video-js.css'
-  import { videoPlayer } from 'vue-video-player'
-  import 'videojs-youtube'
+  // import 'video.js/dist/video-js.css'
+  // import { videoPlayer } from 'vue-video-player'
+  // import 'videojs-youtube'
+  // require('videojs-youtube/dist/Youtube.min.js')
 
   export default {
-    components: {
-      videoPlayer
-    },
+    // components: {
+    //   videoPlayer
+    // },
     props: {
       src: String
     },
@@ -50,6 +51,7 @@
           // width: window.document.width,
           // height: window.document.height,
           // playbackRates: [0.7, 1.0, 1.5, 2.0],
+          techOrder: ['Youtube'],
           sources: [{
             type: 'video/youtube',
             src: 'http://vjs.zencdn.net/v/oceans.mp4'
@@ -59,8 +61,21 @@
       }
     },
     mounted () {
-      this.sources.src = this.src
+      // this.playerOptions.sources[0].src = this.src
       // console.log('this is current player instance object', this.player)
+    },
+    watch: {
+      'src': {
+        handler: function (val, oldVal) {
+          var source = {
+            type: 'video/youtube',
+            src: val
+          }
+          this.playerOptions.sources = [source]
+        },
+        deep: true,
+        immediate: true
+      }
     },
     computed: {
       player () {

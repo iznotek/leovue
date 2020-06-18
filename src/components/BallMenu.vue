@@ -30,14 +30,28 @@
       :size="54"
       color="#fff"
     /> -->
-    <div class="logo" @click="signIn()">
+    <div v-if="!text" class="logo" @click="signIn()">
       <img src="/static/images/logo.png" width="55"/>
     </div>
+    <div v-else class="text" v-html="caption">
+    </div>
+    <!-- <div v-if="text" class="blur">
+    </div> -->
       <!-- <div style="color: rgba(0,0,0,0.6); margin-top: 16px;">{{ lastClicked }}</div> -->
   </div>
 </template>
 
 <style scoped>
+  .blur {
+     position: absolute;
+    text-align: center;
+    margin-top: 13px; 
+    margin-left: -5px; 
+    width: 60px;
+    -webkit-box-shadow: 0px 0px 50px 0px;
+    -moz-box-shadow: 0px 0px 50px 0px;
+    box-shadow: 0px 0px 50px 0px;
+  }
   .radial {
     position: absolute; 
     left: 0px; 
@@ -49,8 +63,18 @@
   .logo {
     position: absolute;
     transform: rotate(0deg);
+    text-align: center;
     margin-top: -2px; 
     margin-left: -2px; 
+    color: #000;
+  }
+  .text {
+    position: absolute;
+    text-align: center;
+    margin-top: 13px; 
+    margin-left: -5px; 
+    width: 60px;
+    color: #000;
   }
 </style>
 
@@ -67,9 +91,13 @@ export default {
     RadialMenuItem,
     OrbitSpinner
   },
+  props: {
+    caption: String
+  },
   data () {
     return {
       color: 'white',
+      text: null,
       items: {
         guest: ['you', 'will', 'be', 'here', 'a', 'world'],
         user: ['give', 'a', 'space', 'save', 'the', 'time']
@@ -120,6 +148,15 @@ export default {
     }
   },
   watch: {
+    'caption': {
+      handler: function (val, oldVal) {
+        if (val) {
+          this.text = val
+        }
+      },
+      deep: true,
+      immediate: true
+    },
     '$store.state.currentItem': {
       handler: function (val, oldVal) {
         if (val) {

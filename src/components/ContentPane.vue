@@ -31,7 +31,7 @@
                     <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
                       <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                          <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                          <div class="around" :class="arounddarkmode" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
                             <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
@@ -89,7 +89,7 @@
                     class="frame"
                     id="bpane">
                   <div style="width:100%">
-                    <slideshow :content="item.content"/> 
+                    <slideshow :item="item"/> 
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -124,7 +124,7 @@
                     <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
                       <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                          <div class="around" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                          <div class="around" :class="arounddarkmode" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
                              <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
@@ -182,7 +182,7 @@
                     class="frame"
                     id="bpane">
                   <div style="width:100%">
-                    <slideshow :content="item.content" /> 
+                    <slideshow :item="item" /> 
                   </div>
                 </div>
                 <div v-if="iframeContent(item)"
@@ -505,9 +505,14 @@ export default {
   },
   computed: {
     darkmode () {
-      const dmode = this.$store.state.darkmode
+      const dmode = !this.$store.state.darkmode
       const invert = this.current.mode === 'invert'
       return dmode ? (!invert ? 'light' : 'dark') : (!invert ? 'dark' : 'light')
+    },
+    arounddarkmode () {
+      const dmode = this.$store.state.darkmode
+      const invert = this.current.mode === 'invert'
+      return dmode ? (!invert ? 'lightaround' : 'darkaround') : (!invert ? 'darkaround' : 'lightaround')
     },
     itemOdd () {
       if (this.fade.indexOdd > -1)
@@ -704,6 +709,7 @@ export default {
     float: right;
   }
   .behind {
+    font-family: fantasy;
     position: relative;
     height: 100%;
     transition: 0.5s;
@@ -718,18 +724,24 @@ export default {
     // background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 100%); /* Black*/
     color: #FFF;
   }
-  .login {
-    //height: 1000px;
-    //position:'absolute';
+  .darkaround {
+    background: rgba(255,255,255,0.7);
+    // background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
+    color: #000;
+    -webkit-box-shadow: 0px 10px 30px rgba(255,255,255,0.4);
+    -moz-box-shadow: 0px 10px 30px rgba(255,0255,255,0.4);
+    box-shadow: 0px 10px 30px rgba(255,255,255,0.4);
   }
-  .handle {
-    width:50px;
-    // align-items: center;
-    //flex: auto;
-    display: inline-block;
+  .lightaround {
+    background: rgba(0,0,0,0.5);
+    // background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 100%); /* Black*/
+    color: #FFF;
+    -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 10px 30px rgba(0,0,0,0.4);
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.4);
   }
   .around {
-    background: rgba(255, 255, 255, 0.2);
+    // background: rgba(255, 255, 255, 0.2);
     padding: 30px;
     margin: 0px;
     margin-top: 25px;
@@ -740,9 +752,16 @@ export default {
     // min-width: 500px;
     //overflow: auto;
     // height: calc(100vh - 33px);
-    -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
-    box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+  }
+  .login {
+    //height: 1000px;
+    //position:'absolute';
+  }
+  .handle {
+    width:50px;
+    // align-items: center;
+    //flex: auto;
+    display: inline-block;
   }
   .right-cpane {
     flex: auto;
@@ -806,5 +825,13 @@ export default {
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Opera and Firefox */
+  }
+  blockquote:before {
+    content: "\201C";
+    font-size: 6.25rem;
+    font-family: Georgia;
+    left: -7px;
+    width: 100%;
+    margin-bottom: -50px;
   }
 </style>

@@ -42,7 +42,7 @@
         </div>
 
         <div class="space"></div>   
-        <div v-if="connected"  @click="refresh" class="icon icon-button">
+        <div v-if="ready"  @click="refresh" class="icon icon-button">
           <icon class="icon" name="sync-alt"></icon>
         </div> 
         <!-- <searchbar class="searchbar"></searchbar> -->

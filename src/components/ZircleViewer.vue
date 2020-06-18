@@ -3,10 +3,10 @@
   <div >
     <div class="zircleviewer">
       <div style="position: absolute; width: 100%; height: 100%;">
-        <div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.25)'}">
+        <div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
           <textra :data='spaceNames' :timer="1" filter="left-right" />
         </div>
-        <div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.25)'}">
+        <div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
           <textra :data='spaceDescs' :timer="1" filter="right-left" />
         </div>
 
@@ -261,20 +261,16 @@
       '$store.state.currentItem': {
         handler: function (val, oldVal) {
           if (val) {
-            // var model = JSON.search(this.$store.state.leodata, '//*[id="' + val.id + '"]')
-            // if (!model) return
-            // if (model.length) model = model[0]
+            var model = JSON.search(this.$store.state.leodata, '//*[id="' + val.id + '"]')
+            if (!model) return
+            if (model.length) model = model[0]
 
-            // if (this.$store.state.space && val.id !== this.$store.state.space.id) {
-            //   this.nodeNames = [model.vtitle]
-            // } else {
-            //   this.nodeNames = ['']
+            // if (model) {
+            //   this.spaceNames = [model.vtitle]
             // }
-            // if (model && model.deep && model.deep.look && model.deep.look.desc) {
-            //   this.nodeDescs = [model.deep.look.desc]
-            // } else {
-            //   this.nodeDescs = ['']
-            // }
+            if (model && model.deep && model.deep.look && model.deep.look.space) {
+              this.spaceDescs = [model.deep.look.space]
+            }
             // var deep = this.$store.getters.getDeepLookForNode(val)
             // if (deep && deep.look) {
             //   if (deep.look.theme) {
