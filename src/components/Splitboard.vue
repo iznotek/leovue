@@ -5,7 +5,7 @@
     <deep-editor/>
     <type-menu v-if="ready"/>
     <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
-    <!-- <chatmenu v-if="connected && config.comments"/>
+    <chat-menu v-if="ready && config.comments"/> <!--
     <chat v-if="config.chats && connected"/> -->
 
    <splitpanes 
@@ -14,27 +14,44 @@
       @pane-maximize="maximized($event)"
       @resize="resize($event)" 
       @resized="resize($event)" 
-      style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; padding-top: 40px; transition: 0s; width: 100%"
+      style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; padding-top: 0px; transition: 0s; width: 100%"
       >
-      <pane v-if="left" :size="sizes.left" :class="$store.state.darkmode ? 'dark' : 'light'">
+      <pane v-if="left" :size="sizes.left" :class="$store.state.darkmode ? 'dark' : 'dark'">
         <zircle-viewer style="z-index: 6002;"></zircle-viewer> 
       </pane> 
       <pane v-if="ready && center" :size="sizes.center">
-        <content-pane style="z-index: 6002;"></content-pane> 
-      </pane>
-      <!-- <pane v-if="connected && right && (comments || meeting)" :size="sizes.right">
-        <splitpanes horizontal>
-          <pane v-if="comments" size="70">
-            <comments style="z-index: 6003;"></comments>  
-          </pane>
-          <pane v-if="meeting" size="30">
-            <meeting style="z-index: 6004;" ></meeting>
-          </pane>
+      
+        <splitpanes 
+          ref="splitsocial"
+          vertical
+          style=""
+          >
+          <pane>
+            <splitpanes horizontal>
+              <pane size="100">
+                <content-pane style="z-index: 6002;"></content-pane> 
+              </pane>
+              <!-- <pane v-if="meeting && meetingUrl" size="40">
+                <iframe style="z-index: 6004;" :src="meetingUrl" allow="display-capture; geolocation ; microphone ; camera *"></iframe>
+              </pane> -->
+            </splitpanes>
+          </pane> 
+          <pane v-if="ready && right && comments" :size="30"> <!-- (comments || meeting) -->
+            <splitpanes horizontal>
+              <pane v-if="comments" size="100">
+                <comments style="z-index: 6003;"></comments>  
+              </pane>
+             <!-- <pane v-if="meeting" size="30">
+                <meeting style="z-index: 6004;" ></meeting>
+              </pane> -->
+            </splitpanes>
+          </pane> 
         </splitpanes>
-      </pane> -->
+      </pane>
+
     </splitpanes>
 
-    <div v-if="ready" class="noselect" style="position:fixed; top: 40px; margin-left: -5px; z-index: 6005;" :style="{left: leftBall}">
+    <div v-if="ready" class="noselect" style="position:fixed; top: 0px; margin-left: -5px; z-index: 6005;" :style="{left: leftBall}">
         <ball-menu class="split-ball"/>
         <div class="arrow-left"
             v-show="showLeftButton"
@@ -61,16 +78,17 @@
   import ContentPane from './ContentPane'
   import ZircleViewer from './ZircleViewer'
   import MiddleMenu from './MiddleMenu'
-  // import Comments from './Comments.vue'
-  // import Meeting from './meeting/Meeting.vue'
+  import Comments from './Comments.vue'
+  import Meeting from './Meeting.vue'
 
   import SpaceMenu from './SpaceMenu'
   import TypeMenu from './TypeMenu'
   // import Chat from './chat/Chat'
-  // import ChatMenu from './ChatMenu'
+  import ChatMenu from './ChatMenu'
   // modals
   // import Settings from './modals/Settings'
   import DeepEditor from './modals/DeepEditor'
+  /// import { Api, Http } from '../lib/bigbluebutton'
 
   const util = require('../util.js')
 
@@ -88,24 +106,26 @@
       ZircleViewer,
       SpaceMenu,
       TypeMenu,
-      DeepEditor
-      // Comments,
-      // Meeting
+      DeepEditor,
+      Comments,
+      ChatMenu,
+      Meeting
     },
     data: function () {
       return {
         init: false,
-        comments: true,
+        hasComments: false,
+        showComments: false,
         meeting: false,
         showLeftButton: true,
         showRightButton: true,
         left: true,
         center: true,
-        right: false,
+        right: true,
         sizes: {
           left: 100,
           center: 0,
-          right: 0
+          right: 20
         },
         lock: false,
         saved: [],
@@ -198,6 +218,12 @@
       }
     },
     computed: {
+      comments: function () {
+        return window.lconfig.comments && this.showComments && this.hasComments
+      },
+      meetingUrl: function () {
+        return window.lconfig.meeting
+      },
       leftBall: function () {
         return this.sizes.left + '%'
       },
@@ -222,13 +248,38 @@
       }
     },
     mounted: function () {
+      // by running bbb-conf --secret on your BBB server
+      // console.log(Api, Http)
+      // let bbb = {Api, Http}
+      // let api = bbb.api(window.lconfig.bbbServer, window.lconfig.bbbApiKey)
+      // let http = api.http
+
+      // // api module itslef is responsible for constructing URLs
+      // let meetingCreateUrl = api.administration.create('deeplook', '23b537B737', {
+      //   duration: 2,
+      //   attendeePW: 'secret',
+      //   moderatorPW: 'supersecret'
+      // })
+
+      // // http method should be used in order to make calls
+      // http(meetingCreateUrl).then((result) => {
+      //   console.log(result)
+
+      //   let moderatorUrl = api.administration.join('moderator', '1', 'supersecret')
+      //   let attendeeUrl = api.administration.join('attendee', '1', 'secret')
+      //   console.log(`Moderator link: ${moderatorUrl}\nAttendee link: ${attendeeUrl}`)
+
+      //   let meetingEndUrl = api.administration.end('1', 'supersecret')
+      //   console.log(`End meeting link: ${meetingEndUrl}`)
+      // })
+
       setInterval(() => {
         if (this.$store.state.spacemenu && (this.$refs.splitpanes.panes[0].size === 0 || this.mode === 'left')) {
           this.$store.commit('SPACEMENU', false)
         } else if (!this.$store.state.spacemenu && this.mode !== 'left' && (this.$refs.splitpanes.panes[0].size !== 0)) {
           this.$store.commit('SPACEMENU', true)
         }
-      }, 100)
+      }, 500)
     },
     updated: function () {
     },
@@ -236,7 +287,7 @@
       chatMenuClick (action) {
         if (action) {
           if (action.name === 'comments') {
-            this.comments = !this.comments
+            this.showComments = !this.showComments
           }
           if (action.name === 'meeting') {
             this.meeting = !this.meeting
@@ -268,9 +319,12 @@
         handler: function (val, oldVal) {
           if (val) {
             var deep = this.$store.getters.getDeepLookForNode(val)
-            if (deep && deep.look && deep.look.theme) {
-              var color = util.rgbaFromTheme(deep.look.theme, 1.0)
-              this.color = color
+            if (deep && deep.look) {
+              if (deep.look.theme) {
+                var color = util.rgbaFromTheme(deep.look.theme, 1.0)
+                this.color = color
+              }
+              this.hasComments = deep.look.comments !== undefined ? deep.look.comments : true
             }
           }
         },
@@ -334,15 +388,15 @@
 
   .splitpanes--vertical > .splitpanes__splitter {
     min-width: 14px;
-    background: transparent;
-     -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,1.0);
-    -moz-box-shadow: 0px 10px 30px rgba(0,0,0,1.0);
-    box-shadow: 0px 10px 30px rgba(0,0,0,1.0); 
+    background: rgba(0,0,0,0.4);
+     -webkit-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
+    -moz-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
+    box-shadow: -10px 10px 15px rgba(0,0,0,0.0); 
   }
 
   .splitpanes--horizontal > .splitpanes__splitter {
     min-height: 14px;
-    background: transparent;
+    background: rgba(0,0,0,0.5);
   }
 </style> 
 
@@ -362,9 +416,9 @@
       z-index: 9999;
       opacity: 1;
       text-align: center;
-      -webkit-box-shadow: 0px -10px 30px rgba(0,0,0,0.85);
-      -moz-box-shadow: 0px -10px 30px rgba(0,0,0,0.85);
-      box-shadow: 0px -10px 30px rgba(0,0,0,0.85);
+      -webkit-box-shadow: -10px -10px 30px rgba(0,0,0,0.85);
+      -moz-box-shadow: -10px -10px 30px rgba(0,0,0,0.85);
+      box-shadow: -10px -10px 30px rgba(0,0,0,0.85);
   }
 
   .dark {

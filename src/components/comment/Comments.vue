@@ -109,6 +109,7 @@
           :commentBackgroundColor="commentBackgroundColor"
           :commentTextColor="commentTextColor"
           :userNameColor="userNameColor"
+          :themeColor="themeColor"
           :wrapperSize="wrapperSize.toString()"
         ></app-wrapper>
         <div class="noCommentWrapper" @click="$refs.addComment.focus()" v-if="comments.length<1" key="noComment">
@@ -199,7 +200,7 @@
             Math.round(Math.random() * 244) +
             ',' +
             Math.round(Math.random() * 244) +
-            ',0.6)'
+            ',0.0)'
         },
         limit: parseInt(this.initialMessageLimit),
         alertMessage: '',
@@ -420,7 +421,7 @@
       nodeColor: {
         immediate: true,
         handler (val, oldVal) {
-          this.themeColor = util.rgbaFromTheme(val)
+          this.themeColor = util.rgbaFromTheme(val, 1.0)
         }
       },
       loading () {
@@ -586,7 +587,7 @@
   }
   .comments > .innerWrapper {
     overflow-x: auto;
-    padding: 10px 2px;
+    padding: 10px 15px;
     z-index: 100;
   }
   .comments>>>.noCommentWrapper {
@@ -646,8 +647,8 @@
   }
   .comments>>>.avatar > svg {
     border-radius: 50%;
-    height: 44px;
-    width: 44px;
+    height: 20px;
+    width: 20px;
     transition: 0.3s;
     -moz-transition: 0.3s;
     -webkit-transition: 0.3s;
@@ -656,12 +657,12 @@
     display: grid;
     grid-template-columns: 0.001fr 1fr;
     grid-auto-rows: minmax(0, auto);
-    grid-column-gap: 10px;
+    grid-column-gap: 0px;
     padding-top: 2px;
   }
   .comments>>>.commentBox {
     display: grid;
-    grid-template-columns: minmax(200px, auto) 0.2fr;
+    grid-template-columns: minmax(20px, auto) 0.2fr;
     grid-auto-rows: minmax(0, -webkit-max-content);
     grid-auto-rows: minmax(0, max-content);
     grid-auto-rows: minmax(0, -moz-max-content);
@@ -695,6 +696,7 @@
     align-self: end;
     color: #fff;
     max-height: 32px;
+    max-width: 50px;
     box-sizing: border-box;
     height: 32px;
     padding: 8px 10px;

@@ -25,7 +25,7 @@
   .logo-around {
     transition: all 2s ease;
     position: absolute;
-    margin-top: -45px; 
+    margin-top: -75px; 
     margin-left: -45px; 
   }
   .logo-back {

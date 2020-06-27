@@ -3,13 +3,21 @@
   <div >
     <div class="zircleviewer">
       <div style="position: absolute; width: 100%; height: 100%;">
-        <div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
+       <div class="adjust space" :style="{color: 'rgba(255,255,255,0.5)'}">
+        <!--<div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
+          <textra :data='spaceNames' :timer="1" filter="left-right" />
+        </div>
+         <div class="adjust spacedesc" :style="{color: 'rgba(255,255,255,0.5)'}">
+        <!--<div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
+          <textra :data='spaceDescs' :timer="1" filter="right-left" />
+        </div>
+
+<!-- <div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
           <textra :data='spaceNames' :timer="1" filter="left-right" />
         </div>
         <div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
           <textra :data='spaceDescs' :timer="1" filter="right-left" />
-        </div>
-
+        </div> -->
         <fade-transition v-show='showcircle'>
           <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
           </z-canvas>
@@ -342,7 +350,7 @@
 
 .space {
   top: 0px;
-  left: 80px;
+  left: 60px;
   width: 100%;
   font-size: 75px;
 }
@@ -406,7 +414,7 @@
 <style>
 
 .zcanvas {
-    transition: all 2s ease;
+    transition: all 1s ease;
 }
 
 .asteroids {

@@ -201,6 +201,7 @@
           returnSecureToken: true
         })
           .then(res => {
+            console.log(res.data)
             this.idTokenD = res.data.idToken
             this.userIdD = res.data.localId
             this.expiresInD = res.data.expiresIn

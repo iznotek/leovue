@@ -5,7 +5,7 @@
     <background/>
     <appheader/>
 
-    <div id="main" :class="{'header-space': config.showHeader}"> <!-- id="main"  -->
+    <div id="main" :class="{'header-space': config.showHeaderTop}"> <!-- id="main"  -->
         <router-multi-view :id="id" >
         </router-multi-view>
     </div>
@@ -367,9 +367,10 @@ li {
 } 
 
 #main {
-  height: calc(100vh - 40px);
+  height: 100vh; 
+  // right: calc(100vh - 40px);
   width: 100%;
-  top: 40px;
+  // top: 40px;
   position: fixed;
   z-index: 2;
 }

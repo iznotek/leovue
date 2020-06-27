@@ -10,8 +10,8 @@
     </div> -->
 
     <div class="behind" :class="darkmode">
-    <div >
-      <component :is="fade.transition"  :duration="fade.duration" :delay="fade.next ? fade.delay : 0" v-show='fade.next'>
+    <div>
+      <component :is="fade.next ? fade.transitionIn : fade.transitionOut"  :duration="fade.duration" :delay="fade.next ? fade.delay : 0" v-show='fade.next'>
       <div>
         <div v-for="(item,index) in itemOdd" :key="index" 
           style="position: absolute; width: 100%; height: 100%;"
@@ -31,7 +31,7 @@
                     <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
                       <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                          <div class="around" :class="arounddarkmode" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                          <div class="around" :class="arounddarkmode" :style="{maxWidth: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
                             <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
@@ -104,7 +104,7 @@
       </div>
     
       <div >
-      <component :is="fade.transition" :duration="fade.duration" :delay="!fade.next ? fade.delay : 0" v-show='!fade.next'>
+      <component :is="!fade.next ? fade.transitionIn : fade.transitionOut" :duration="fade.duration" :delay="!fade.next ? fade.delay : 0" v-show='!fade.next'>
       <div>
         <div v-for="(item,index) in itemEven" :key="index" 
           style="position: absolute; width: 100%; height: 100%;"
@@ -124,7 +124,7 @@
                     <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
                       <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
                         <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
-                          <div class="around" :class="arounddarkmode" :style="{width: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
+                          <div class="around" :class="arounddarkmode" :style="{maxWidth: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
                              <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
@@ -319,13 +319,14 @@ export default {
         savedData: {}
       },
       fade: {
-        duration: 1000,
-        delay: 1000,
+        duration: 500,
+        delay: 500,
         next: false,
         items: [], 
         indexOdd: -1,
         indexEven: -1,
-        transition: transitions[0]
+        transitionIn: transitions[0],
+        transitionOut: transitions[0]
       }
     }
   },
@@ -709,13 +710,13 @@ export default {
     float: right;
   }
   .behind {
-    font-family: fantasy;
+    font-family: fantasy; 
     position: relative;
     height: 100%;
     transition: 0.5s;
   }
   .dark {
-    background: rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.5);
     // background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
     color: #000;
   }
@@ -725,27 +726,36 @@ export default {
     color: #FFF;
   }
   .darkaround {
-    background: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.5);
     // background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
     color: #000;
-    -webkit-box-shadow: 0px 10px 30px rgba(255,255,255,0.4);
-    -moz-box-shadow: 0px 10px 30px rgba(255,0255,255,0.4);
-    box-shadow: 0px 10px 30px rgba(255,255,255,0.4);
+    -webkit-box-shadow: 0px 30px 30px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 30px 30px rgba(0,0,0,0.5);
+    box-shadow: 0px 30px 30px rgba(0,0,0,0.5);
   }
   .lightaround {
     background: rgba(0,0,0,0.5);
     // background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 100%); /* Black*/
     color: #FFF;
-    -webkit-box-shadow: 0px 10px 30px rgba(0,0,0,0.4);
-    -moz-box-shadow: 0px 10px 30px rgba(0,0,0,0.4);
-    box-shadow: 0px 10px 30px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0px 30px 30px rgba(255,255,255,0.5);
+    -moz-box-shadow: 0px 30px 30px rgba(255,0255,255,0.5);
+    box-shadow: 0px 30px 30px rgba(255,255,255,0.5);
   }
   .around {
     // background: rgba(255, 255, 255, 0.2);
-    padding: 30px;
-    margin: 0px;
-    margin-top: 25px;
-    border-radius: 20px;
+    // padding: 30px;
+    // margin: 300px;
+    // margin-top: 100px;
+    border-radius: 50px;
+    // top: 50%;
+    // transform: translate(0%, -50%);
+    // -ms-transform: translate(-50%, -50%);
+    // position: relative;
+    margin-top: 20%;
+    margin-bottom: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     // padding-top: 33px;
     //max-width: 720px;
     //width: 700px;
@@ -761,7 +771,7 @@ export default {
     width:50px;
     // align-items: center;
     //flex: auto;
-    display: inline-block;
+    display: block;
   }
   .right-cpane {
     flex: auto;
@@ -772,7 +782,11 @@ export default {
     //width: 700px;
     min-width: 500px;
     //overflow: auto;
-    height: calc(100vh - 33px);
+    height: calc(100vh - 0px);
+    visibility: false;
+  }
+  .right-cpane::-webkit-scrollbar {
+    display: none;
   }
   p {
     line-height:1.3em;
@@ -781,13 +795,17 @@ export default {
     width: 100%;
     //background: #fff;
     //height: 400px;
-    height: calc(100vh - 33px);
+    height: calc(100vh - 0px);
   }
   #bpane {
     width: 100%;
     //background: #fff;
-    height: calc(100vh - 33px);
+    height: calc(100vh - 0px);
     overflow: scroll;
+    visibility: false;
+  }
+  #bpane::-webkit-scrollbar {
+    display: none;
   }
   #tlayout {
     //background: #fff;

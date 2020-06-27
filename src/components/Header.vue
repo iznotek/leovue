@@ -1,7 +1,7 @@
 <template>
   <div style="height:0px;">
     <div class="holder">
-      <div class="header" v-if="config.showHeader">
+      <div class="header" :style="{background: color}"  v-if="config.showHeader">
         <span class="app-title"> 
           {{user}}{{ config.trademark }}
         </span>
@@ -109,6 +109,7 @@
   import { JSONtoLeo } from '../services/leo-file'
   import DigitalClock from 'vue-digital-clock'
   import router from '../router'
+  const util = require('../util.js')
 
   function formatJSONData (data, textItems) {
     if (_.isArray(data)) {
@@ -130,7 +131,8 @@
     },
     data () {
       return {
-        menu: false
+        menu: false,
+        color: 'blue'
       }
     },
     mounted () {
@@ -264,6 +266,22 @@
         return window.lconfig
       }
 
+    },
+    watch: {
+      '$store.state.currentItem': {
+        handler: function (val, oldVal) {
+          let color = 'blue'
+          if (val) {
+            var deep = this.$store.getters.getDeepLookForNode(val)
+            if (deep && deep.look && deep.look.theme) {
+              color = deep.look.theme
+            }
+          }
+          this.color = util.rgbaFromTheme(color, 0.5)
+        },
+        deep: true,
+        immediate: true
+      }
     }
   }
 </script>
@@ -282,7 +300,7 @@
 .holder
   padding: 0
   margin: 0
-  top: 0px
+  bottom: 0px
   position: fixed
   width: 100%
   z-index: 1110
@@ -326,15 +344,17 @@
 .header
   text-align: left
   //background: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
-  background-color: rgba(0,0,0,0.5) 
+  // background-color: rgba(0,0,0,0.7) 
+  transition: all 1s ease
   font-weight: normal
   padding: 2px
   padding-top: 10px
-  padding-left: 6px
+  padding-left: 36px
+  padding-right: 24px
   color: #333
   //border-bottom: 1px solid #333
   //box-shadow: 0 1px 1px 0 rgba(116, 129, 141, 0.1)
-  box-shadow: 0px 10px 30px rgba(0,0,0,0.85)
+  box-shadow: 0px 0px 0px rgba(0,0,0,0.5)
   height: 40px
 .search
   float: left

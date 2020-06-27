@@ -2,7 +2,7 @@
   <div ref="slideshow" class="slideshow" tabindex="1" @keyup.right.space="impressNextStep" @keyup.left="impressPrevStep">
     <impress-viewport v-if="ready" ref="impress" :steps="steps" :config="config" :astyle="astyle" ></impress-viewport>
 
-     <div style="position:absolute; top: 90%; margin-left: 50%; z-index: 6005;">
+     <div style="position:absolute; top: 83%; margin-left: 50%; z-index: 6005;">
         <ball-menu class="split-ball" :caption="caption"/>
         <div class="arrow-left"
             v-show="true"
@@ -212,7 +212,7 @@ export default {
   transition: all 2s ease;
 
   &.active {
-    border: solid 3px;
+    border: solid 0px;
     -webkit-box-shadow: 0px 10px 50px 0px;
     -moz-box-shadow: 0px 10px 50px 0px;
     box-shadow: 0px 10px 50px 0px;
@@ -241,7 +241,7 @@ export default {
   .arrow-left {
     position: absolute;
     transform: rotate(180deg);
-    margin-top: -6px; 
+    margin-top: -10px; 
     margin-left: -57px;
   }
   .arrow-right {

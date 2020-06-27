@@ -47,24 +47,7 @@
           'medium',
           'large'
         ],
-        actions: [
-          {
-            name: 'comments',
-            icon: 'comment',
-            // tooltip: 'Tree',
-            color: 'rgba(20, 40, 100, 0.7)',
-            active: false,
-            group: 1
-          },
-          {
-            name: 'meeting',
-            icon: 'video',
-            // tooltip: 'Graph',
-            color: 'rgba(20, 40, 100, 0.7)',
-            active: false,
-            group: 1
-          }
-        ],
+        actions: [],
         color: 'rgba(20, 40, 100, 0.7)',
         position: 'bottom-right',
         positionType: 'fixed',
@@ -73,6 +56,32 @@
         mainIcon: 'comments',
         mainTooltip: '',
         enableRotation: true
+      }
+    },
+    mounted () {
+      if (window.lconfig.comments) {
+        this.actions.push(
+          {
+            name: 'comments',
+            icon: 'comment',
+            // tooltip: 'Tree',
+            color: 'rgba(20, 40, 100, 0.7)',
+            active: window.lconfig.comments,
+            group: 1
+          }
+        )
+      }
+      if (window.lconfig.meetings) {
+        this.actions.push(
+          {
+            name: 'meeting',
+            icon: 'video',
+            // tooltip: 'Graph',
+            color: 'rgba(20, 40, 100, 0.7)',
+            active: false,
+            group: 1
+          }
+        )
       }
     },
     computed: {

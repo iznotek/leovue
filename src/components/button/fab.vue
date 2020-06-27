@@ -287,11 +287,11 @@ export default {
       switch (this.position) {
         case 'bottom-right':
           this.pos.right = '-40px'
-          this.pos.bottom = '30px'
+          this.pos.bottom = '60px'
           break
         case 'bottom-left':
           this.pos.left = '100px'
-          this.pos.bottom = '30px'
+          this.pos.bottom = '60px'
           break
         case 'top-left':
           this.pos.left = '100px'

@@ -183,7 +183,7 @@
       </div>
     </div> -->
   <div class="behind" 
-      :class="$store.state.darkmode ? 'dark' : 'light'"
+      :class="$store.state.darkmode ? 'dark' : 'dark'"
       :style="{ left: '0px', 
         width: '100%', 
         marginLeft: '0px', 

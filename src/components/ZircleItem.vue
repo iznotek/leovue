@@ -28,7 +28,8 @@
       </section>
 
       <section slot="extension">
-        <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}">
+         <div class="adjust description" :style="{color: 'rgba(255,255,255,0.5)'}">
+        <!--<div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
           <textra :data="description" :timer="1" filter="bottom-top" />
         </div>
         <z-spot 
@@ -100,7 +101,7 @@
               <!-- <div :class="current(amodel) ? 'current-label-background current-label-bottom2' : 'current-label-background current-label-bottom2-hide'">
             
               <span>{{ amodel.vtitle }}</span> -->
-              <div style="font-size: 15px; color: #eee; text-decoration: none;">
+              <div style="font-size: 15px; color: #eee; text-decoration: none; width: 150px; margin: auto;">
                 {{ amodel.vtitle }} 
               </div>
             </div>
@@ -390,7 +391,7 @@ export default {
       this.mediaPlayer = event.target
       this.mediaPlayer.setVolume(this.mediaMute ? 0 : this.mediaVolume)
       this.mediaPlayer.playVideo()
-      this.mediaFade = true
+      this.mediaFade = false
     },
     onMediaEnded: function (event) {
       this.mediaFade = false
@@ -487,8 +488,8 @@ export default {
     angle: function (itemdata, length, index) {
       let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
       if (look.angle !== undefined) return look.angle
-      let amount = (length > 7 ? 360.0 : length > 5 ? 230.0 : 180.0) / length
-      return -100 + amount * index - this.tweenangle
+      let amount = (length > 7 ? 360.0 : length > 5 ? 230.0 : length > 3 ? 180.0 : 150.0) / length
+      return -15 * length + amount * index - this.tweenangle
     },
     size: function (itemdata, length, index) {
       let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}

@@ -92,9 +92,11 @@
                 spellcheck="false"
                 aria-label="Add Reply" 
               ></textarea>
-              <button aria-label="Reply" v-if="requestLoading"><div class="requestLoading"></div></button>
-              <button @click="reply" aria-label="Reply" v-else>Reply</button>
-              <div class="remainingLetter" :style="{ background: remainigLetter<0 ? 'rgba(255, 82, 82,1)' :'rgba(42, 94, 190, 1)'}"><span>{{remainigLetter}}</span></div>        
+              <button :style="{backgroundColor: themeColor}" aria-label="Reply" v-if="requestLoading"><div class="requestLoading"></div></button>
+              <button :style="{backgroundColor: themeColor}" @click="reply" aria-label="Reply" v-else>Reply</button>
+              <div class="remainingLetter" :style="{ background: remainigLetter<0 ? 'rgba(255, 82, 82,1)' : themeColor}">
+                <span>{{remainigLetter}}</span>
+              </div>        
               <transition name="fade">
                 <div class="alert" v-if="alert" :class="alertClass" :key="alertClass" style="align-self:start; margin-top: -5px;">
                   <div>{{alertMessage}}</div>
@@ -147,6 +149,7 @@
             :commentBackgroundColor="commentBackgroundColor"
             :commentTextColor="commentTextColor"
             :userNameColor="userNameColor"
+            :themeColor="themeColor"
             :depthLength="depthLength+1"
             :wrapperSize="wrapperSize"
           ></app-wrapper>
@@ -232,6 +235,10 @@
         teype: String,
         default: 'rgb(6, 177, 183)'
       },
+      themeColor: {
+        teype: String,
+        default: 'blue'
+      },
       show: {
         type: Boolean,
         default: false
@@ -270,7 +277,7 @@
             Math.round(Math.random() * 244) +
             ',' +
             Math.round(Math.random() * 244) +
-            ',0.6)'
+            ',0.0)'
         },
         limit: parseInt(this.initialMessageLimit),
         alert: false,
@@ -312,6 +319,7 @@
       handleBeforeReply () {
         this.clearAlert()
         this.beforeReply = !this.beforeReply
+        return
         if (!this.svgAvatarCheck && this.$refs.svgReplyAvatar) {
           let a = 0
           let b = 0
@@ -866,17 +874,17 @@
     -moz-osx-font-smoothing: grayscale;
   }
   .comments>>>.wrapper {
-    display: grid;
+    display: block;
     grid-template-columns: 0.001fr 1fr;
     grid-auto-rows: minmax(0, auto);
-    grid-column-gap: 10px;
+    grid-column-gap: 0px;
     padding-top: 15px;
   }
   .comments>>>.commentWrapper {
     display: grid;
     grid-auto-rows: minmax(0, auto);
     grid-auto-columns: minmax(-webkit-min-content, -webkit-max-content);
-    grid-auto-columns: minmax(min-content, max-content);
+    // grid-auto-columns: minmax(min-content, max-content);
     grid-auto-columns: minmax(-moz-min-content, -moz-max-content);
     grid-gap: 10px;
   }

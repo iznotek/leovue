@@ -15,6 +15,7 @@
 <script>
   import Cover from './components/Cover'
   import axios from 'axios'
+  import untar from 'js-untar'
   
   export default {
     name: 'app',
@@ -87,6 +88,21 @@
           reader.readAsText(f)
         }
       },
+      linkStone (url) {
+        var vm = this
+        fetch(url) // , {headers: {'Access-Control-Allow-Origin': '*'}})
+          .then((response) => {
+            console.log(response)
+            untar(response.data).then(
+              function (extractedFiles) { // onSuccess
+                console.log(extractedFiles)
+              }
+            )
+          })
+          .catch(function () {
+            vm.load()
+          })
+      },
       linkCheck (url) {
         var vm = this
         // var xhr = new XMLHttpRequest()
@@ -119,6 +135,7 @@
           filename = url
         }
 
+        // console.log(filename)
         if (!this.$store.state.initializedData) {
           this.$store.dispatch('loadLeo', {filename, route: this.$route})
         }
@@ -181,8 +198,15 @@
     },
     mounted () {
       var host = window.location.hostname
-      if (host) {
-        this.linkCheck(window.location.origin + '/static/domains/' + host + '.leo')
+      // console.log(host)
+      // process.env.NODE_ENV === 'production' &&
+      // if (window.lconfig.api && window.lconfig.stone) {
+      //   this.linkStone(window.lconfig.api + '/' + window.lconfig.stone + '/uv/welcome.gz')
+      // } else
+      if (window.lconfig.stone) {
+        this.linkCheck(window.location.origin + '/static/stones/' + window.lconfig.stone + '/welcome.leo')
+      } else if (host) {
+        this.linkCheck(window.location.origin + '/static/stones/' + host + '/welcome.leo')
       }
     }
   }
