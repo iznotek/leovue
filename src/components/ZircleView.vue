@@ -18,7 +18,7 @@
         </kinesis-container> -->
       </section>
 
-      <section slot="media" > 
+      <section v-if="!loading" slot="media" > 
         <fade-transition v-if="mediaready" :duration="1000" :delay="2000" v-show='mediaFade'>
           <div style="margin-top: 12px;"> 
             <!-- <video-player :src="media(space)" @ready="onMediaReady" @ended="onMediaEnded"></video-player> -->
@@ -28,10 +28,6 @@
       </section>
 
       <section slot="extension">
-        <div class="adjust description" :style="{color: 'rgba(255,255,255,0.5)'}">
-        <!-- <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
-          <textra :data="description" :timer="2" filter="bottom-top" />
-        </div>
 
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 3px;  border-color:white ' size=s :distance="150" :angle="-65" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 3px;  border-color:white ' size=s :distance="160" :angle="-130" />
@@ -48,6 +44,28 @@
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 1px;  border-color:white' size=xxs :distance="132" :angle="210" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width: 1px;  border-color:white' size=xxs :distance="132" :angle="-82" />
         <z-spot class="asteroids" style='background-color: var(--shade-color);border-width:3px;   border-color:white' size=xs :distance="190" :angle="-160" />
+
+      </section>
+
+      <!-- <section v-if="loading" slot="extension">
+        <z-spot
+          button
+          @click.native="load()" 
+          style='background-color: rgba(0,0,0,0);border-width:0px;' 
+          size=xxl 
+          :distance="0" 
+          :angle="0">
+          <div style="border-radius: 50%; border: 10px solid;">
+            <div ref="loader"/>
+          </div>
+        </z-spot> 
+      </section> -->
+
+      <section v-if="!loading" slot="extension">
+        <div class="adjust description" :style="{color: 'rgba(255,255,255,0.5)'}">
+        <!-- <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
+          <textra :data="description" :timer="2" filter="bottom-top" />
+        </div>
 
         <z-spot 
           v-if="!mediaFade"
@@ -90,7 +108,7 @@
           <icon class="icon" :name="!mediaMute ? 'volume-up' : 'volume-mute'"></icon>
         </z-spot> 
       </section>
-      <section v-if="$store.state.ready && space" slot="extension">
+      <section v-if="$store.state.ready && !loading && space" slot="extension">
         <z-spot
           v-for="(amodel, index) in space.children"
           v-if="isVisible(amodel)"
@@ -151,13 +169,14 @@
 import {TweenLite, Power2} from 'gsap' // Elastic, Back,
 // import VideoPlayer from './VideoPlayer' // Elastic, Back,
 import _ from 'lodash'
+import Logo from './Logo'
 const util = require('../util.js')
 
 export default {
   name: 'zview',
-  // components: {
-  //   VideoPlayer
-  // },
+  components: {
+    Logo
+  },
   props: {
     model: Object,
     textItems: Object,
@@ -191,6 +210,9 @@ export default {
       mediaReady: false,
       mediaVolume: 50,
       mediaMute: true,
+      logo: null,
+      loading: false,
+      loader: null,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -321,12 +343,18 @@ export default {
     style: function (itemdata, index = 0, parentdata = null) {
       var style = '' // "background-color: orange; border-width: 4px; border-color: var(--background-color);"
       if (itemdata) {
-        if (itemdata.id === this.$store.state.currentItem.id) {
+        if (itemdata.id === this.$store.state.currentItem.id || this.loading) {
           style = 'border-width: 3px; border-color:white; '
         } else {
           style = 'border-width: 0px; border-color:white; '
         }
-        var color = 'blue'
+        style += 'background-color: ' + this.color(itemdata, index, parentdata) + ';'
+      }
+      return style
+    },
+    color: function (itemdata, index = 0, parentdata = null) {
+      var color = 'blue'
+      if (itemdata) {
         var gdeep = this.$store.state.deep
         var pdeep = parentdata ? parentdata.deep : null
         var deep = itemdata.deep
@@ -339,10 +367,47 @@ export default {
         } else if (gdeep && gdeep.look && gdeep.look.theme) {
           color = util.rgbaFromTheme(gdeep.look.theme, 1, 30 * index)
         }
-
-        style += 'background-color: ' + color + ';'
       }
-      return style
+      return color
+    },
+    switch: function (state = false) {
+      if (state) {
+        if (!this.loading) {
+          this.loading = true
+          if (!this.logo) {
+            this.logo = this.$createElement('logo', {ref: 'logo'})
+          }
+          setTimeout(() => {
+            var color = 'rgba(0,0,0,0.0)'
+            // var deep = this.$store.getters.getDeepLookForNode(this.graph)
+            // if (deep && deep.look && deep.look.theme) {
+            //   color = util.rgbaFromTheme(deep.look.theme)
+            //   // console.log('to: ', deep.look.theme)
+            // }
+            this.loader = this.$loading.show({
+              // Optional parameters
+              container: this.$refs.loader,
+              backgroundColor: color, // '#001127',
+              color: '#0AF',
+              opacity: 1,
+              loader: 'dots',
+              zIndex: 10000
+              // onCancel: this.onCancel,
+            }, {
+              default: this.logo
+            })
+          }, 20)
+        }
+      } else {
+        setTimeout(() => {
+          this.loader.opacity = 0
+          this.$refs.logo.hide()
+          setTimeout(() => {
+            this.loader.hide()
+            this.loading = false
+          }, 2000)
+        }, 200)
+      }
     },
     load: function () {
       this.toggle(this.space)
@@ -442,6 +507,7 @@ export default {
     })
 
     setInterval(this.checkViewChanged, 200)
+    // console.log('zview mounted')
 
     // if (this.$store.state.leodata.length >= 0) {
     //   this.$store.dispatch('setCurrentItem', this.$store.state.leodata[0].id)
@@ -495,8 +561,8 @@ export default {
       handler: function (val, oldVal) {
         if (val) {
           // console.log('Look for space: ' + val, this)
-          this.graph = null
-          let agraph = null
+          // this.graph = null
+          let agraph = null // this.$store.state.leodata[0]
           if (this.$store.state.leodata && this.$store.state.leodata.length) {
             this.$store.state.leodata.forEach((data) => {
               if (data.vtitle.includes(val.name)) {
@@ -507,15 +573,36 @@ export default {
             // console.log('load a graph first !!')
           }
 
-          setTimeout(() => {
-            if (!agraph) {
-              this.graph = this.$store.state.leodata[0]
-              console.log('Fallback at id: ', this.graph.id)
-            } else {
-              this.graph = agraph
-              // console.log('Found at id: ', this.graph.id)
-            }
-          }, 10)
+          if (!agraph) {
+            agraph = this.$store.state.leodata[0]
+            console.log('Fallback at id: ', this.graph.id)
+          } else {
+            // console.log('Found at id: ', this.graph.id)
+          }
+          this.graph = agraph
+
+          // setTimeout(() => {
+          //   this.switch(true)
+          //   setTimeout(() => {
+          //     // if (!agraph) {
+          //     //   this.graph = this.$store.state.leodata[0]
+          //     //   console.log('Fallback at id: ', this.graph.id)
+          //     // } else {
+          //     //   this.graph = agraph
+          //     //   // console.log('Found at id: ', this.graph.id)
+          //     // }
+          //     // this.graph = agraph
+          //     var deep = this.$store.getters.getDeepLookForNode(agraph)
+          //     if (deep && deep.look && deep.look.theme) {
+          //       this.loader.backgroundColor = util.rgbaFromTheme(deep.look.theme)
+          //       // console.log('to: ', deep.look.theme)
+          //     }
+          //     setTimeout(() => {
+          //       this.graph = agraph
+          //       this.switch(false)
+          //     }, 2000)
+          //   }, 200)
+          // }, 10)
           // console.log(this.graph)
 
           // only at startup

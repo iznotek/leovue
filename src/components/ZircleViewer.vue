@@ -19,7 +19,7 @@
           <textra :data='spaceDescs' :timer="1" filter="right-left" />
         </div> -->
         <fade-transition v-show='showcircle'>
-          <z-canvas id="zcanvas" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
+          <z-canvas id="z-container" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
           </z-canvas>
         </fade-transition>
         <fade-transition v-show='!showcircle'>
@@ -88,6 +88,7 @@
         debug: false
       })
 
+      // console.log(this.$zircle.getComponentList())
       this.$zircle.setView('zview')
       this.viewname = this.$zircle.getCurrentViewName()
 

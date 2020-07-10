@@ -82,7 +82,7 @@
     ul
       list-style-type: none
       padding: 0
-      padding-left: 10px
+      padding-left: 0px
       line-height: 1.4em
       list-style-type: none
       margin-bottom: 8px

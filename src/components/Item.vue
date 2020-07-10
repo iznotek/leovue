@@ -443,7 +443,7 @@ export default {
 $black: rgba(0,0,0,0.5);
 $selected: rgba(50,50,50,0.5);
 $dkblack: #333;
-$mdblack: rgba(150,150,150,0.5);
+$mdblack: rgba(255,255,255,0.8);
 $ltblack: #444;
 $grey: #888;
 $width: 350px;
@@ -474,7 +474,7 @@ section {
   background-size: cover;
   background-blend-mode: overlay;
   background-attachment: absolute;
-  filter: opacity(90%);
+  filter: opacity(100%);
 }
 
 .block {

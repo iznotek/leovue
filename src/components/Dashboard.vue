@@ -133,7 +133,7 @@ export default {
         backgroundColor: '#000', // '#001127',
         color: '#0AF',
         opacity: 1,
-        canCancel: true,
+        // canCancel: true,
         loader: 'dots',
         zIndex: 10000
         // onCancel: this.onCancel,

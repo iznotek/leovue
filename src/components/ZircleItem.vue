@@ -140,7 +140,7 @@
 <script>
 import Velocity from 'velocity-animate'
 import _ from 'lodash'
-import {TweenLite, Power2} from 'gsap' // Elastic, Back,
+// import {TweenLite, Power2} from 'gsap' // Elastic, Back,
 
 const util = require('../util.js')
 
@@ -184,16 +184,16 @@ export default {
     }
   },
   mounted () {
-    this.tween = TweenLite.to(this.mov, 1, {
-      angle: 0,
-      ease: Power2.easeOut,
-      repeat: 0
-    })
-    this.tween2 = TweenLite.to(this.mov2, 1, {
-      angle: -7,
-      ease: Power2.easeOut,
-      repeat: 0
-    })
+    // this.tween = TweenLite.to(this.mov, 1, {
+    //   angle: 0,
+    //   ease: Power2.easeOut,
+    //   repeat: 0
+    // })
+    // this.tween2 = TweenLite.to(this.mov2, 1, {
+    //   angle: -7,
+    //   ease: Power2.easeOut,
+    //   repeat: 0
+    // })
     setInterval(this.checkViewChanged, 200)
 
     if (this.$zircle.getParams() !== undefined) { // } && this.depth === -1) {

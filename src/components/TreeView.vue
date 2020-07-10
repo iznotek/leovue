@@ -117,12 +117,15 @@
 <style lang="sass">
 .treeview
   margin: 0
-  padding-top: 135px
-  margin-left: 100px
+  padding-top: 150px
+  padding-left: 100px
+  padding-bottom: 135px
   height: 100%
   width: 100%
   color: #dddddd
   z-index: 2000
+  overflow-y: auto
+  overflow-x: auto
   
 .very-pane
   ul

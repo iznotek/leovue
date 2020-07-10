@@ -120,16 +120,16 @@ export default new Router({
         component: Splitboard
         // component: () => lazyLoadView(import(/* webpackChunkName: "Splitboard" */'@/components/Splitboard'))
       }]
-    }
+    },
 
     // {
     //   path: '/settings',
     //   component: Settings
     // },
-    // {
-    //   path: '*',
-    //   redirect: '/' + baseMode + startPage
-    // }
+    {
+      path: '*',
+      redirect: '/' + baseMode + startPage
+    }
   ]
 })
 

@@ -65,6 +65,8 @@ export default {
 		background-repeat: no-repeat;
 		background-position: center center;
 		transition: all 300ms ease-out;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 80px;
 		width: 0px;
 		height: 13%;
     }
@@ -82,6 +84,7 @@ export default {
     transition-delay: 150ms;
 		width: 100%;
 		height: 50%;
+    border-top-right-radius: 20px;
     }
 
     .vue-accordion ul li a * {
