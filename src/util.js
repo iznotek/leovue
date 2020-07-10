@@ -285,6 +285,7 @@ function formatText (text, noWrapper, title) {
       text = '<div class="hcode">' + text + '</div>'
   }
   if (noWrapper) { return text }
+  if (text === '') { return text }
   text = `<div class='content'>${text}</div>`
   return text
 }

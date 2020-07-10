@@ -655,7 +655,8 @@ export default {
         if (this.$store.state.contentPane === 'site') return
 
         this.new.content = val
-        this.new.pane = this.$store.state.contentPane
+        console.log(val)
+        this.new.pane = val !== '' ? this.$store.state.contentPane : 'void'
         this.setNext(Object.assign({}, this.new))
       },
       deep: true,
