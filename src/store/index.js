@@ -699,28 +699,67 @@ function resolveDeeps (ldata) {
   // console.log('FOUND LOOK: ', deeps)
 }
 function resolveDeep (d, textItems, parent = null) {
-  if (parent) {
-    // parent.deep = {}
-    if (/^@deep/.test(d.name)) {
-      let itemText = textItems[d.t]
-      let deep = jsyaml.load(itemText.replace('@language yaml', ''))
-      if (deep && parent) {
-        parent.deep = deep
-        // console.log('FOUND LOOK: ', parent)
-      }
-    }
-  }
+  let itemText = textItems[d.t]
+  let {deep, body} = extractDeep(itemText, parent ? parent.deep.look.theme : 'blue')
+  d.deep = deep
+  textItems[d.t] = body // override body without deep
+
   d.children.forEach(child => {
     resolveDeep(child, textItems, d)
-    if (d.deep && !child.deep) {
-      child.deep = {look: {theme: d.deep.look.theme}}
-      // console.log('ADD LOOK: ', child)
-    }
   })
-  if (d.children.length && /^@deep/.test(d.children[0].name)) {
-    d.children.shift()
-  }
 }
+function extractDeep (text, theme) {
+  let deep = {look: {theme: theme}}
+  let body = text
+  let bDeep = false
+  if (/^@deep/.test(text)) {
+    bDeep = true
+    deep = []
+    body = []
+    const lines = text.split(/[\n]/)
+    lines.shift() // @deep
+    lines.shift() // @language yaml
+    lines.forEach(line => {
+      if (bDeep && (/^---/.test(line) || /^@body/.test(line))) {
+        bDeep = false
+      } else if (bDeep) {
+        deep.push(line)
+      } else if (!bDeep) {
+        body.push(line)
+      }
+    })
+    deep = deep.join('\n')
+    deep.replace('@deep', '') // in case
+    deep.replace('@language yaml', '') // in case
+    deep = jsyaml.load(deep)
+    body = body.join('\n')
+  }
+  return {deep, body}
+}
+
+// function resolveDeep (d, textItems, parent = null) {
+//   if (parent) {
+//     // parent.deep = {}
+//     if (/^@deep/.test(d.name)) {
+//       let itemText = textItems[d.t]
+//       let deep = jsyaml.load(itemText.replace('@language yaml', ''))
+//       if (deep && parent) {
+//         parent.deep = deep
+//         // console.log('FOUND LOOK: ', parent)
+//       }
+//     }
+//   }
+//   d.children.forEach(child => {
+//     resolveDeep(child, textItems, d)
+//     if (d.deep && !child.deep) {
+//       child.deep = {look: {theme: d.deep.look.theme}}
+//       // console.log('ADD LOOK: ', child)
+//     }
+//   })
+//   if (d.children.length && /^@deep/.test(d.children[0].name)) {
+//     d.children.shift()
+//   }
+// }
 
 /**
  * extract @slide nodes section, can only be the first child
