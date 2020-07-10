@@ -15,7 +15,7 @@
 <script>
   import Cover from './components/Cover'
   import axios from 'axios'
-  import untar from 'js-untar'
+  // import untar from 'js-untar'
   
   export default {
     name: 'app',
@@ -90,16 +90,27 @@
       },
       linkStone (url) {
         var vm = this
-        fetch(url) // , {headers: {'Access-Control-Allow-Origin': '*'}})
+        axios.head(url) // , {headers: {'Access-Control-Allow-Origin': '*'}})
           .then((response) => {
-            console.log(response)
-            untar(response.data).then(
-              function (extractedFiles) { // onSuccess
-                console.log(extractedFiles)
-              }
-            )
+            // function str2ab (str) {
+            //   var buf = new ArrayBuffer(str.length * 2) // 2 bytes for each char
+            //   var bufView = new Uint16Array(buf)
+            //   for (var i = 0, strLen = str.length; i < strLen; i++) {
+            //     bufView[i] = str.charCodeAt(i)
+            //   }
+            //   return buf
+            // }
+            // let ab = str2ab(response.data)
+            // console.log(typeof ab)
+            // untar(ab).then(
+            //   function (extractedFiles) { // onSuccess
+            //     console.log(extractedFiles)
+            //   }
+            // )
+            vm.load(url)
           })
-          .catch(function () {
+          .catch(function (error) {
+            console.log(error)
             vm.load()
           })
       },
@@ -199,11 +210,9 @@
     mounted () {
       var host = window.location.hostname
       // console.log(host)
-      // process.env.NODE_ENV === 'production' &&
-      // if (window.lconfig.api && window.lconfig.stone) {
-      //   this.linkStone(window.lconfig.api + '/' + window.lconfig.stone + '/uv/welcome.gz')
-      // } else
-      if (window.lconfig.stone) {
+      if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.stone) {
+        this.linkStone(window.lconfig.api + '/' + window.lconfig.stone + '/doc/trunk/welcome.leo') // window.lconfig.stone + '/uv/welcome.gz')
+      } else if (window.lconfig.stone) {
         this.linkCheck(window.location.origin + '/static/stones/' + window.lconfig.stone + '/welcome.leo')
       } else if (host) {
         this.linkCheck(window.location.origin + '/static/stones/' + host + '/welcome.leo')

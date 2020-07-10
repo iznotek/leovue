@@ -1391,8 +1391,9 @@ export default new Vuex.Store({
       var space = o.space || window.location.hostname
       var id = 'notfound'
       state.leodata.forEach((data) => {
-        if (data.vtitle.includes(space)) {
+        if (space.includes(data.vtitle) || data.vtitle.includes(space)) {
           id = data.id
+          space = data.vtitle.replace('@space')
         }
       })
       if (id === 'notfound') {
