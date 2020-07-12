@@ -172,6 +172,7 @@ export default {
       mediaReady: false,
       mediaVolume: 50,
       mediaMute: true,
+      mediaAutoPlay: false,
       tween: undefined,
       tween2: undefined,
       movSwap: false,
@@ -390,8 +391,8 @@ export default {
     onMediaReady: function (event) {
       this.mediaPlayer = event.target
       this.mediaPlayer.setVolume(this.mediaMute ? 0 : this.mediaVolume)
-      this.mediaPlayer.playVideo()
-      this.mediaFade = false
+      this.mediaFade = this.mediaAutoPlay
+      if (this.mediaAutoPlay) this.mediaPlayer.playVideo()
     },
     onMediaEnded: function (event) {
       this.mediaFade = false
@@ -402,10 +403,12 @@ export default {
         if (deep && deep.look && deep.look.media) {
           this.mediaVolume = deep.look.volume || 50
           this.mediaMute = this.mediaVolume === 0
+          this.mediaAutoPlay = deep.look.autoplay || false
           return true
         }
       }
       this.mediaMute = true
+      this.mediaAutoPlay = false
       return false
     },
     media: function (itemdata) {
