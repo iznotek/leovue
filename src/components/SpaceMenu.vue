@@ -1,6 +1,6 @@
 <template>
   <div style='position: absolute; margin-top: 0px; height: 100%; z-index: 6999;'>
-      <vue-accordion :items="items" :styles="styles"></vue-accordion>
+      <vue-accordion :items="items" :styles="styles" @selected="selected"></vue-accordion>
   </div>
 </template>
 
@@ -14,8 +14,34 @@ export default {
     'vue-accordion': Accordion
   },
   methods: {
+    selected (item) {
+      // console.log(item)
+      var vm = this
+      function cb (url = null) {
+        if (url) {
+          vm.$store.dispatch('loadStone', {filename: url, route: vm.$route})
+        }
+      }
+      if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.seed) {
+        util.seedStone(window.lconfig.seeder, item.title, cb)
+      } else {
+        util.urlCheck(window.location.origin + '/static/stones/' + window.lconfig.stone + '/deep/spaces/' + item.title + '/index.leo', cb)
+      }
+    },
     width () {
       return this.$store.state.leftPaneWidth || '1000px'
+    },
+    populate (space, manifest) {
+      if (space && manifest) {
+        var aspace = {
+          title: space,
+          text: manifest.description || '',
+          image: manifest.image,
+          url: manifest.url,
+          color: util.rgbaFromTheme(manifest.color || 'black', 0.8)
+        }
+        this.items.push(aspace)
+      }
     }
   },
   computed: {
@@ -79,21 +105,19 @@ export default {
         var spaces = []
         if (val && val.length) {
           // console.log(val)
-          val.forEach(item => {
-            let deep = item.deep
-            // console.log(item)
-            if (deep && deep.look) {
-              // deep.look.links.forEach(item => {
-              var space = {
-                text: deep.look.space || '',
-                title: item.vtitle,
-                image: deep.look.spot,
-                id: item.id,
-                color: util.rgbaFromTheme(deep.look.theme || 'black', 0.8)
-              }
-              spaces.push(space)
+          // only peek the first @space node
+          var item = val[0] // .forEach(item => {
+          let deep = item.deep
+          // console.log(item)
+          if (deep && deep.look) {
+            // then the links eventualy
+            if (deep.look.spaces) {
+              deep.look.spaces.forEach(space => {
+                util.seedCheck(window.lconfig.api + '/' + window.lconfig.seed, space, this.populate)
+              })
             }
-          })
+          }
+          // })
         }
         // console.log(spaces)
         this.items = spaces

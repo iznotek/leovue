@@ -1375,6 +1375,7 @@ export default new Vuex.Store({
       state.accordion = state.accordionPrev
     },
     LEO (state, o) {
+      // state.currentItem = {id: -1}
       state.leodata = o.data
       state.leotext = o.text
       state.leojson = o.json || {}
@@ -1478,7 +1479,7 @@ export default new Vuex.Store({
     CURRENT_ITEM (state, o) {
       const id = o.id
       // check current for identical
-      if (o.id === state.currentItem.id) {
+      if (o.id === state.currentItem.id && state.initialized) {
         return
       }
       // TODO: check prev/next for identical before change
@@ -1506,6 +1507,7 @@ export default new Vuex.Store({
       item.next = next
       // console.log(item)
 
+      state.initialized = true
       state.currentItem = item
       let routeName = state.route.name
       if (routeName === 'Top') {
@@ -1631,14 +1633,26 @@ export default new Vuex.Store({
       context.commit('LEO', o)
       // context.commit('CURRENT_SPACE', item.vtitle)
     },
+    loadStone (context, o) {
+      context.commit('RESET') // content item has not been drawn
+      context.commit('INIT_DATA') // loaded the leo data
+      context.dispatch('loadLeo', o)
+      // context.commit('CURRENT_SPACE', item.vtitle)
+    },
     loadLeo (context, o) {
       getLeoJSON(o.filename, o.id).then(ldata => {
         setData(context, ldata, o.filename, o.route)
+        if (!context.state.initialized) {
+          context.dispatch('setCurrentItem', {id: context.state.leodata[0].id})
+        }
       })
     },
     loadLeoFromXML (context, o) {
       transformLeoXML(o.xml).then(ldata => {
         setData(context, ldata, 'dnd', o.route)
+        if (!context.state.initialized) {
+          context.dispatch('setCurrentItem', {id: context.state.leodata[0].id})
+        }
       })
     },
     // Given a list of ids, get the content. Needed for
@@ -1728,7 +1742,7 @@ export default new Vuex.Store({
     // TODO: this is being called by loadSubtrees, fix logic (duplicate for openitems)
     setCurrentItem (context, o) {
       const id = o.id
-      if (o.id === context.state.currentItem.id && !o.reset) { return }
+      if (o.id === context.state.currentItem.id && !o.reset && context.state.initialized) { return }
       // if in iframe, just raise event and leave
       if (window.parent !== window.self) { return }
 

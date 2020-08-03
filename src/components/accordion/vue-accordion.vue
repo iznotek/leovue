@@ -6,6 +6,7 @@
 				:item="item" 
 				:key="index"
 				:styles="styles"
+        @clicked="clicked"
 			></partial-accordion>
 		</ul>
 	</div>
@@ -32,6 +33,11 @@ export default {
   computed: {
     divStyles () {
       return this.styles && this.styles.div ? this.styles.div : {}
+    }
+  },
+  methods: {
+    clicked (item) {
+      this.$emit('selected', item)
     }
   },
   components: {

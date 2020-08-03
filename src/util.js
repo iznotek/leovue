@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import jsyaml from 'js-yaml'
 import lodashTemplate from './lib/lodash-template'
+import axios from 'axios'
 
 const hljs = require('highlight.js')
 // const pug = require('pug')
@@ -82,6 +83,85 @@ function getDirectives (text) {
     }
   })
   return rets.join('\n')
+}
+
+function urlCheck (url, cb) {
+  // var vm = this
+  // var xhr = new XMLHttpRequest()
+  // xhr.onreadystatechange = function () {
+  //   if (this.readyState === this.HEADERS_RECEIVED) {
+  //     var status = this.status
+  //     if (status === 0 || (status >= 200 && status < 400)) {
+  //       vm.load(url)
+  //     } else {
+  //       vm.load()
+  //     }
+  //   }
+  // }
+  // console.log(url)
+  // xhr.open('HEAD', url, true)
+  // axios.head(url) // , {headers: {'Access-Control-Allow-Origin': '*'}})
+  // .then((response) => {
+  // function str2ab (str) {
+  //   var buf = new ArrayBuffer(str.length * 2) // 2 bytes for each char
+  //   var bufView = new Uint16Array(buf)
+  //   for (var i = 0, strLen = str.length; i < strLen; i++) {
+  //     bufView[i] = str.charCodeAt(i)
+  //   }
+  //   return buf
+  // }
+  // let ab = str2ab(response.data)
+  // console.log(typeof ab)
+  // untar(ab).then(
+  //   function (extractedFiles) { // onSuccess
+  //     console.log(extractedFiles)
+  //   }
+  // )
+  axios.head(url)
+    .then((response) => {
+      cb(url)
+    })
+    .catch(function (error) {
+      console.log(error)
+      cb()
+    })
+}
+
+function seedCheck (seeder, host, cb) {
+  var full = seeder + '/json/wiki/get?name=space@' + host
+  axios.get(full) // , {headers: {'Access-Control-Allow-Origin': '*'}})
+    .then(response => {
+      if (response.data.payload) {
+        var manifest = JSON.parse(response.data.payload.content)
+        cb(host, manifest)
+      } else {
+        cb()
+      }
+    })
+    .catch(error => {
+      console.log(error)
+      cb()
+    })
+}
+
+function seedStone (seeder, host, cb) {
+  function callback (stone = null, manifest = null) {
+    if (stone && manifest) {
+      var stone = manifest.url
+      var path
+      if (process.env.NODE_ENV === 'production') {
+        stone = stone.replace('http://', 'https://')
+        if (!stone.includes('https://')) {
+          stone = 'https://' + stone
+        }
+        path = stone + '/doc/trunk/deep/spaces/' + host + '/index.leo' 
+      } else {
+        path = window.location.origin + '/static/stones/' + stone + '/deep/spaces/' + host + '/index.leo'
+      }
+      urlCheck(path, cb)
+    }
+  }
+  seedCheck(seeder, host, callback)
 }
 
 function parseQueryString (config, url) {
@@ -473,6 +553,9 @@ module.exports = {
   getLanguage,
   getDirectives,
   removeDirectives,
+  urlCheck,
+  seedCheck,
+  seedStone,
   parseQueryString,
   rgbaFromTheme,
   rgbaFromObject,

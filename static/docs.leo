@@ -6,49 +6,7 @@
 <preferences/>
 <find_panel_settings/>
 <vnodes>
-<v t="josephorr.20181002174010.1"><vh>@space le3foisglanddu.fr</vh>
-<v t="ifs.20190418155034.1"><vh>@deep</vh></v>
-<v t="josephorr.20170228222411.2"><vh>@board iz now</vh>
-<v t="ifs.20190421204116.1"><vh>@deep</vh></v>
-<v t="ifs.20190414205247.1"><vh>l'astro</vh>
-<v t="ifs.20190415223632.1"><vh>@deep</vh></v>
-<v t="ifs.20190501154145.1"><vh>plans</vh>
-<v t="ifs.20190501154145.2"><vh>@deep</vh></v>
-</v>
-<v t="ifs.20190501131551.1"><vh>@pdf [desc](static/arkom/astro/Astroport.pdf)</vh>
-<v t="ifs.20190501131619.1"><vh>@deep</vh></v>
-</v>
-<v t="ifs.20190421204708.1"><vh>bar</vh>
-<v t="ifs.20190422125241.1"><vh>@deep</vh></v>
-</v>
-<v t="ifs.20190421205559.1"><vh>salons</vh>
-<v t="ifs.20190422125325.1"><vh>@deep</vh></v>
-</v>
-<v t="ifs.20190421205734.1"><vh>rooms</vh>
-<v t="ifs.20190422125336.1"><vh>@deep</vh></v>
-</v>
-</v>
-<v t="ifs.20190324101042.1"><vh>l'idéal</vh>
-<v t="ifs.20190416230605.1"><vh>@deep</vh></v>
-</v>
-<v t="ifs.20190324101106.1"><vh>l'errante</vh>
-<v t="ifs.20190426134328.1"><vh>@deep</vh></v>
-</v>
-<v t="ifs.20190324100058.1"><vh>l'igo</vh>
-<v t="ifs.20190426133529.1"><vh>@deep</vh></v>
-<v t="ifs.20190324100302.1"><vh>oasis</vh></v>
-<v t="ifs.20190324100253.1"><vh>sceno</vh></v>
-<v t="ifs.20190324100212.1"><vh>ethno</vh></v>
-<v t="ifs.20190324100205.1"><vh>own</vh></v>
-<v t="ifs.20190324100154.1"><vh>oak</vh></v>
-<v t="ifs.20190324100148.1"><vh>om</vh></v>
-<v t="ifs.20190324100129.1"><vh>oy</vh></v>
-</v>
-</v>
-<v t="ifs.20200324194154.1"><vh>[Ark'OM](https://arkom.iznow.tech)</vh>
-<v t="ifs.20200324194333.1"><vh>[Outline ?](https://app.sigle.io/le3foisglanddu.id.blockstack/q-xZtpzIuaydN-vUDgSPb)</vh></v>
-</v>
-<v t="ifs.20190324101206.1"><vh>@private ...</vh>
+<v t="ifs.20190324101206.1"><vh>@space deep.look</vh>
 <v t="josephorr.20180123102417.1"><vh>Summary Nodes</vh>
 <v t="josephorr.20180123102440.1"><vh>Mermaid</vh>
 <v t="josephorr.20180123094605.1"><vh>@mermaidtd (Simple Example Top Down)</vh>
@@ -214,14 +172,14 @@
 </v>
 </v>
 </v>
-<v t="josephorr.20170326174500.1"><vh>More About Leo</vh>
+<v t="josephorr.20170326174500.1"><vh>More About leo</vh>
 <v t="josephorr.20170327233137.1"><vh>[Feature Introduction](https://kaleguy.github.io/leo-tutorials/feature-introduction.md)</vh></v>
 <v t="josephorr.20170327233223.1"><vh>[Chunking](https://kaleguy.github.io/leo-tutorials/chunking.md)</vh></v>
 <v t="josephorr.20170327233236.1"><vh>Additional Features</vh></v>
 <v t="josephorr.20181202130523.1"><vh>[Screenshots](https://leoeditor.com/screen-shots.html)</vh></v>
 <v t="josephorr.20170327233257.1"><vh>Installing Leo</vh></v>
 </v>
-<v t="josephorr.20170327233126.1"><vh>More About LeoVue</vh>
+<v t="josephorr.20170327233126.1"><vh>More About deep.look</vh>
 <v t="josephorr.20181006112633.1"><vh>[LeoVue Quick Look](static/QuickLook.md)</vh></v>
 <v t="josephorr.20180304203537.1"><vh>[LeoVue README](README.md)</vh></v>
 <v t="josephorr.20171116064625.1"><vh>Current Feature List</vh></v>
@@ -511,33 +469,13 @@
 </v>
 </v>
 </v>
-</v>
-<v t="pipi.20200413010540.1"><vh>@space iznow.tech</vh>
-<v t="pipi.20200416172953.1"><vh>@deep</vh></v>
-</v>
-<v t="pipi.20200413010607.1"><vh>@space elromanesco.com</vh>
-<v t="pipi.20200416173013.1"><vh>@deep</vh></v>
-</v>
-<v t="pipi.20200413010628.1"><vh>@space alittlestone.productions</vh>
-<v t="pipi.20200416173025.1"><vh>@deep</vh></v>
-</v>
 </vnodes>
 <tnodes>
-<t tx="ifs.20190324100058.1"></t>
-<t tx="ifs.20190324100129.1"></t>
-<t tx="ifs.20190324100148.1"></t>
-<t tx="ifs.20190324100154.1"></t>
-<t tx="ifs.20190324100205.1"></t>
-<t tx="ifs.20190324100212.1"></t>
-<t tx="ifs.20190324100253.1"></t>
-<t tx="ifs.20190324100302.1"></t>
-<t tx="ifs.20190324101042.1">@language md
+<t tx="ifs.20190324101206.1">@language md
 
-Chaîne youtube dédié a poser une seule question !!!
+# Welcome on deep.look
 
-What's your idéal</t>
-<t tx="ifs.20190324101106.1"></t>
-<t tx="ifs.20190324101206.1"></t>
+The first cordial network ever ...</t>
 <t tx="ifs.20190324101255.1">@language md
 
 Nodes can contain JSON, YAML or CSV data.
@@ -4808,153 +4746,6 @@ rating: 5</t>
     "template": "rgarticle"
   }
 }</t>
-<t tx="ifs.20190414205247.1">@language md
-
-## A place to link them all...</t>
-<t tx="ifs.20190415223632.1">@language yaml
-
-look: 
-  space: An amasing place to link us all...
-  transition: transitionWarp
-  dash: https://le3foisglanddu-iznow.s3.filebase.com/the-gentle-giant.jpg
-  spot: https://le3foisglanddu-iznow.s3.filebase.com/the-gentle-giant.jpg
-  theme: green
-  mode: dark</t>
-<t tx="ifs.20190416230605.1">@language yaml
-
-look: 
-  space: Just a channel for tomorrow
-  transition: transitionZip
-  dash: http://www.bianoti.com/wp-content/uploads/2015/12/fonds-ecran-desert-4.jpg
-  spot: http://www.bianoti.com/wp-content/uploads/2015/12/fonds-ecran-desert-19.jpg
-  theme: orange
-  mode: dark
-
-# transitionFade transitionKenburn transitionSwipe transitionSlide transitionWaterfall transitionZip  transitionBlinds2d transitionBlocks1 transitionBlocks2 transitionConcentric transitionWarp transitionCamera transitionCube transitionBook transitionFall transitionWave transitionBlinds3d transitionRound1 transitionRound2 transitionExplode
-
-# red blue black green yellow orange purple light-blue gray
-# dark dark-filled light light-filled
-      </t>
-<t tx="ifs.20190418155034.1">@language yaml
-
-look: 
-  space: an amazing peace... of guy
-  desc: Tombé du ciel... pour se planter sur terre
-  dash: /static/images/back.jpg
-  media: S7SLep244ss
-  spot: https://media.fromthegrapevine.com/assets/images/2017/8/earth-planet-0802.jpg.480x0_q71_crop-scale.jpg
-  theme: marron
-  mode: dark</t>
-<t tx="ifs.20190421204116.1">@language yaml
-
-look: 
-  dash: http://www.pptbackgrounds.org/uploads/blue-blurry-bubbles-powerpoint-backgrounds.jpg
-  media: _xKCwzgI68s
-  spot: https://media.fromthegrapevine.com/assets/images/2019/3/מערת_מלחם_המערה_הארוכה_ביותר_בעולם._צילום_אנטון_ציקישב_Anton_Chikishev__1.JPG.824x0_q71_crop-scale.jpg
-  theme: blue
-  mode: dark</t>
-<t tx="ifs.20190421204708.1">&lt;img-left
-  height="500"
-  src="static/arkom/astro/bar01.jpg"&gt;
-&lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/bar02.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/bar03.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/bar04.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/bar05.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/bar06.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/bar07.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/bar08.jpg"&gt; &lt;/img-left&gt;
-
-&lt;div slot="foot"&gt;so good ...&lt;/div&gt;
-</t>
-<t tx="ifs.20190421205559.1">&lt;img-left height="500" src="static/arkom/astro/salon01.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/salon02.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/salon03.jpg"&gt; &lt;/img-left&gt;
-</t>
-<t tx="ifs.20190421205734.1">&lt;img-left height="500" src="static/arkom/astro/room01.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/room02.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="500" src="static/arkom/astro/desk01.jpg"&gt; &lt;/img-left&gt;
-</t>
-<t tx="ifs.20190422125241.1">@language yaml
-
-look: 
-  spot: /static/arkom/astro/bar07.jpg</t>
-<t tx="ifs.20190422125325.1">@language yaml
-
-look: 
-  spot: /static/arkom/astro/salon03.jpg</t>
-<t tx="ifs.20190422125336.1">@language yaml
-
-look: 
-  spot: /static/arkom/astro/room02.jpg</t>
-<t tx="ifs.20190426133529.1">@language yaml
-
-look: 
-  desc: Une identité pas comme les autres
-  transition: transitionBlocks2
-  dash: https://images4.alphacoders.com/106/thumb-1920-106826.jpg
-  spot: https://cache.desktopnexus.com/thumbseg/971/971542-bigthumbnail.jpg
-  theme: black
-  mode: dark</t>
-<t tx="ifs.20190426134328.1">@language yaml
-
-look: 
-  space: Une conf errante pour la nouvelle donne...
-  transition: transitionCamera
-  dash: https://www.kazoart.com/blog/wp-content/uploads/2019/02/petite-fille-au-ballon-bansky.jpg
-  spot: https://image-api.nrj.fr/medias/2018/02/arts-du-spectacle-quels-metiers-autour-de-la-scene-istock-629556336_5a7447487a14e.jpg
-  theme: red
-  mode: dark</t>
-<t tx="ifs.20190501131551.1"></t>
-<t tx="ifs.20190501131619.1">@language yaml
-
-look: 
-  spot: /static/arkom/astro/bar03.jpg</t>
-<t tx="ifs.20190501154145.1">&lt;img-left height="800" src="static/arkom/astro/plan03.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img height="800" src="static/arkom/astro/plan01.jpg"&gt;&lt;/img&gt;
-&lt;img height="800" src="static/arkom/astro/plan02.jpg"&gt; &lt;/img&gt;
-&lt;p/&gt;
-&lt;img-left height="800" src="static/arkom/astro/plan04.jpg"&gt; &lt;/img-left&gt;
-&lt;p/&gt;
-&lt;img-left height="800" src="static/arkom/astro/plan05.jpg"&gt; &lt;/img-left&gt;
-</t>
-<t tx="ifs.20190501154145.2">@language yaml
-
-look: 
-  spot: /static/arkom/astro/bar01.jpg</t>
-<t tx="ifs.20200324194154.1"></t>
-<t tx="ifs.20200324194333.1"></t>
-<t tx="josephorr.20170228222411.2">@language html
-
-&lt;div style="width:600px;margin-left:auto;margin-right:auto; margin-top:20px"&gt;
-&lt;div style="text-align:center;font-size:70px;margin-bottom:15px;font-weight:bold;display:none"&gt;LeoVue&lt;/div&gt;
-
-&lt;div style="text-align:center;font-size:40px;margin-bottom:15px;font-weight:normal"&gt;Deep d'Own&lt;/div&gt;
-
-&lt;p&gt;
-&lt;strong&gt;D'Own&lt;/strong&gt; is a uniquely powerful and versatile project information manager. It is open source and runs 
-on Windows/Mac/Linux/Web and Mobile. &lt;a target="_blank" href="http://www.deepdown.com"&gt;More about Deep d'Own.&lt;/a&gt;
-&lt;/p&gt;
-&lt;p&gt;
-Leo allows you to create content items and display them in multiple hierarchies.
-&lt;/p&gt;
-
-&lt;p&gt;
-The website you are viewing was created with d'Own. The tree menu is  created from one or more Leo outlines, and the content is either created in place or is loaded from external files and sites.
-&lt;/p&gt;
-&lt;/div&gt;</t>
 <t tx="josephorr.20170304113011.1">@language md
 
 
@@ -5051,22 +4842,22 @@ You can also create other types of content nodes:
 See the nodes below for examples of the above items.</t>
 <t tx="josephorr.20170327233126.1">@language md
 
-# LeoVue
+# deep.look
 
-**LeoVue** is a web app that can display files created with
+**deep.look** is a web app that can display files created with
 &lt;a href='http://www.leoeditor.com'&gt;Leo&lt;/a&gt;, the open source outlining editor and IDE.
 
-Using **Leo**, you can create outlined content. Using **LeoVue** you can display this
+Using **Leo**, you can create outlined content. Using **deep.look** you can display this
 content as a web page.
 
-**LeoVue** extends the capabilities of Leo by allowing outline nodes to load content not just from 
+**deep.look** extends the capabilities of Leo by allowing outline nodes to load content not just from 
 Leo outlines, but from 
 other files, including text, html or markdown files, or even other Leo files.
 
-The content you are reading was created in Leo. If you're reading this on the LeoVue
-site, then this content is being displayed via LeoVue.
+The content you are reading was created in Leo. If you're reading this on the deep.look
+site, then this content is being displayed via deep.look.
 
-LeoVue is licensed under the MIT license.
+deep.look is licensed under the Eternity license.
 
 &lt;toc&gt;&lt;/toc&gt;</t>
 <t tx="josephorr.20170327233137.1"></t>
@@ -5195,7 +4986,7 @@ For Mac and Linux users: you may need to install the Droid Sans Mono font (the d
     ul
       list-style-type: none
       padding: 0
-      padding-left: 10px
+      padding-left: 0px
       line-height: 1.4em
       list-style-type: none
       margin-bottom: 8px
@@ -7096,58 +6887,6 @@ The child nodes below contain some examples of Bootstrap Vue components in use.
   &lt;/b-tabs&gt;
 &lt;/b-card&gt;
 &lt;div class="hshim"&gt;&lt;/div&gt;</t>
-<t tx="josephorr.20181002174010.1">@language html
-
-&lt;h1  style="text-align: center;" &gt;Deep d'Own &lt;/h1&gt;
-
-The Bootstrap-Vue library is included with LeoVue, so all of the Bootstrap Vue components are supported.
-
-The child nodes below contain some examples of Bootstrap Vue components in use.
-
-&lt;p/&gt;
-
-&lt;b-carousel id="carousel1"
-            style="text-shadow: 1px 1px 2px #333;"
-            controls
-            indicators
-            background="#ababab"
-            :interval="4000"
-            img-width="1024"
-            img-height="480"
-&gt;
-
-      &lt;!-- Text slides with image --&gt;
-      &lt;b-carousel-slide caption="First slide"
-                        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-                        img-src="https://picsum.photos/1024/480/?image=52"
-      &gt;&lt;/b-carousel-slide&gt;
-
-      &lt;!-- Slides with custom text --&gt;
-      &lt;b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54"&gt;
-        &lt;h1&gt;Hello world!&lt;/h1&gt;
-      &lt;/b-carousel-slide&gt;
-
-      &lt;!-- Slides with image only --&gt;
-      &lt;b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"&gt;
-      &lt;/b-carousel-slide&gt;
-
-      &lt;!-- Slides with img slot --&gt;
-      &lt;!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment --&gt;
-      &lt;b-carousel-slide&gt;
-        &lt;img slot="img" class="d-block img-fluid w-100" width="1024" height="480"
-             src="https://picsum.photos/1024/480/?image=55" alt="image slot"&gt;
-      &lt;/b-carousel-slide&gt;
-
-      &lt;!-- Slide with blank fluid image to maintain slide aspect ratio --&gt;
-      &lt;b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image"&gt;
-        &lt;p&gt;
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          eros felis, tincidunt a tincidunt eget, convallis vel est. Ut pellentesque
-          ut lacus vel interdum.
-        &lt;/p&gt;
-      &lt;/b-carousel-slide&gt;
-
-    &lt;/b-carousel&gt;</t>
 <t tx="josephorr.20181006112633.1"></t>
 <t tx="josephorr.20181007134257.1">## Example Sites
 
@@ -7392,32 +7131,5 @@ comments: This is a math book. It was on the Openlibrary site.</t>
 <t tx="josephorr.20190105100838.1"></t>
 <t tx="josephorr.20190105100846.1"></t>
 <t tx="josephorr.20190105100914.1"></t>
-<t tx="pipi.20200413010540.1"></t>
-<t tx="pipi.20200413010607.1"></t>
-<t tx="pipi.20200413010628.1"></t>
-<t tx="pipi.20200416172953.1">@language yaml
-
-look: 
-  space: an amazing peace... of tech
-  dash: https://www.kyrio.com/wp-content/uploads/2018/03/abstract-network-hero.jpg
-  spot: https://images.idgesg.net/images/article/2018/01/binary_neural_network_artificial_intelligence_machine_learning_thinkstock_636754212_tinted-100747913-large.3x2.jpg
-  theme: blue
-  mode: dark</t>
-<t tx="pipi.20200416173013.1">@language yaml
-
-look: 
-  space: an amazing peace... of life
-  dash: https://wallup.net/wp-content/uploads/2017/11/23/450683-romanesco-food-macro-green-depth_of_field-fractal-closeup-748x421.jpg
-  spot: https://i.pinimg.com/originals/93/d3/f1/93d3f19f8e804a117f032c36e18aca05.jpg
-  theme: green
-  mode: dark</t>
-<t tx="pipi.20200416173025.1">@language yaml
-
-look: 
-  space: an amazing peace... of art
-  dash: https://learndiscoverbefree.com/wp-content/uploads/2015/03/rgb-pile-of-stones1.jpg
-  spot: https://www.thewhisperofgod.com/wp-content/uploads/Fotolia_79247204_S.jpg
-  theme: black
-  mode: dark</t>
 </tnodes>
 </leo_file>

@@ -14,7 +14,8 @@
 
 <script>
   import Cover from './components/Cover'
-  import axios from 'axios'
+  // import axios from 'axios'
+  import util from './util'
   // import untar from 'js-untar'
   
   export default {
@@ -88,55 +89,6 @@
           reader.readAsText(f)
         }
       },
-      linkStone (url) {
-        var vm = this
-        axios.head(url) // , {headers: {'Access-Control-Allow-Origin': '*'}})
-          .then((response) => {
-            // function str2ab (str) {
-            //   var buf = new ArrayBuffer(str.length * 2) // 2 bytes for each char
-            //   var bufView = new Uint16Array(buf)
-            //   for (var i = 0, strLen = str.length; i < strLen; i++) {
-            //     bufView[i] = str.charCodeAt(i)
-            //   }
-            //   return buf
-            // }
-            // let ab = str2ab(response.data)
-            // console.log(typeof ab)
-            // untar(ab).then(
-            //   function (extractedFiles) { // onSuccess
-            //     console.log(extractedFiles)
-            //   }
-            // )
-            vm.load(url)
-          })
-          .catch(function (error) {
-            console.log(error)
-            vm.load()
-          })
-      },
-      linkCheck (url) {
-        var vm = this
-        // var xhr = new XMLHttpRequest()
-        // xhr.onreadystatechange = function () {
-        //   if (this.readyState === this.HEADERS_RECEIVED) {
-        //     var status = this.status
-        //     if (status === 0 || (status >= 200 && status < 400)) {
-        //       vm.load(url)
-        //     } else {
-        //       vm.load()
-        //     }
-        //   }
-        // }
-        // console.log(url)
-        // xhr.open('HEAD', url, true)
-        axios.head(url)
-          .then((response) => {
-            vm.load(url)
-          })
-          .catch(function () {
-            vm.load()
-          })
-      },
       loadDefault (url = null) {
         let filename = '/static/docs'
         if (window.lconfig.filename) {
@@ -209,13 +161,16 @@
     },
     mounted () {
       var host = window.location.hostname
+      host = host.replace('www.')
       // console.log(host)
-      if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.stone) {
-        this.linkStone(window.lconfig.api + '/' + window.lconfig.stone + '/doc/trunk/welcome.leo') // window.lconfig.stone + '/uv/welcome.gz')
+      // if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.stone) {
+      if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.seed) {
+        util.seedStone(window.lconfig.seeder, host, this.load)
+        // this.linkStone(window.lconfig.api + '/' + window.lconfig.stone + '/doc/trunk/welcome.leo') // window.lconfig.stone + '/uv/welcome.gz')
       } else if (window.lconfig.stone) {
-        this.linkCheck(window.location.origin + '/static/stones/' + window.lconfig.stone + '/welcome.leo')
+        util.urlCheck(window.location.origin + '/static/stones/' + window.lconfig.stone + '/deep/spaces/' + host + '/index.leo', this.load)
       } else if (host) {
-        this.linkCheck(window.location.origin + '/static/stones/' + host + '/welcome.leo')
+        util.urlCheck(window.location.origin + '/static/stones/' + host + '/welcome.leo', this.load)
       }
     }
   }

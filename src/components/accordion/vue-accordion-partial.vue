@@ -18,7 +18,8 @@ export default {
   },
   methods: {
     click (item) {
-      this.$store.commit('CURRENT_SPACE', {id: item.id, name: item.title})
+      this.$emit('clicked', item)
+      // this.$store.commit('CURRENT_SPACE', {id: item.id, name: item.title})
       // this.$store.dispatch('setCurrentItem', item)
     }
   },
