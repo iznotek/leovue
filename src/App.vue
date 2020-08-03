@@ -164,7 +164,7 @@
       host = host.replace('www.')
       // console.log(host)
       // if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.stone) {
-      if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.seed) {
+      if (process.env.NODE_ENV === 'production' && window.lconfig.seeder) {
         util.seedStone(window.lconfig.seeder, host, this.load)
         // this.linkStone(window.lconfig.api + '/' + window.lconfig.stone + '/doc/trunk/welcome.leo') // window.lconfig.stone + '/uv/welcome.gz')
       } else if (window.lconfig.stone) {

@@ -22,7 +22,7 @@ export default {
           vm.$store.dispatch('loadStone', {filename: url, route: vm.$route})
         }
       }
-      if (process.env.NODE_ENV === 'production' && window.lconfig.api && window.lconfig.seed) {
+      if (process.env.NODE_ENV === 'production' && window.lconfig.seeder) {
         util.seedStone(window.lconfig.seeder, item.title, cb)
       } else {
         util.urlCheck(window.location.origin + '/static/stones/' + window.lconfig.stone + '/deep/spaces/' + item.title + '/index.leo', cb)
@@ -113,7 +113,7 @@ export default {
             // then the links eventualy
             if (deep.look.spaces) {
               deep.look.spaces.forEach(space => {
-                util.seedCheck(window.lconfig.api + '/' + window.lconfig.seed, space, this.populate)
+                util.seedCheck(window.lconfig.seeder, space, this.populate)
               })
             }
           }
