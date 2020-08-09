@@ -75,8 +75,8 @@ export default {
   .panes-separator,
   .left-pane,
   .right-pane {
-    margin: 0;
-    padding: 0;
+    // margin: 0;
+    // padding: 0;
   }
   .right-pane {
     overflow: hidden;

@@ -1,19 +1,19 @@
 <template>
-  <div style="position: relative; height: 90%; background: rgba(0,0,0,0.5);">
-    <div style="height: 100%;" v-show="!showSignPanel && auth">
+  <div style="position: relative; height: 100%; background: rgba(0,0,0,0.5);">
+    <div style="height: 100%;"> <!-- v-show="!showSignPanel && auth"> -->
       <vue-jitsi-meet
         ref="jitsiRef"
         domain="meet.jit.si"
         :options="jitsiOptions"
       ></vue-jitsi-meet>    
     </div>        
-    <sign-wrapper 
+    <!-- <sign-wrapper 
       v-if="showSignPanel && !auth" 
       :baseURL="signConfig.baseURL" 
       :apiKey= "signConfig.apiKey"
       :maxUserNameLength="30" 
       v-on:sign-user="signUser"
-    ></sign-wrapper>
+    ></sign-wrapper> -->
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
     }
   },
   mounted () {
-    this.checkAutoLogin()
+    // this.checkAutoLogin()
   },
   methods: {
     checkAutoLogin () {

@@ -1384,6 +1384,7 @@ export default new Vuex.Store({
       state.idxDocs = c.docs
       state.cover = o.cover
       state.filename = o.filename
+      state.zircle = {}
 
       window.lconfig.leodata = o.data
       window.lconfig.leotext = o.text
@@ -1398,7 +1399,7 @@ export default new Vuex.Store({
         }
       })
       if (id === 'notfound') {
-        id = '1'
+        id = state.leodata[0].id
         space = state.leodata[0].vtitle.replace('@space')
       }
       // console.log('CURRENT_SPACE: ', space)
@@ -1510,8 +1511,11 @@ export default new Vuex.Store({
       state.initialized = true
       state.currentItem = item
       let routeName = state.route.name
+      // console.log(state.route)
       if (routeName === 'Top') {
         routeName = 'Node'
+      } else if (routeName === null) {
+        routeName = 'ONode'
       }
 
       if (typeof o.historyIndex !== 'undefined') {
@@ -1768,7 +1772,7 @@ export default new Vuex.Store({
       if (item) {
         item = item[0]
         if (!item) {
-          console.log('No item[0] for item:', item)
+          console.log('No item[0] for item: ', item, ' and id: ', id)
           return
         }
 

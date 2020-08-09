@@ -8,7 +8,7 @@
       :radius="120"
       :size="50"
       :angle-restriction="-180">
-        <radial-menu-item 
+        <radial-menu-item v-if="$mq !== 'sm'"
           v-for="(item, index) in getItems()" 
           :key="index" 
           :style="{backgroundColor: color, color: 'white'}"

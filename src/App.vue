@@ -192,12 +192,12 @@ HTML, BODY
 
 #app
   color: $mycolor
-  margin: 0
-  padding: 0
+  // margin: 0
+  // padding: 0
   height: 100%
   // background-color: rgba(255,0,0,1.0)
 
-.right-pane .text, .inline .text
+.right-pane .text, .inline .text,
   // margin-top: 20px
   border: none
   background-color: transparent
@@ -207,6 +207,9 @@ HTML, BODY
   // height: 100%
   // white-space: pre-line
   width: 100%
+
+.right-cpane .text, .inline .text, .frame .text
+  white-space: pre-line
 
 .directive
   color: #990000;

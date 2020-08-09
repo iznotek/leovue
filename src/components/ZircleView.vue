@@ -62,7 +62,7 @@
       </section> -->
 
       <section v-if="!loading" slot="extension">
-        <div class="adjust description" :style="{color: 'rgba(255,255,255,0.5)'}">
+        <div v-if="$mq !== 'sm'" class="adjust description" :style="{color: 'rgba(255,255,255,0.5)'}">
         <!-- <div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
           <textra :data="description" :timer="2" filter="bottom-top" />
         </div>
@@ -583,6 +583,8 @@ export default {
             // console.log('Found at id: ', this.graph.id)
           }
           this.graph = agraph
+          // var view = this.$zircle.getCurrentViewName()
+          // this.$store.commit('ZIRCLE_VIEW', {view: view, id: 'cover'})
 
           // setTimeout(() => {
           //   this.switch(true)

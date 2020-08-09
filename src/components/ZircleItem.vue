@@ -28,7 +28,7 @@
       </section>
 
       <section slot="extension">
-         <div class="adjust description" :style="{color: 'rgba(255,255,255,0.5)'}">
+        <div v-if="$mq !== 'sm'" class="adjust description" :style="{color: 'rgba(255,255,255,0.5)'}">
         <!--<div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
           <textra :data="description" :timer="1" filter="bottom-top" />
         </div>
@@ -84,7 +84,7 @@
         
         <z-spot
           v-for="(amodel, index) in data.children"
-          v-if="isVisible(amodel)"
+          v-if="isVisible(data, amodel)"
           :ref="ref(data.id, amodel.id)"
           button
           :size="size(amodel, data.children.length, index)"
@@ -123,7 +123,7 @@
               </z-spot> -->
               <z-spot 
                 v-for="(subdata, ichild) in amodel.children"
-                v-if="isVisible(subdata)"
+                v-if="isVisible(amodel, subdata)"
                 :angle="(-90 + 180 / amodel.children.length * ichild) + tweenangle * 2"
                 :distance="110"
                 :style="style(subdata, ichild, amodel)"
@@ -470,7 +470,8 @@ export default {
       return nbVisibleItems > 0
       // return itemdata.children && itemdata.children.length
     },
-    isVisible: function (itemdata) {
+    isVisible: function (parentData, itemdata) {
+      if (/^@page/.test(parentData.name)) { return false } // outline
       return itemdata !== undefined
     },
     hasTheme: function (itemdata) {

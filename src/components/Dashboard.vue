@@ -3,7 +3,7 @@
    <div id="dashboard" v-bind:style="dashboardStyle"> 
 
     <background/>
-    <appheader/>
+    <appheader v-if="!isMobile"/>
 
     <div id="main" :class="{'header-space': config.showHeaderTop}"> <!-- id="main"  -->
         <router-multi-view :id="id" >
@@ -234,6 +234,9 @@ export default {
     ready: function () {
       return this.$store.state.ready
     },
+    isMobile () {
+      return this.$mq === 'sm'
+    },
     id: function () {
       if (!this.$route.params.id) {
         return +1
@@ -358,7 +361,7 @@ h1, h2 {
 
 ul {
   list-style-type: none;
-  padding: 0;
+  // padding: 0;
 }
 
 li {

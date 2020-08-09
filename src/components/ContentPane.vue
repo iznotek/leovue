@@ -28,12 +28,13 @@
                     </div>
                   </div>
                   <div id="tlayout">
-                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
-                      <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
-                        <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                    <div :style="{overflow: 'hidden', width: '100%', height: '100%'}">
+                      <div class="inner-container" id="content-inner-container" style="width:100%; height:100%; overflow:hidden">
+                        <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto', height: '100%'}" v-on:scroll="onScroll" >
                           <div class="around" :class="arounddarkmode" :style="{maxWidth: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
-                            <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
+                            <!-- {position:'relative', overflow: 'hidden', width: '100%', height: '100vh'} 
+                            <editorjs  v-if="edit && item.item.id === current.item.id"
                               :autofocus="editor.autofocus"
                               ref="editorjs"
                               :holderId="'editor'+item.item.id+'1'"
@@ -121,9 +122,9 @@
                     </div>
                   </div>
                   <div id="tlayout">
-                    <div :style="{position:'relative', overflow: 'hidden', width: '100%', height: '100vh'}">
-                      <div class="inner-container" id="content-inner-container" style="width:100%; overflow:hidden">
-                        <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto'}" v-on:scroll="onScroll" >
+                    <div :style="{overflow: 'hidden', width: '100%', height: '100%'}">
+                      <div class="inner-container" id="content-inner-container" style="width:100%; height:100%; overflow:hidden">
+                        <div id="content-inner-containerb" class="right-cpane" :style="{overflowY: 'auto', height: '100%'}" v-on:scroll="onScroll" >
                           <div class="around" :class="arounddarkmode" :style="{maxWidth: cpWidth, marginLeft: 'auto', marginRight: 'auto'}">
                             
                              <!-- <editorjs  v-if="edit && item.item.id === current.item.id"
@@ -179,8 +180,7 @@
                   </div>
                 </div>
                 <div v-if="slideContent(item)"
-                    class="frame"
-                    id="bpane">
+                    class="frame">
                   <div style="width:100%">
                     <slideshow :item="item" /> 
                   </div>
@@ -512,7 +512,7 @@ export default {
     },
     arounddarkmode () {
       const dmode = this.$store.state.darkmode
-      const invert = this.current.mode === 'invert'
+      const invert = this.current.mode !== 'invert'
       return dmode ? (!invert ? 'lightaround' : 'darkaround') : (!invert ? 'darkaround' : 'lightaround')
     },
     itemOdd () {
@@ -726,20 +726,20 @@ export default {
     color: #FFF;
   }
   .darkaround {
-    background: rgba(255,255,255,0.5);
+    // background: rgba(255,255,255,0.5);
     // background: linear-gradient(90deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.9) 100%); /* Black*/
     color: #000;
-    -webkit-box-shadow: 0px 30px 30px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0px 30px 30px rgba(0,0,0,0.5);
-    box-shadow: 0px 30px 30px rgba(0,0,0,0.5);
+    // -webkit-box-shadow: 0px 30px 30px rgba(0,0,0,0.3);
+    // -moz-box-shadow: 0px 30px 30px rgba(0,0,0,0.3);
+    // box-shadow: 0px 30px 30px rgba(0,0,0,0.3);
   }
   .lightaround {
-    background: rgba(0,0,0,0.5);
+    // background: rgba(0,0,0,0.5);
     // background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.9) 100%); /* Black*/
     color: #FFF;
-    -webkit-box-shadow: 0px 30px 30px rgba(255,255,255,0.5);
-    -moz-box-shadow: 0px 30px 30px rgba(255,0255,255,0.5);
-    box-shadow: 0px 30px 30px rgba(255,255,255,0.5);
+    // -webkit-box-shadow: 0px 30px 30px rgba(255,255,255,0.3);
+    // -moz-box-shadow: 0px 30px 30px rgba(255,0255,255,0.3);
+    // box-shadow: 0px 30px 30px rgba(255,255,255,0.3);
   }
   .around {
     // background: rgba(255, 255, 255, 0.2);
@@ -751,9 +751,9 @@ export default {
     // transform: translate(0%, -50%);
     // -ms-transform: translate(-50%, -50%);
     // position: relative;
-    margin-top: 20%;
+    margin-top: 5%;
     margin-bottom: 20%;
-    display: flex;
+    // display: flex;
     align-items: center;
     justify-content: center;
     // padding-top: 33px;
@@ -780,7 +780,7 @@ export default {
     // padding-top: 33px;
     //max-width: 720px;
     //width: 700px;
-    min-width: 500px;
+    // min-width: 500px;
     //overflow: auto;
     height: calc(100vh - 0px);
     visibility: false;
@@ -800,9 +800,10 @@ export default {
   #bpane {
     width: 100%;
     //background: #fff;
-    height: calc(100vh - 0px);
+    height: calc(100% - 0px);
     overflow: scroll;
     visibility: false;
+    padding-bottom: 10%;
   }
   #bpane::-webkit-scrollbar {
     display: none;
@@ -810,9 +811,9 @@ export default {
   #tlayout {
     //background: #fff;
     min-height: 100%;
-    margin: 0;
+    // margin: 0;
     // margin-left: 5%;
-    padding: 0;
+    // padding: 0;
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;

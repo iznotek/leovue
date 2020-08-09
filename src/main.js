@@ -90,6 +90,8 @@ import VueGoodLinks from 'vue-good-links'
 import 'vue-good-links/dist/vue-good-links.css'
 import VueAnime from 'vue-animejs'
 import VueRouterMultiView from 'vue-router-multi-view'
+import VueMq from 'vue-mq'
+
 // import Embed from 'v-video-embed'
 
 // import VueVideoPlayer from 'vue-video-player'
@@ -161,6 +163,15 @@ Vue.use(Zircle)
 Vue.use(VueResize)
 Vue.use(VueLazyImageLoading)
 Vue.use(vBlur)
+
+Vue.use(VueMq, {
+  breakpoints: { // default breakpoints - customize this
+    sm: 650,
+    md: 1250,
+    lg: Infinity
+  }
+})
+
 // Vue.use(VueCesium, {
 // cesiumPath is path of Cesium.js', for example:
 // local Cesium Build package:

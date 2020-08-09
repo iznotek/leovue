@@ -2,15 +2,15 @@
   <div>
     <!-- <modelviewer/> -->
     <!-- <modalsettings/> -->
-    <deep-editor/>
-    <type-menu v-if="ready"/>
+    <deep-editor v-if="ready && !isMobile"/>
+    <type-menu v-if="ready && !isMobile"/>
     <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
-    <chat-menu v-if="ready && config.comments"/> <!--
+    <chat-menu v-if="ready && !isMobile && config.comments"/> <!--
     <chat v-if="config.chats && connected"/> -->
 
    <splitpanes 
       ref="splitpanes"
-      vertical
+      :horizontal="isMobile"
       @pane-maximize="maximized($event)"
       @resize="resize($event)" 
       @resized="resize($event)" 
@@ -36,14 +36,14 @@
               </pane> -->
             </splitpanes>
           </pane> 
-          <pane v-if="ready && right && comments" :size="30"> <!-- (comments || meeting) -->
+          <pane v-if="ready && right && (comments || meeting)" :size="30"> <!--  -->
             <splitpanes horizontal>
+              <pane v-if="meeting" size="30">
+                <meeting style="z-index: 6004;" ></meeting>
+              </pane> 
               <pane v-if="comments" size="100">
                 <comments style="z-index: 6003;"></comments>  
               </pane>
-             <!-- <pane v-if="meeting" size="30">
-                <meeting style="z-index: 6004;" ></meeting>
-              </pane> -->
             </splitpanes>
           </pane> 
         </splitpanes>
@@ -51,7 +51,8 @@
 
     </splitpanes>
 
-    <div v-if="ready" class="noselect" style="position:fixed; top: 0px; margin-left: -5px; z-index: 6005;" :style="{left: leftBall}">
+    <div v-if="ready">
+      <div v-if="!isMobile" class="noselect" style="position:fixed; top: 0px; margin-left: -5px; z-index: 6005;" :style="{left: leftBall}">
         <ball-menu class="split-ball"/>
         <div class="arrow-left"
             v-show="showLeftButton"
@@ -68,6 +69,24 @@
 
         <middle-menu v-if="false" class="middle-menu"/>
       </div> 
+      <div v-else class="noselect" style="position:fixed; right: 43px; margin-top: -45px; z-index: 6005;" :style="{top: leftBall}">
+        <ball-menu class="split-ball"/>
+        <div class="arrow-top"
+            v-show="showLeftButton"
+            @click="slide('left')">
+ 
+          <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
+        </div>
+        <div class="arrow-bottom"
+            v-show="showRightButton"
+            @click="slide('right')">
+   
+          <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
+        </div>
+
+        <middle-menu v-if="false" class="middle-menu"/>
+      </div> 
+    </div>
   </div>
 </template>
 
@@ -245,6 +264,9 @@
       },
       config () {
         return window.lconfig
+      },
+      isMobile () {
+        return this.$mq === 'sm'
       }
     },
     mounted: function () {
@@ -388,15 +410,18 @@
 
   .splitpanes--vertical > .splitpanes__splitter {
     min-width: 14px;
-    background: rgba(0,0,0,0.4);
-     -webkit-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.3);
+    -webkit-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
     -moz-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
     box-shadow: -10px 10px 15px rgba(0,0,0,0.0); 
   }
 
   .splitpanes--horizontal > .splitpanes__splitter {
-    min-height: 14px;
-    background: rgba(0,0,0,0.5);
+    min-height: 44px;
+    background: rgba(0,0,0,0.0);
+    -webkit-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
+    -moz-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
+    box-shadow: -10px 10px 15px rgba(0,0,0,0.0); 
   }
 </style> 
 
@@ -460,6 +485,18 @@
     position: absolute;
     margin-top: 0px; 
     margin-left: -25px;
+  }
+  .arrow-top {
+    position: absolute;
+    transform: rotate(-90deg);
+    margin-top: -20px; 
+    margin-left: -38px;
+  }
+  .arrow-bottom {
+    position: absolute;
+    transform: rotate(90deg);
+    margin-top: 12px; 
+    margin-left: -44px;
   }
   .split-ball {
     position: absolute;

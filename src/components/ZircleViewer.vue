@@ -3,11 +3,11 @@
   <div >
     <div class="zircleviewer">
       <div style="position: absolute; width: 100%; height: 100%;">
-       <div class="adjust space" :style="{color: 'rgba(255,255,255,0.5)'}">
+       <div :class="isMobile ? 'adjust space-mobile' : 'adjust space'" :style="{color: 'rgba(255,255,255,0.5)'}">
         <!--<div class="adjust space" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
           <textra :data='spaceNames' :timer="1" filter="left-right" />
         </div>
-         <div class="adjust spacedesc" :style="{color: 'rgba(255,255,255,0.5)'}">
+         <div :class="isMobile ? 'adjust spacedesc-mobile' : 'adjust spacedesc'" :style="{color: 'rgba(255,255,255,0.5)'}">
         <!--<div class="adjust spacedesc" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
           <textra :data='spaceDescs' :timer="1" filter="right-left" />
         </div>
@@ -19,7 +19,7 @@
           <textra :data='spaceDescs' :timer="1" filter="right-left" />
         </div> -->
         <fade-transition v-show='showcircle'>
-          <z-canvas id="z-container" class="zcanvas" :views='$options.views' :style="{width: width, left: left}" >
+          <z-canvas id="z-container" class="zcanvas" :views='$options.views' :style="{height: height, width: width, left: left, top: top}" >
           </z-canvas>
         </fade-transition>
         <fade-transition v-show='!showcircle'>
@@ -85,6 +85,15 @@
           theme: 'blue',
           mode: 'dark'
         },
+        // sizes: {
+        //   xxl: 72,
+        //   xl: 52,
+        //   l: 40,
+        //   m: 32,
+        //   s: 20,
+        //   xs: 10,
+        //   xxs: 5
+        // },
         debug: false
       })
 
@@ -138,18 +147,31 @@
       },
       getTop (index) {
         if (!index) {
-          return this.top
+          return this.topNode
         }
       }
     },
     computed: {
       left () {
-        if (parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
+        if (!this.isMobile && parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
           return (parseInt(this.$store.state.leftPaneWidth) - this.leftTrigger - 120) / 1.8 + '%'
         }
         return '-50%'
       },
       width () {
+        // if (parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
+        //   return this.leftTrigger + '%'
+        // }
+        // return this.$store.state.leftPaneWidth || '30%'
+        return '200%' // this.$store.state.leftPaneWidth || '30%'
+      },
+      top () {
+        if (this.isMobile && parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
+          return (parseInt(this.$store.state.leftPaneWidth) - this.leftTrigger - 110) / 1.8 + '%'
+        }
+        return '-50%'
+      },
+      height () {
         // if (parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
         //   return this.leftTrigger + '%'
         // }
@@ -162,7 +184,7 @@
         // const u = 'static/images/chou.jpg'
         return `background: ${c};` // width:${w};
       },
-      top () {
+      topNode () {
         // if (this.$store.state.leodata.length > 1) { return false }
         if (window.lconfig.firstNodeAsTitle === false) {
           return false
@@ -186,9 +208,47 @@
       },
       showcircle: function () {
         return this.type === 'circle'
+      },
+      isMobile () {
+        return this.$mq === 'sm'
       }
     },
     watch: {
+      // '$mq': {
+      //   handler: function (val, oldVal) {
+      //     if (val !== oldVal) {
+      //       if (val === 'sm') {
+      //         this.$zircle.config({
+      //           sizes: {
+      //             xxl: 72,
+      //             xl: 52,
+      //             l: 40,
+      //             m: 32,
+      //             s: 20,
+      //             xs: 10,
+      //             xxs: 5
+      //           }
+      //         })
+      //       }
+      //       else {
+      //         this.$zircle.config({
+      //           sizes: {
+      //             xxl: 55,
+      //             xl: 32,
+      //             l: 20,
+      //             m: 12,
+      //             s: 8,
+      //             xs: 5,
+      //             xxs: 2
+      //           }
+      //         })
+      //       }
+      //       this.$zircle.getDimensions()
+      //     }
+      //   },
+      //   deep: true,
+      //   immediate: true
+      // },
       '$store.state.space': {
         handler: function (val, oldVal) {
           if (val) {
@@ -356,11 +416,25 @@
   font-size: 75px;
 }
 
+.space-mobile {
+  top: 0px;
+  left: 5px;
+  width: 100%;
+  font-size: 40px;
+}
+
 .spacedesc {
   top: 90px;
   left: 120px;
   width: 100%;
   font-size: 25px;
+}
+
+.spacedesc-mobile {
+  top: 50px;
+  left: 30px;
+  width: 100%;
+  font-size: 20px;
 }
 
 .description {
