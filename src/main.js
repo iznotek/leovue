@@ -91,6 +91,8 @@ import 'vue-good-links/dist/vue-good-links.css'
 import VueAnime from 'vue-animejs'
 import VueRouterMultiView from 'vue-router-multi-view'
 import VueMq from 'vue-mq'
+// import AudioVisual from 'vue-audio-visual'
+import VueAudio from 'vue-audio-better'
 
 // import Embed from 'v-video-embed'
 
@@ -133,6 +135,9 @@ Vue.prototype.$bs = bs
 // Vue.use(ElementUI)
 
 // Vue.use(VueVideoPlayer)
+
+Vue.use(VueAudio)
+// Vue.use(AudioVisual)
 Vue.use(Impress)
 Vue.use(Element, { locale })
 Vue.use(ElementTiptapPlugin)
