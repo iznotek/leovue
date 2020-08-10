@@ -393,6 +393,9 @@
 .z-canvas
   transition: background-color 0ms
   background-color: rgba(0, 0, 0, 0.0)
+
+.z-label.right > .inside 
+  background-color: rgba(0, 0, 0, 0.5)
   
 </style>
 

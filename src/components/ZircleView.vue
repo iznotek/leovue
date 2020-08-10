@@ -111,7 +111,7 @@
       <section v-if="$store.state.ready && !loading && space" slot="extension">
         <z-spot
           v-for="(amodel, index) in space.children"
-          v-if="isVisible(amodel)"
+          v-if="isVisible(space, amodel)"
           :ref="ref(amodel.id)"
           button
           :size="size(amodel, space.children.length, index)"
@@ -142,7 +142,7 @@
             <section slot="extension">
               <z-spot 
                 v-for="(subdata, ichild) in amodel.children"
-                v-if="isVisible(subdata)"
+                v-if="isVisible(amodel, subdata)"
                 :angle="(-90 + 180 / amodel.children.length * ichild) - tweenangle * 2"
                 :distance="110"
                 class="planetoide"
@@ -270,10 +270,11 @@ export default {
     }
   },
   methods: {
-    isVisible: function (itemdata) {
+    isVisible: function (parentData, itemdata) {
       if (itemdata.id === 1) { return false }
       if (/^@cover/.test(itemdata.name)) { return false } // theme node hided
-      return true
+      if (/^@page/.test(parentData.name)) { return false } // outline
+      return itemdata !== undefined
     },
     opacity: function (itemdata, alpha = 1) {
       return alpha // (itemdata.id === this.$store.state.currentItem.id) ? alpha : alpha
@@ -641,6 +642,7 @@ export default {
       const parent = JSON.search(this.$store.state.leodata, '//*[id="' + toid + '"]/parent::*')
       if (parent && parent[0]) {
         const parentid = parent[0].id
+        if (/^@page/.test(parent[0].name)) return
         // console.log('v test: ', fromid, parent, parentid)
         if (fromid === parentid) {
           let child = _.find(this.graph.children, child => child.id === toid)

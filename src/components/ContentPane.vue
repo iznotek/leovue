@@ -752,7 +752,7 @@ export default {
     // -ms-transform: translate(-50%, -50%);
     // position: relative;
     margin-top: 5%;
-    margin-bottom: 20%;
+    margin-bottom: 100%;
     // display: flex;
     align-items: center;
     justify-content: center;

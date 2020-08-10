@@ -20,7 +20,10 @@
 
         <div v-if="!mediaready" style="height: 75px" />
         <!-- <div v-if="!mediaready" :class="current(model) ? 'current-label-background current-label-bottom' : 'current-label-background current-label-bottom-hide'" > -->
-        <div v-if="!mediaready" :class="'current-label-background current-label-bottom'" >
+        <div 
+          v-if="!mediaready" 
+          @click="load()" 
+          :class="'current-label-background current-label-bottom'" >
           <a style="font-size: 25px; color: #eee; text-decoration: none;">
             {{ model.vtitle }} 
           </a>
@@ -32,7 +35,7 @@
         <!--<div class="adjust description" :style="{color: $store.state.darkmode ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)'}"> -->
           <textra :data="description" :timer="1" filter="bottom-top" />
         </div>
-        <z-spot 
+        <!-- <z-spot 
           v-if="!mediaFade"
           button 
           @click.native="load()" 
@@ -40,8 +43,9 @@
           style='background-color: var(--shade-color);border-width:3px;  border-color:white' 
           size=xxl 
           :distance="0" 
-          :angle="0">
-        </z-spot> 
+          :angle="0"
+          :key="0">
+        </z-spot> -->
         <!-- <z-spot 
           v-if="selected(model)"
           style='background-color: rgba(0,0,0,0);border-width:0px;' 
@@ -80,6 +84,33 @@
           :distance="100" 
           :angle="140">
           <icon class="icon" :name="!mediaMute ? 'volume-up' : 'volume-mute'"></icon>
+        </z-spot> 
+
+        <!-- <div v-if="isPage(data)">
+          <item
+            v-for="(amodel, index) in data.children"
+            :key="amodel.id"
+            class="item"
+            :model="amodel"
+            :top="false"
+            :textItems="text"
+            :targetEl="target.el">
+          </item>
+        </div> -->
+
+        <z-spot
+          v-if="isPage(data)"
+          v-for="(amodel, index) in data.children"
+          button
+          size="xs"
+          class="meteor"
+          :style="style(amodel, index)"
+          :distance="vdistance(amodel, data.children.length, index)"
+          :angle="vangle(amodel, data.children.length, index)" 
+          @click.native="toggle(amodel)"
+          :label="amodel.vtitle"
+          labelPos="right"
+          :key="100 + index">
         </z-spot> 
         
         <z-spot
@@ -139,6 +170,7 @@
 
 <script>
 import Velocity from 'velocity-animate'
+import Item from './Item'
 import _ from 'lodash'
 // import {TweenLite, Power2} from 'gsap' // Elastic, Back,
 
@@ -146,6 +178,9 @@ const util = require('../util.js')
 
 export default {
   name: 'zitem',
+  components: {
+    Item
+  },
   props: {
     targetEl: Boolean,
     textItems: Object,
@@ -470,6 +505,10 @@ export default {
       return nbVisibleItems > 0
       // return itemdata.children && itemdata.children.length
     },
+    isPage: function (itemdata) {
+      if (/^@page/.test(itemdata.name)) { return true } // outline
+      return false
+    },
     isVisible: function (parentData, itemdata) {
       if (/^@page/.test(parentData.name)) { return false } // outline
       return itemdata !== undefined
@@ -495,6 +534,12 @@ export default {
       let amount = (length > 7 ? 360.0 : length > 5 ? 230.0 : length > 3 ? 180.0 : 150.0) / length
       return -15 * length + amount * index - this.tweenangle
     },
+    vdistance: function (itemdata, length, index) {
+      return 30 * (length - 1 - index)
+    },
+    vangle: function (itemdata, length, index) {
+      return -90 + Math.atan2(30 * (length - 1 - index), 0)
+    },
     size: function (itemdata, length, index) {
       let look = (itemdata && itemdata.deep && itemdata.deep.look) ? itemdata.deep.look : {}
       if (look.size !== undefined) return look.size
@@ -509,7 +554,10 @@ export default {
     style: function (itemdata, index = 0, parentdata = null) {
       var style = '' // "background-color: orange; border-width: 4px; border-color: var(--background-color);"
       if (itemdata) {
-        if (itemdata.id === this.$store.state.currentItem.id) {
+        if ((!itemdata.page && itemdata.id === this.$store.state.currentItem.id) ||
+          (itemdata.page && itemdata.id === this.$store.state.currentPage.id)) {
+          style = 'border-width: 3px; border-color:white; '
+        } else if (itemdata.id === this.$store.state.currentPage.id) {
           style = 'border-width: 3px; border-color:white; '
         } else {
           style = 'border-width: 0px; border-color:white; '
@@ -589,9 +637,9 @@ export default {
       // console.log(openItemIds)
       this.$store.commit('OPEN_ITEMS', {openItemIds})
 
-      if (this.model.page) {
+      if (itemdata.page) {
         // TODO: this is duplicate of code in store
-        let page = this.model.page
+        let page = itemdata.page
         this.$store.dispatch('setCurrentItem', {id: page.pid})
         this.$store.dispatch('setCurrentPageSection', {id: page.id})
         const sectionId = `x${page.pid}-${page.id}`
@@ -601,8 +649,9 @@ export default {
         console.log('page', page)
         return
       }
+
       this.$store.dispatch('setCurrentItem', {id})
-      this.myContent = this.$store.state.contentItems[this.model.id]
+      this.myContent = this.$store.state.contentItems[id]
     }
   },
   events: {
@@ -649,6 +698,7 @@ export default {
       const parent = JSON.search(this.$store.state.leodata, '//*[id="' + toid + '"]/parent::*')
       if (parent && parent[0]) {
         const parentid = parent[0].id
+        if (/^@page/.test(parent[0].name)) return
         // console.log('test: ', fromid, parentid)
         if (fromid === parentid) {
           let child = _.find(this.data.children, child => child.id === toid)
@@ -688,5 +738,7 @@ export default {
 
 
 <style>
-
+.item {
+  z-index: 1000;
+}
 </style>
