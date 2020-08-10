@@ -455,6 +455,9 @@ export default {
         box-shadow: 0 10px 10px rgba(0, 0, 0, 0.20), 0 4px 4px rgba(0, 0, 0, 0.15);
         z-index: 2;
         justify-content: center;
+        -webkit-transition: 3s all ease;
+        -moz-transition: 3s all ease;
+        transition: 3s all ease;
     }
     .fab-child .material-icons {
         color: #cccccc;
