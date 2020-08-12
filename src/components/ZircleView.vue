@@ -143,8 +143,8 @@
               <z-spot 
                 v-for="(subdata, ichild) in amodel.children"
                 v-if="isVisible(amodel, subdata)"
-                :angle="(-90 + 180 / amodel.children.length * ichild) - tweenangle * 2"
-                :distance="110"
+                :angle="(-10 + 10 * ichild) - tweenangle * 2"
+                :distance="105"
                 class="planetoide"
                 :style="style(subdata, ichild, amodel)"
                 size="xxs"
@@ -670,36 +670,6 @@ export default {
 </script>
 
 <style>
-
-.asteroids {
-    pointer-events: none !important;
-    opacity: 0.10;
-}
-
-.planetoide {
-    pointer-events: none !important;
-    background-color: rgba(255, 255, 255, 1.0);
-    opacity: 0.3;
-    border: none;
-}
-
-.planetoide2 {
-    pointer-events: none !important;
-    background-color: rgba(255, 255, 255, 1.0);
-    opacity: 0.3;
-    border: none;
-}
-
-.meteor {
-    // background-color: rgba(20, 40, 100, 0.7);
-    opacity: 1.0;
-    border-width: 0px;
-}
-
-.comete {
-    // background-color: rgba(255, 255, 255, 0.2);
-    opacity: 0.01;
-}
 
 .transition {
   transition: all 2s ease;

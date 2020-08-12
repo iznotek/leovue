@@ -151,12 +151,12 @@
                 :distance="77" 
                 :angle="-60">
                   <img :src="require(`@/assets/logo.png`)" width="55"/>
-              </z-spot> -->
+              </z-spot>                 :angle="(-90 + 180 / amodel.children.length * ichild) + tweenangle * 2" -->
               <z-spot 
                 v-for="(subdata, ichild) in amodel.children"
                 v-if="isVisible(amodel, subdata)"
-                :angle="(-90 + 180 / amodel.children.length * ichild) + tweenangle * 2"
-                :distance="110"
+                :angle="(-10 + 10 * ichild) - tweenangle * 2"
+                :distance="105"
                 :style="style(subdata, ichild, amodel)"
                 class="planetoide2"
                 size="xxs"

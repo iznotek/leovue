@@ -503,7 +503,7 @@
 .planetoide {
     pointer-events: none !important;
     background-color: rgba(255, 255, 255, 1.0);
-    opacity: 0.3;
+    opacity: 0.7;
     border: none;
 }
 
