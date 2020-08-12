@@ -11,7 +11,7 @@
     :enable-rotation="enableRotation"
     :toggleWhenAway="false"
     :startOpened="initState"
-    :zIndex="7000"
+    :zIndex="70000"
     @handleClick="handleClick"
     @handleToggle="handleToggle"
     >

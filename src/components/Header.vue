@@ -303,7 +303,7 @@
   bottom: 0px
   position: fixed
   width: 100%
-  z-index: 1110
+  z-index: 11100
 .icon-box
   width: 20px
   margin-left: 20px

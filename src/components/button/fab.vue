@@ -112,6 +112,12 @@ export default {
     zIndex: {
       default: '999'
     },
+    decalWidth: {
+      default: 20
+    },
+    decalHeight: {
+      default: 20
+    },
     rippleShow: {
       default: true
     },
@@ -291,15 +297,16 @@ export default {
     enter () {
       if (this.swipeFromSide) {
         const wrapper = document.getElementById(`${this.position}-wrapper`)
+        var dw = this.decalWidth + 'px'
         switch (this.position) {
           case 'bottom-right':
           case 'top-right':
-            this.pos.right = '30px'
+            this.pos.right = dw
             wrapper.style.right = this.pos.right
             break
           case 'bottom-left':
           case 'top-left':
-            this.pos.left = '30px'
+            this.pos.left = dw
             wrapper.style.left = this.pos.left
             break
         }
@@ -310,15 +317,16 @@ export default {
     leave () {
       if (this.swipeFromSide) {
         const wrapper = document.getElementById(`${this.position}-wrapper`)
+        var dw = this.decalWidth - 100 + 'px'
         switch (this.position) {
           case 'bottom-right':
           case 'top-right':
-            this.pos.right = '-70px'
+            this.pos.right = dw
             wrapper.style.right = this.pos.right
             break
           case 'bottom-left':
           case 'top-left':
-            this.pos.left = '-70px'
+            this.pos.left = dw
             wrapper.style.left = this.pos.left
             break
         }
@@ -328,26 +336,28 @@ export default {
     },
     setPosition () {
       this.pos = {}
-      var apos = this.swipeFromSide ? '-70px' : '30px'
+      var dw = this.decalWidth + 'px'
+      var dh = this.decalHeight + 'px'
+      var apos = this.swipeFromSide ? this.decalWidth - 100 + 'px' : dw
       switch (this.position) {
         case 'bottom-right':
           this.pos.right = apos
-          this.pos.bottom = '60px'
+          this.pos.bottom = dh
           this.pos.paddingLeft = '150px'
           break
         case 'bottom-left':
           this.pos.left = apos
-          this.pos.bottom = '60px'
+          this.pos.bottom = dh
           this.pos.paddingRight = '150px'
           break
         case 'top-left':
           this.pos.left = apos
-          this.pos.top = '40px'
+          this.pos.top = dh
           this.pos.paddingRight = '150px'
           break
         case 'top-right':
           this.pos.right = apos
-          this.pos.top = '40px'
+          this.pos.top = dh
           this.pos.paddingLeft = '150px'
           break
         case 'free-down':
@@ -439,11 +449,11 @@ export default {
 
 <style scoped>
     .animated.quick {
-        -webkit-animation-duration: 1s !important;
-        animation-duration: 1s !important;
+        -webkit-animation-duration: 0.7s !important;
+        animation-duration: 0.7s !important;
     }
     .fab-wrapper {
-        z-index: 999;
+        z-index: 99999;
     }
     .fab-main {
         border-radius: 100px;
@@ -455,7 +465,7 @@ export default {
         display: flex;
         align-items: center;
         box-shadow: 0 10px 10px rgba(0, 0, 0, 0.20), 0 4px 4px rgba(0, 0, 0, 0.15);
-        z-index: 2;
+        z-index: 200000; 
         justify-content: center;
         -webkit-transition: 3s all ease;
         -moz-transition: 3s all ease;
@@ -502,7 +512,7 @@ export default {
         display: flex;*/
         align-items: center;
         box-shadow: 0 10px 10px rgba(0, 0, 0, 0.20), 0 4px 4px rgba(0, 0, 0, 0.15);
-        z-index: 2;
+        /*z-index: 2; */
         justify-content: center;
         -webkit-transition: 3s all ease;
         -moz-transition: 3s all ease;
@@ -537,7 +547,7 @@ export default {
     }
     .fab-list {
         position: relative;
-        z-index: 1;
+        /*z-index: 1; */
         margin: 2vh 0;
         display: flex;
         flex-direction: column;
@@ -566,7 +576,7 @@ export default {
     }
     .fab-wrapper .actions-container {
         overflow: hidden;
-        z-index: 0;
+        /*z-index: 0;*/
         position: relative;
     }
     /* Rules for sizing the icon. */

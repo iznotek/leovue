@@ -10,7 +10,7 @@
     :fixed-tooltip="fixedTooltip"
     :enable-rotation="enableRotation"
     :toggleWhenAway="false"
-    :zIndex="7000"
+    :zIndex="70000"
     @handleClick="handleClick"
     @handleToggle="handleToggle"
     >
@@ -103,7 +103,7 @@
           if (val) {
             var deep = this.$store.getters.getDeepLookForNode(val)
             if (deep && deep.look && deep.look.theme) {
-              var color = util.rgbaFromTheme(deep.look.theme, 0.7)
+              var color = util.rgbaFromTheme(deep.look.theme, 0.9)
               this.color = color
               this.actions.forEach(function (a) {
                 a.color = color

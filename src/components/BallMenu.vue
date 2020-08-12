@@ -2,7 +2,9 @@
   <div> <!-- v-html="menu"> -->
     <radial-menu
       class="radial"
-      @click="open()"
+      @open="open"
+      @close="close"
+      @click="click"
       :style="{backgroundColor: color, color: 'white'}"
       :itemSize="50"
       :radius="120"
@@ -121,6 +123,12 @@ export default {
       return !this.$store.state.connected ? this.items.guest : this.items.user
     },
     open () {
+      this.$emit('enter')
+    },
+    close () {
+      this.$emit('leave')
+    },
+    click () {
     },
     handleClick (item) {
       this.lastClicked = item

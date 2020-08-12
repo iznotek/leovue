@@ -2,6 +2,7 @@
   <div>
     <!-- <modelviewer/> -->
     <!-- <modalsettings/> -->
+    <app-header v-if="!isMobile"/>
     <deep-editor v-if="ready && !isMobile"/>
     <type-menu v-if="ready && !isMobile"/>
     <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
@@ -52,21 +53,23 @@
     </splitpanes>
 
     <div v-if="ready">
-      <div v-if="!isMobile" class="noselect" style="position:fixed; top: 0px; margin-left: -5px; z-index: 7005;" :style="{left: leftBall}">
-        <ball-menu class="split-ball"/>
-        <div class="arrow-left"
-            v-show="showLeftButton"
-            @click="slide('left')">
- 
-          <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
+      <div v-if="!isMobile" id="ballMenu" @mouseenter="ballEnter" @mouseleave="ballLeave"
+        class="noselect" style="position:fixed; transition: top 1s ease; top: -100px; margin-left: -50px; z-index: 7005;" :style="{left: leftBall}">
+        <div class="selector">
+          <ball-menu class="split-ball" @enter="ballMenuEnter" @leave="ballMenuLeave"/>
+          <div class="arrow-left"
+              v-show="showLeftButton"
+              @click="slide('left')">
+  
+            <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
+          </div>
+          <div class="arrow-right"
+              v-show="showRightButton"
+              @click="slide('right')">
+    
+            <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
+          </div>
         </div>
-        <div class="arrow-right"
-            v-show="showRightButton"
-            @click="slide('right')">
-   
-          <img :src="require(`@/assets/icons/bullet-arrow.svg`)" class="transition" :style="astyle" width="95"/>
-        </div>
-
         <middle-menu v-if="false" class="middle-menu"/>
       </div> 
       <div v-else class="noselect" style="position:fixed; right: 43px; margin-top: -45px; z-index: 7005;" :style="{top: leftBall}">
@@ -91,6 +94,7 @@
 </template>
 
 <script>
+  import AppHeader from './Header'
   import BallMenu from './BallMenu'
   import { Splitpanes, Pane } from 'splitpanes'
   import 'splitpanes/dist/splitpanes.css'
@@ -117,6 +121,7 @@
       leftPaneStyle: String
     },
     components: {
+      AppHeader,
       BallMenu,
       MiddleMenu,
       ContentPane,
@@ -138,6 +143,7 @@
         meeting: false,
         showLeftButton: true,
         showRightButton: true,
+        ballMenuOpened: false,
         left: true,
         center: true,
         right: true,
@@ -153,6 +159,22 @@
       }
     },
     methods: {
+      ballEnter: function () {
+        const ball = document.getElementById('ballMenu')
+        ball.style.top = '0px'
+      },
+      ballLeave: function () {
+        if (!this.ballMenuOpened) {
+          const ball = document.getElementById('ballMenu')
+          ball.style.top = '-100px'
+        }
+      },
+      ballMenuEnter: function () {
+        this.ballMenuOpened = true
+      },
+      ballMenuLeave: function () {
+        this.ballMenuOpened = false
+      },
       maximize: function (id) {
         let totalMinSizes = 0
         var panes = this.$refs.splitpanes.panes
@@ -484,6 +506,14 @@
     -moz-transition: 3s all ease;
     transition: 3s all ease;
   }
+  .selector {
+    position: absolute;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    padding-left: 95px;
+  }
+
   .arrow-left {
     position: absolute;
     transform: rotate(180deg);

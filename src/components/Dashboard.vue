@@ -3,7 +3,6 @@
    <div id="dashboard" v-bind:style="dashboardStyle"> 
 
     <background/>
-    <appheader v-if="!isMobile"/>
 
     <div id="main" :class="{'header-space': config.showHeaderTop}"> <!-- id="main"  -->
         <router-multi-view :id="id" >
