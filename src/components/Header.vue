@@ -1,6 +1,6 @@
 <template>
   <div style="height:0px;">
-    <div class="holder">
+    <div id="headerBar" class="holder" @mouseenter="enter" @mouseleave="leave">
       <div class="header" :style="{background: color}"  v-if="config.showHeader">
         <span class="app-title"> 
           {{user}}{{ config.trademark }}
@@ -138,6 +138,14 @@
     mounted () {
     },
     methods: {
+      enter () {
+        const bar = document.getElementById('headerBar')
+        bar.style.bottom = '0px'
+      },
+      leave () {
+        const bar = document.getElementById('headerBar')
+        bar.style.bottom = '-40px'
+      },
       settings () {
         this.$router.replace({path: '/settings'})
       },
@@ -300,10 +308,12 @@
 .holder
   padding: 0
   margin: 0
-  bottom: 0px
+  padding-top: 40px
+  bottom: -40px
   position: fixed
   width: 100%
   z-index: 11100
+  transition: bottom 0.7s ease;
 .icon-box
   width: 20px
   margin-left: 20px

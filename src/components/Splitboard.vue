@@ -54,7 +54,7 @@
 
     <div v-if="ready">
       <div v-if="!isMobile" id="ballMenu" @mouseenter="ballEnter" @mouseleave="ballLeave"
-        class="noselect" style="position:fixed; transition: top 1s ease; top: -100px; margin-left: -50px; z-index: 7005;" :style="{left: leftBall}">
+        class="noselect" style="position:fixed; transition: top 0.7s ease; top: -100px; margin-left: -50px; z-index: 7005;" :style="{left: leftBall}">
         <div class="selector">
           <ball-menu class="split-ball" @enter="ballMenuEnter" @leave="ballMenuLeave"/>
           <div class="arrow-left"
