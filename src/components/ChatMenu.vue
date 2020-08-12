@@ -10,6 +10,7 @@
     :fixed-tooltip="fixedTooltip"
     :enable-rotation="enableRotation"
     :toggleWhenAway="false"
+    :swipeFromSide="true"
     :zIndex="7000"
     @handleClick="handleClick"
     @handleToggle="handleToggle"
@@ -55,7 +56,7 @@
         iconSizes: 'medium',
         mainIcon: 'comments',
         mainTooltip: '',
-        enableRotation: true
+        enableRotation: false
       }
     },
     mounted () {

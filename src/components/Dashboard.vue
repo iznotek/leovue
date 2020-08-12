@@ -327,15 +327,6 @@ export default {
   transition: all 2s ease;
 }
 
-.fab-main {
-  left: -70px;
-  position: absolute;
-}
-.fab-wrapper .actions-container {
-  left: -70px;
-  position: absolute;
-}
-
 .logintheme {
   background: transparent;
   margin-top: 25px;

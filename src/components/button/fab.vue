@@ -1,6 +1,6 @@
 <template>
-    <div :id="position + '-wrapper'" class="fab-wrapper" v-on-clickaway="away"
-         :style="[ pos, {zIndex: zIndex}, {position: positionType} ]">
+    <div :id="position + '-wrapper'" class="fab-wrapper" v-on-clickaway="away" @mouseenter="enter" @mouseleave="leave"
+         style="transition: left 1s ease, right 1s ease;" :style="wrapperPosition">
         <div :id="position + '-action'" class="actions-container" :style="listPos">
             <transition name="fab-actions-appear"
                         :enter-active-class="transitionEnter"
@@ -14,7 +14,7 @@
                                 v-on:after-enter="afterActionsTransitionEnter"
                         >
                             <template v-if="action.tooltip">
-                                <li v-if="toggle" :style="{ 'background-color': action.color || bgColor }"
+                                <li v-if="toggle" :style="{ 'background-color': bgColor }"
                                     v-tooltip="{ content: action.tooltip, placement: tooltipPosition, classes: 'fab-tooltip', trigger: tooltipTrigger}"
                                     @click="clickAction(action.name)" class="fab-child pointer" ref="actions">
       
@@ -24,7 +24,7 @@
                             </template>
                             <template v-else>
                                 <li v-ripple="rippleColor == 'light' ? 'rgba(255, 255, 255, 0.35)' : ''"
-                                    v-if="toggle" :style="{ 'background-color': action.color || bgColor }"
+                                    v-if="toggle" :style="{ 'background-color': bgColor }"
                                     @click="clickAction(action.name)" class="fab-child pointer">
  
                                     <icon :class="[ actionIconSize , { select: action.active }, 'material-icons main']"  :name="action.icon"></icon>
@@ -142,6 +142,9 @@ export default {
     startOpened: {
       default: false
     },
+    swipeFromSide: {
+      default: false
+    },
     toggleWhenAway: {
       default: true
     },
@@ -150,6 +153,9 @@ export default {
     }
   },
   computed: {
+    wrapperPosition () {
+      return [ this.pos, {zIndex: this.zIndex}, {position: this.positionType} ]
+    },
     actionIconSize () {
       switch (this.iconSize) {
         case 'small':
@@ -278,28 +284,71 @@ export default {
       }
     },
     away () {
-      if (this.toggleWhenAway) {
+      if (this.swipeFromSide) {
         this.toggle = false
+      }
+    },
+    enter () {
+      if (this.swipeFromSide) {
+        const wrapper = document.getElementById(`${this.position}-wrapper`)
+        switch (this.position) {
+          case 'bottom-right':
+          case 'top-right':
+            this.pos.right = '30px'
+            wrapper.style.right = this.pos.right
+            break
+          case 'bottom-left':
+          case 'top-left':
+            this.pos.left = '30px'
+            wrapper.style.left = this.pos.left
+            break
+        }
+        this.$events.fire('fabSwipeFromSlideEnter')
+        // console.log('away', this.pos)
+      }
+    },
+    leave () {
+      if (this.swipeFromSide) {
+        const wrapper = document.getElementById(`${this.position}-wrapper`)
+        switch (this.position) {
+          case 'bottom-right':
+          case 'top-right':
+            this.pos.right = '-70px'
+            wrapper.style.right = this.pos.right
+            break
+          case 'bottom-left':
+          case 'top-left':
+            this.pos.left = '-70px'
+            wrapper.style.left = this.pos.left
+            break
+        }
+        this.$events.fire('fabSwipeFromSlideLeave')
+        // console.log('back', this.pos)
       }
     },
     setPosition () {
       this.pos = {}
+      var apos = this.swipeFromSide ? '-70px' : '30px'
       switch (this.position) {
         case 'bottom-right':
-          this.pos.right = '-40px'
+          this.pos.right = apos
           this.pos.bottom = '60px'
+          this.pos.paddingLeft = '150px'
           break
         case 'bottom-left':
-          this.pos.left = '100px'
+          this.pos.left = apos
           this.pos.bottom = '60px'
+          this.pos.paddingRight = '150px'
           break
         case 'top-left':
-          this.pos.left = '100px'
+          this.pos.left = apos
           this.pos.top = '40px'
+          this.pos.paddingRight = '150px'
           break
         case 'top-right':
-          this.pos.right = '100px'
+          this.pos.right = apos
           this.pos.top = '40px'
+          this.pos.paddingLeft = '150px'
           break
         case 'free-down':
         case 'free-up':
@@ -390,8 +439,8 @@ export default {
 
 <style scoped>
     .animated.quick {
-        -webkit-animation-duration: .7s !important;
-        animation-duration: .7s !important;
+        -webkit-animation-duration: 1s !important;
+        animation-duration: 1s !important;
     }
     .fab-wrapper {
         z-index: 999;

@@ -52,7 +52,7 @@
     </splitpanes>
 
     <div v-if="ready">
-      <div v-if="!isMobile" class="noselect" style="position:fixed; top: 0px; margin-left: -5px; z-index: 6005;" :style="{left: leftBall}">
+      <div v-if="!isMobile" class="noselect" style="position:fixed; top: 0px; margin-left: -5px; z-index: 7005;" :style="{left: leftBall}">
         <ball-menu class="split-ball"/>
         <div class="arrow-left"
             v-show="showLeftButton"
@@ -69,7 +69,7 @@
 
         <middle-menu v-if="false" class="middle-menu"/>
       </div> 
-      <div v-else class="noselect" style="position:fixed; right: 43px; margin-top: -45px; z-index: 6005;" :style="{top: leftBall}">
+      <div v-else class="noselect" style="position:fixed; right: 43px; margin-top: -45px; z-index: 7005;" :style="{top: leftBall}">
         <ball-menu class="split-ball"/>
         <div class="arrow-top"
             v-show="showLeftButton"
@@ -296,6 +296,7 @@
       // })
 
       setInterval(() => {
+        if (this.lock) return
         if (this.$store.state.spacemenu && (this.$refs.splitpanes.panes[0].size === 0 || this.mode === 'left')) {
           this.$store.commit('SPACEMENU', false)
         } else if (!this.$store.state.spacemenu && this.mode !== 'left' && (this.$refs.splitpanes.panes[0].size !== 0)) {
@@ -306,6 +307,14 @@
     updated: function () {
     },
     events: {
+      fabSwipeFromSlideEnter () {
+        this.$store.commit('SPACEMENU', false)
+        this.lock = true
+      },
+      fabSwipeFromSlideLeave () {
+        this.$store.commit('SPACEMENU', true)
+        this.lock = true
+      },
       chatMenuClick (action) {
         if (action) {
           if (action.name === 'comments') {

@@ -93,6 +93,10 @@ import VueRouterMultiView from 'vue-router-multi-view'
 import VueMq from 'vue-mq'
 // import AudioVisual from 'vue-audio-visual'
 import VueAudio from 'vue-audio-better'
+import VueGamepad from 'vue-gamepad'
+
+import SlideOut from '@hyjiacan/vue-slideout'
+import '@hyjiacan/vue-slideout/lib/slideout.css'
 
 // import Embed from 'v-video-embed'
 
@@ -108,6 +112,7 @@ import Element from 'element-ui'
 import './assets/element.scss'
 import locale from 'element-ui/lib/locale/lang/en'
 
+// import { SmartWidgetGrid } from 'vue-smart-widget'
 import { ElementTiptapPlugin } from 'element-tiptap'
 import 'element-tiptap/lib/index.css'
 
@@ -135,9 +140,12 @@ Vue.prototype.$bs = bs
 // Vue.use(ElementUI)
 
 // Vue.use(VueVideoPlayer)
-
-Vue.use(VueAudio)
 // Vue.use(AudioVisual)
+
+// import SlideOut component, and set the defaults props
+Vue.use(SlideOut, {})
+Vue.use(VueGamepad)
+Vue.use(VueAudio)
 Vue.use(Impress)
 Vue.use(Element, { locale })
 Vue.use(ElementTiptapPlugin)
@@ -195,6 +203,7 @@ Vue.use(VueMq, {
 //   // iconType: 'iconfont'
 // })
 
+// Vue.component('SmartWidgetGrid', SmartWidgetGrid)
 Vue.component('textra', Textra)
 Vue.component('star-rating', StarRating)
 Vue.component('lv-timeline', LVTimeline)
