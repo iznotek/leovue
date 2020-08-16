@@ -292,7 +292,7 @@ export default {
         if (val) {
           var deep = this.$store.getters.getDeepLookForNode(val)
           if (deep && deep.look && deep.look.theme) {
-            if (this.loading) {
+            if (this.loader && this.loading) {
               this.loader.backgroundColor = util.rgbaFromTheme(deep.look.theme)
             }
           }
