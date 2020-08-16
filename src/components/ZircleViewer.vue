@@ -154,7 +154,7 @@
     computed: {
       left () {
         if (!this.isMobile && parseInt(this.$store.state.leftPaneWidth) < this.leftTrigger) {
-          return (parseInt(this.$store.state.leftPaneWidth) - this.leftTrigger - 120) / 1.8 + '%'
+          return (parseInt(this.$store.state.leftPaneWidth) - this.leftTrigger - 117) / 1.8 + '%'
         }
         return '-50%'
       },
