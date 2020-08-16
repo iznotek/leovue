@@ -53,7 +53,7 @@
     </splitpanes>
 
     <div v-if="ready">
-      <div v-if="!isMobile" id="ballMenu" @mouseenter="ballEnter" @mouseleave="ballLeave"
+      <div v-if="!isMobile" ref="ballMenu" @mouseenter="ballEnter" @mouseleave="ballLeave"
         class="noselect" style="position:fixed; transition: top 0.7s ease; top: -100px; margin-left: -50px; z-index: 7005;" :style="{left: leftBall}">
         <div class="selector">
           <ball-menu class="split-ball" @enter="ballMenuEnter" @leave="ballMenuLeave"/>
@@ -144,6 +144,7 @@
         showLeftButton: true,
         showRightButton: true,
         ballMenuOpened: false,
+        ballTimeout: 0,
         left: true,
         center: true,
         right: true,
@@ -160,13 +161,20 @@
     },
     methods: {
       ballEnter: function () {
-        const ball = document.getElementById('ballMenu')
-        ball.style.top = '0px'
+        if (this.ballTimeout !== 0) {
+          clearTimeout(this.ballTimeout)
+          this.ballTimeout = 0
+        }
+        this.$refs.ballMenu.style.top = '0px'
       },
       ballLeave: function () {
         if (!this.ballMenuOpened) {
-          const ball = document.getElementById('ballMenu')
-          ball.style.top = '-100px'
+          if (this.ballTimeout === 0) {
+            this.ballTimeout = setTimeout(() => {
+              this.$refs.ballMenu.style.top = '-100px'
+              this.ballTimeout = 0
+            }, 3000)
+          }
         }
       },
       ballMenuEnter: function () {
@@ -329,11 +337,11 @@
     updated: function () {
     },
     events: {
-      fabSwipeFromSlideEnter () {
+      fabSwipeFromSideEnter () {
         this.$store.commit('SPACEMENU', false)
         this.lock = true
       },
-      fabSwipeFromSlideLeave () {
+      fabSwipeFromSideLeave () {
         this.$store.commit('SPACEMENU', true)
         this.lock = true
       },

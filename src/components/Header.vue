@@ -1,6 +1,6 @@
 <template>
   <div style="height:0px;">
-    <div id="headerBar" class="holder" @mouseenter="enter" @mouseleave="leave">
+    <div ref="headerBar" class="holder" @mouseenter="enter" @mouseleave="leave">
       <div class="header" :style="{background: color}"  v-if="config.showHeader">
         <span class="app-title"> 
           {{user}}{{ config.trademark }}
@@ -132,19 +132,27 @@
     data () {
       return {
         menu: false,
-        color: 'blue'
+        color: 'blue',
+        timeout: 0
       }
     },
     mounted () {
     },
     methods: {
       enter () {
-        const bar = document.getElementById('headerBar')
-        bar.style.bottom = '0px'
+        if (this.timeout !== 0) {
+          clearTimeout(this.timeout)
+          this.timeout = 0
+        }
+        this.$refs.headerBar.style.bottom = '0px'
       },
       leave () {
-        const bar = document.getElementById('headerBar')
-        bar.style.bottom = '-40px'
+        if (this.timeout === 0) {
+          this.timeout = setTimeout(() => {
+            this.$refs.headerBar.style.bottom = '-40px'
+            this.timeout = 0
+          }, 3000)
+        }
       },
       settings () {
         this.$router.replace({path: '/settings'})

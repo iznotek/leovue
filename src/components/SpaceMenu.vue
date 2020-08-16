@@ -75,7 +75,7 @@ export default {
   data () {
     return {
       div: {
-        width: 100,
+        width: 60,
         height: 100,
         center: false
       },

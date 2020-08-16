@@ -119,9 +119,9 @@ export default {
 
     .vue-accordion ul li a { height: 100%; }
 
-    .vue-accordion ul:hover li { height: 13%; width: 60%; }
+    .vue-accordion ul:hover li { height: 13%; width: 100%; }
 
-    .vue-accordion ul:hover li:hover { height: 20%; width: 400%; }
+    .vue-accordion ul:hover li:hover { height: 20%; width: 600%; }
 
     .vue-accordion ul:hover li:hover a { opacity: 0.85; height: 50%; }
 

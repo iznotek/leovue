@@ -310,7 +310,7 @@ export default {
             wrapper.style.left = this.pos.left
             break
         }
-        this.$events.fire('fabSwipeFromSlideEnter')
+        this.$events.fire('fabSwipeFromSideEnter')
         // console.log('away', this.pos)
       }
     },
@@ -330,7 +330,7 @@ export default {
             wrapper.style.left = this.pos.left
             break
         }
-        this.$events.fire('fabSwipeFromSlideLeave')
+        this.$events.fire('fabSwipeFromSideLeave')
         // console.log('back', this.pos)
       }
     },
