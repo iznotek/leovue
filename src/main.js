@@ -94,6 +94,8 @@ import VueMq from 'vue-mq'
 // import AudioVisual from 'vue-audio-visual'
 import VueAudio from 'vue-audio-better'
 import VueGamepad from 'vue-gamepad'
+import VuePrlx from 'vue-prlx'
+import panZoom from 'vue-panzoom'
 
 import SlideOut from '@hyjiacan/vue-slideout'
 import '@hyjiacan/vue-slideout/lib/slideout.css'
@@ -142,7 +144,8 @@ Vue.prototype.$bs = bs
 // Vue.use(VueVideoPlayer)
 // Vue.use(AudioVisual)
 
-// import SlideOut component, and set the defaults props
+Vue.use(panZoom)
+Vue.use(VuePrlx)
 Vue.use(SlideOut, {})
 Vue.use(VueGamepad)
 Vue.use(VueAudio)
