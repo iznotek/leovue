@@ -36,7 +36,9 @@ export default {
       isAdmin: null,
       userName: '',
       expiresIn: null,
-      auth: false
+      auth: false,
+      room: this.$store.state.space.name,
+      user: this.$store.state.user.name
     }
   },
   computed: {
@@ -48,11 +50,11 @@ export default {
     },
     jitsiOptions () {
       return {
-        roomName: 'deep.look.iznow.tech.3773829817',
+        roomName: this.room,
         noSSL: false,
         userInfo: {
-          email: 'iznow@pm.me',
-          displayName: 'iznow.time'
+          // email: 'iznow@pm.me',
+          displayName: this.user
         },
         configOverwrite: {
           enableNoisyMicDetection: false
@@ -60,7 +62,15 @@ export default {
         interfaceConfigOverwrite: {
           SHOW_JITSI_WATERMARK: false,
           SHOW_WATERMARK_FOR_GUESTS: false,
-          SHOW_CHROME_EXTENSION_BANNER: false
+          SHOW_CHROME_EXTENSION_BANNER: false,
+          TOOLBAR_BUTTONS: ['microphone', 'camera', 'tileview']
+          // TOOLBAR_BUTTONS: [
+          //   'microphone', 'camera', 'closedcaptions', 'desktop', 'embedmeeting', 'fullscreen',
+          //   'fodeviceselection', 'hangup', 'profile', 'chat', 'recording',
+          //   'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand',
+          //   'videoquality', 'filmstrip', 'invite', 'feedback', 'stats', 'shortcuts',
+          //   'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone', 'security'
+          // ],
         },
         onload: this.onIFrameLoad
       }
@@ -120,10 +130,21 @@ export default {
     },
     onIFrameLoad () {
       this.$refs.jitsiRef.addEventListener('participantJoined', this.onParticipantJoined)
+
+      // only work with jitsi on same origin
+      let frameElement = document.getElementById('jitsiConferenceFrame0')
+      if (frameElement.contentWindow.document !== null) {
+        var doc = frameElement.contentWindow.document
+        doc.body.innerHTML = doc.body.innerHTML + '<style>.watermark.leftwatermark {display:none;}</style>'
+        doc.body.innerHTML = doc.body.innerHTML + '<style>.videocontainer {background-color: rgba(0,0,0,0.0);}</style>'
+      }
     },
     onParticipantJoined (e) {
       // do stuff
-      console.log(e)
+      console.log('boom:', e)
+      // if (event.role === "moderator") {
+      //   api.executeCommand('password', 'The Password')
+      // }
     }
   }
 }

@@ -4,6 +4,7 @@
     <!-- <modalsettings/> -->
     <app-header v-if="!isMobile"/>
     <deep-editor v-if="ready && !isMobile"/>
+    <meething v-if="ready && !isMobile"/>
     <type-menu v-if="ready && !isMobile"/>
     <space-menu v-if="ready && this.$store.state.spacemenu && !config.static"/>
     <chat-menu v-if="ready && !isMobile && config.comments"/> <!--
@@ -39,10 +40,19 @@
           </pane> 
           <pane v-if="ready && right && (comments || meeting)" :size="30"> <!--  -->
             <splitpanes horizontal>
-              <pane v-if="meeting" size="30">
-                <meeting style="z-index: 6004;" ></meeting>
+              <pane v-if="meeting" size="50"> <!-- style="z-index: 7000;" -->
+               <meeting style="z-index: 6004;" ></meeting>
+              <!--  <div style="z-index: 6004; width:100%; height:100%">
+                  <iframe :src="'https://us.meething.space'" 
+                    allowusermedia
+                    allow="camera; microphone"
+                    height="100%" width="100%"
+                    marginwidth="0" marginheight="0"
+                    hspace="0" vspace="0"
+                    frameBorder="0"/>
+                </div>  -->
               </pane> 
-              <pane v-if="comments" size="100">
+              <pane v-if="comments" size="50">
                 <comments style="z-index: 6003;"></comments>  
               </pane>
             </splitpanes>
@@ -111,6 +121,7 @@
   // modals
   // import Settings from './modals/Settings'
   import DeepEditor from './modals/DeepEditor'
+  import Meething from './modals/Meething'
   /// import { Api, Http } from '../lib/bigbluebutton'
 
   const util = require('../util.js')
@@ -131,6 +142,7 @@
       SpaceMenu,
       TypeMenu,
       DeepEditor,
+      Meething,
       Comments,
       ChatMenu,
       Meeting
@@ -352,6 +364,7 @@
           }
           if (action.name === 'meeting') {
             this.meeting = !this.meeting
+            this.showComments = true
           }
         }
       },
@@ -456,7 +469,7 @@
   }
 
   .splitpanes--horizontal > .splitpanes__splitter {
-    min-height: 44px;
+    min-height: 14px;
     background: rgba(0,0,0,0.0);
     -webkit-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
     -moz-box-shadow: -10px 10px 15px rgba(0,0,0,0.5);
